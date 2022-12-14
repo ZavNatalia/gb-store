@@ -19,6 +19,7 @@ import {
 import {Field, Form, Formik, FormikHelpers} from 'formik';
 import * as Yup from "yup";
 import {useCategory} from "../../context/CategoryContext";
+import {RegExpURL} from "../../utils/RegExpURL";
 
 export interface Values {
     title: string;
@@ -42,7 +43,7 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
             .max(100, 'Пожалуйста, введите не более 100 символов')
             .required('Пожалуйста, заполните обязательное поле'),
         image: Yup.string()
-            .url('Некорректная ссылка')
+            .matches(RegExpURL, 'Пожалуйста, введите корректный URL')
             .required('Пожалуйста, добавьте ссылку на изображение'),
         description: Yup.string()
             .min(5, 'Пожалуйста, введите не меньше 5 символов')

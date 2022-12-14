@@ -5,7 +5,7 @@ import {formatCurrency} from "../../utilities/formatCurrency";
 import {EditIcon} from "../UI/EditIcon";
 
 interface EditPriceProps {
-    price: string,
+    price: number,
     updatePrice: (v: string) => void
 }
 
@@ -26,7 +26,7 @@ export const EditPrice = ({price, updatePrice}: EditPriceProps) => {
                         type={"number"}
                         _focus={{borderColor: 'yellow.500'}}
                         onChange={(e) => updatePrice(e.target.value)}/>
-                    <SaveIcon isDisabled={price.length === 0}
+                    <SaveIcon isDisabled={price === 0}
                               onSave={() => setIsEditMode(false)}/>
                 </>
             ) : (

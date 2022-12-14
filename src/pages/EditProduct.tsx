@@ -62,12 +62,8 @@ export const EditProduct = () => {
     }
 
     const onSaveChanges = async () => {
-        // add /${productId}
         await axios.put(`${rootURL}/items/update`,
-            {
-                "title": product.title,
-                "price": product.price
-            })
+            {product})
             .then(() => {
                     ToastSuccess('The product has been updated successfully');
                 }
@@ -118,7 +114,7 @@ export const EditProduct = () => {
                             updateDescription={updateDescription}
                         />
                         <EditPrice
-                            price={product.price}
+                            price={+product.price}
                             updatePrice={updatePrice}/>
                         <Divider/>
                         <Flex gap={4}>

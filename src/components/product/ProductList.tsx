@@ -22,14 +22,14 @@ const ProductList = () => {
     const {isOpen, onOpen, onClose} = useDisclosure()
     const [isLoading, setIsLoading] = useState(true);
     // const [contentLength, setContentLength] = useState(0);
+    const [total, setTotal] = useState(0);
 
     const fetchProducts = async () => {
         setError('');
         await axios.get(
             // isEmpty(currentCategory)
             //     ?
-                `${rootURL}/items/list`
-                // `${rootURL}/items/list/?offset=${offset}&limit=${limit}`
+                `${rootURL}/items/list/?offset=${offset}&limit=${limit}`
                 // : `${rootURL}/items/categories/${currentCategory.name}`
         )
             .then(response => {
@@ -43,41 +43,50 @@ const ProductList = () => {
             });
     };
 
+    const fetchTotal = async () => {
+        setError('');
+        await axios.get(`${rootURL}/items/quantity`)
+            .then(response => {
+                setTotal(response.data);
+            })
+            .catch(e => setError(e.message))
+            .finally(() => fetchProducts())
+    };
+
+
     useEffect(() => {
         if (isLoading) {
-            fetchProducts();
+            fetchTotal();
         }
     }, [isLoading]);
 
-    // TODO: get total /items/quantity
-
     // TODO: строка поиска /items/search/:searchRequest
 
-    // useEffect(() => {
-    //     setIsLoading(true);
-    //     setProducts([]);
-    //     setOffset(0);
-    //     window.scroll({
-    //         top: 0,
-    //         left: 0,
-    //     });
-    // }, [currentCategory]);
-    //
-    // useEffect(() => {
-    //     document.addEventListener('scroll', scrollHandler)
-    //     return function () {
-    //         document.removeEventListener('scroll', scrollHandler)
-    //     }
-    // })
-    //
-    // const scrollHandler = (e: any) => {
-    //     const scrollHeight = e.target.documentElement.scrollHeight;
-    //     const scrollTop = e.target.documentElement.scrollTop;
-    //     const innerHeight = window.innerHeight;
-    //     if (scrollHeight - (scrollTop + innerHeight) < 200 && contentLength > 2) {
-    //         setIsLoading(true)
-    //     }
-    // }
+    useEffect(() => {
+        setIsLoading(true);
+        setProducts([]);
+        setOffset(0);
+        window.scroll({
+            top: 0,
+            left: 0,
+        });
+    }, [currentCategory]);
+
+    useEffect(() => {
+        document.addEventListener('scroll', scrollHandler)
+        return function () {
+            document.removeEventListener('scroll', scrollHandler)
+        }
+    })
+
+    const scrollHandler = (e: any) => {
+        const scrollHeight = e.target.documentElement.scrollHeight;
+        const scrollTop = e.target.documentElement.scrollTop;
+        const innerHeight = window.innerHeight;
+        if (scrollHeight - (scrollTop + innerHeight) < 200 && total > 0) {
+            setIsLoading(true)
+        }
+    }
 
     const onChangeCategory = (id: number) => {
         const selectedCategory = categories.find(c => c.id == id);
@@ -87,6 +96,7 @@ const ProductList = () => {
     }
 
     const onAddNewProduct = async (values: Values) => {
+        // add category
         const result = {
             "title": values.title,
             "description": values.description,
@@ -106,7 +116,7 @@ const ProductList = () => {
             .catch(error => {
                 ToastError(error.message);
             }).finally(() => {
-                fetchProducts();
+                fetchTotal();
             })
     }
 

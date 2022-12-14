@@ -45,7 +45,7 @@ export const CategoryList = () => {
         await axios.delete(`${rootURL}/categories/${id}`)
             .then(() => {
                 fetchCategories();
-                ToastSuccess('The category has been removed successfully');
+                ToastSuccess('Категория была успешно удалена');
             })
             .catch(error => {
                 ToastError(error.message);
@@ -57,15 +57,12 @@ export const CategoryList = () => {
 
     const onEditCategory = async (category: ICategory) => {
         await axios.put(
-            `${rootURL}/categories/${category.id}`,
-            {
-                'name': category.name,
-                'image': category.image
-            }
+            `${rootURL}/categories/update`,
+            {category}
         )
             .then(() => {
                 fetchCategories();
-                ToastSuccess('The category has been updated successfully');
+                ToastSuccess('Категория была успешно обновлена');
             })
             .catch(error => {
                 ToastError(error.message);
@@ -80,12 +77,13 @@ export const CategoryList = () => {
             `${rootURL}/categories/create`,
             {
                 'name': category.name,
-                'image': category.image
+                'description': category.description,
+                'image': ''
             }
         )
             .then(() => {
                 fetchCategories();
-                ToastSuccess('The category has been created successfully');
+                ToastSuccess('Категория была успешно создана');
             })
             .catch(error => {
                 ToastError(error.message);
@@ -194,9 +192,7 @@ export const CategoryList = () => {
             <CreateCategoryModal
                 isOpen={createDisclosure.isOpen}
                 onClose={createDisclosure.onClose}
-                category={selectedCategory}
-                handleSelectedCategory={(category) => setSelectedCategory(category)}
-                onEditCategory={onCreateCategory}
+                onCreateCategory={onCreateCategory}
             />
             <EditCategoryModal
                 isOpen={editDisclosure.isOpen}
