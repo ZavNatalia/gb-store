@@ -96,12 +96,11 @@ const ProductList = () => {
     }
 
     const onAddNewProduct = async (values: Values) => {
-        // add category
         const result = {
             "title": values.title,
             "description": values.description,
             "price": values.price,
-            "category": values.categoryId,
+            "category": categories.find(c => c.id == values.categoryId),
             "image": [values.image]
         };
 
