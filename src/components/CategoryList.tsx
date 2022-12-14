@@ -58,7 +58,10 @@ export const CategoryList = () => {
     const onEditCategory = async (category: ICategory) => {
         await axios.put(
             `https://api.escuelajs.co/api/v1/categories/${category.id}`,
-            {'name': category.name}
+            {
+                'name': category.name,
+                'image': category.image
+            }
         )
             .then(() => {
                 fetchCategories();
@@ -179,7 +182,6 @@ export const CategoryList = () => {
                             isOpen={editDisclosure.isOpen}
                             onClose={editDisclosure.onClose}
                             category={selectedCategory}
-                            handleSelectedCategory={(e) => setSelectedCategory({...selectedCategory, name: e})}
                             onEditCategory={onEditCategory}
                         />
                         <RemoveCategoryModal
