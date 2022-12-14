@@ -1,6 +1,8 @@
 import React from 'react';
 import {
     Button,
+    FormControl,
+    FormLabel,
     Input,
     Modal,
     ModalBody,
@@ -9,47 +11,95 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    VStack
+    Stack,
+    Text
 } from "@chakra-ui/react";
-import {ICategory} from "../../models/ICategory";
-import {isEmpty} from "../../utilities/isEmpty";
+import {Field, Form, Formik} from "formik";
+import * as Yup from "yup";
+import {RegExpURL} from "../../utils/RegExpURL";
 
 interface EditCategoryModalProps {
-    category: ICategory,
-    handleSelectedCategory: (category: ICategory) => void,
     isOpen: boolean,
     onClose: () => void,
-    onEditCategory: (category: ICategory) => void,
+    onCreateCategory: (category: any) => void,
 }
 
+type Values = {
+    name: string;
+    image: string
+};
+
 const CreateCategoryModal = ({
-                                 category,
-                                 handleSelectedCategory,
                                  isOpen,
                                  onClose,
-                                 onEditCategory
+                                 onCreateCategory
                              }: EditCategoryModalProps) => {
+
+    const ValidationSchema = Yup.object().shape({
+        name: Yup.string()
+            .required('Пожалуйста, введите название категории'),
+        image: Yup.string()
+            .matches(RegExpURL, 'Пожалуйста, введите корректный URL')
+            .required('Пожалуйста, добавьте изображение категории')
+    });
+
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.16)'}}/>
             <ModalContent>
                 <ModalHeader borderBottom='1px solid' borderBottomColor='gray.200'>Создание категории</ModalHeader>
                 <ModalCloseButton/>
-                <ModalBody my={4}>
-                    <VStack spacing={4}>
-                        <Input placeholder='Введите название категории' value={category.name}
-                               onChange={(e) => handleSelectedCategory({...category, name: e.target.value})}/>
-                        <Input placeholder='Добавьте ссылку на изображение' value={category.image}
-                               onChange={(e) => handleSelectedCategory({...category, image: e.target.value})}/>
-                    </VStack>
-                </ModalBody>
-                <ModalFooter>
-                    <Button variant='ghost' mr={3} onClick={onClose}>
-                        Отмена
-                    </Button>
-                    <Button disabled={isEmpty(category) || category.name?.length < 2}
-                            onClick={() => onEditCategory(category)}>Сохранить</Button>
-                </ModalFooter>
+                <Formik
+                    initialValues={{name: '', description: '', image: ''}}
+                    validationSchema={ValidationSchema}
+                    onSubmit={async (values: Values) => {
+                        onCreateCategory(values)
+                    }}
+                >
+                    {({isValid, dirty}) => (
+                        <Form>
+                            <ModalBody my={4}>
+                                <Stack spacing={4}>
+                                    <FormControl>
+                                        <FormLabel htmlFor='name' fontWeight='bold'>Название категории</FormLabel>
+                                        <Field name="name">
+                                            {({field, meta}: any) => (
+                                                <>
+                                                    <Input name='name' type='string' {...field}/>
+                                                    {meta.touched && meta.error && (
+                                                        <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                    )}
+                                                </>
+                                            )}
+                                        </Field>
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel htmlFor='image' fontWeight='bold'>Изображение категории</FormLabel>
+                                        <Field name="image">
+                                            {({field, meta}: any) => (
+                                                <>
+                                                    <Input name='image' type='string' {...field}/>
+                                                    {meta.touched && meta.error && (
+                                                        <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                    )}
+                                                </>
+                                            )}
+                                        </Field>
+                                    </FormControl>
+                                </Stack>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button variant='ghost' mr={3} onClick={onClose}>
+                                    Отмена
+                                </Button>
+                                <Button isDisabled={!isValid || !dirty}
+                                        type='submit'>Создать</Button>
+                            </ModalFooter>
+                        </Form>
+                    )}
+                </Formik>
+
             </ModalContent>
         </Modal>
     );
