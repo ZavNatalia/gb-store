@@ -1,4 +1,4 @@
-import {Box, Button, Flex, Skeleton, Stack, useDisclosure} from '@chakra-ui/react';
+import {Box, Button, Center, Flex, Skeleton, Stack, Text, useDisclosure} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {NavItem} from './UI/NavItem';
@@ -102,15 +102,24 @@ export const CategoryList = () => {
 
     if (error) {
         return (
-            <>
-                <ErrorMessage message={error}/>
+            <Box
+                bg='white'
+                borderRight='1px'
+                position='sticky'
+                top='80px'
+                py={4}
+                height='calc(100vh - 80px)'
+                borderRightColor='gray.200'
+                overflowY='auto'>
+                <ErrorMessage message={'Не удалось получить список категорий'}/>
+
                 <Button
                     m={5}
                     leftIcon={<AiOutlineReload/>}
                     onClick={() => updateList()}>
-                    Обновить страницу
+                    Повторить запрос
                 </Button>
-            </>
+            </Box>
         )
     }
 
@@ -135,16 +144,23 @@ export const CategoryList = () => {
                 height='calc(100vh - 80px)'
                 borderRightColor='gray.200'
                 overflowY='auto'>
-                {isAdmin && <Button mx={2} mb={2} onClick={() => {
-                    setSelectedCategory({} as ICategory);
-                    createDisclosure.onOpen();
-                }}>Добавить категорию</Button>}
-                <NavItem
+                {isAdmin && <Button mx={2} mb={2} onClick={() => createDisclosure.onOpen()}>
+                    Добавить категорию
+                </Button>}
+
+                {categories.length === 0 && <Center>
+                    <Text mt={4} mx={2} color='gray' fontSize='sm'>
+                        Список категорий пуст
+                    </Text>
+                </Center>}
+
+                {categories.length > 0 && <NavItem
+                    key={0}
                     fontWeight={isEmpty(currentCategory) ? '800' : '400'}
                     onClick={() => onChangeCurrentCategory({} as ICategory)}
                 >
                     All
-                </NavItem>
+                </NavItem>}
                 {categories?.map((category) => (
                     <Flex
                         key={category.id}
@@ -171,28 +187,26 @@ export const CategoryList = () => {
                                             setSelectedCategory(category);
                                             removeDisclosure.onOpen();
                                         }}/>}
-                        <CreateCategoryModal
-                            isOpen={createDisclosure.isOpen}
-                            onClose={createDisclosure.onClose}
-                            category={selectedCategory}
-                            handleSelectedCategory={(category) => setSelectedCategory(category)}
-                            onEditCategory={onCreateCategory}
-                        />
-                        <EditCategoryModal
-                            isOpen={editDisclosure.isOpen}
-                            onClose={editDisclosure.onClose}
-                            category={selectedCategory}
-                            onEditCategory={onEditCategory}
-                        />
-                        <RemoveCategoryModal
-                            isOpen={removeDisclosure.isOpen}
-                            onClose={removeDisclosure.onClose}
-                            category={selectedCategory}
-                            onRemoveCategory={onRemoveCategory}
-                        />
                     </Flex>
                 ))}
             </Box>}
+            <CreateCategoryModal
+                isOpen={createDisclosure.isOpen}
+                onClose={createDisclosure.onClose}
+                onCreateCategory={onCreateCategory}
+            />
+            <EditCategoryModal
+                isOpen={editDisclosure.isOpen}
+                onClose={editDisclosure.onClose}
+                category={selectedCategory}
+                onEditCategory={onEditCategory}
+            />
+            <RemoveCategoryModal
+                isOpen={removeDisclosure.isOpen}
+                onClose={removeDisclosure.onClose}
+                category={selectedCategory}
+                onRemoveCategory={onRemoveCategory}
+            />
         </>
     );
 };

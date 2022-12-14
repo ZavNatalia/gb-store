@@ -19,10 +19,11 @@ import {
 import {Field, Form, Formik, FormikHelpers} from 'formik';
 import * as Yup from "yup";
 import {useCategory} from "../../context/CategoryContext";
+import {RegExpURL} from "../../utils/RegExpURL";
 
 export interface Values {
     title: string;
-    price: string;
+    price: number;
     description: string;
     categoryId: number;
     image: string;
@@ -42,7 +43,7 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
             .max(100, 'Пожалуйста, введите не более 100 символов')
             .required('Пожалуйста, заполните обязательное поле'),
         image: Yup.string()
-            .url('Некорректная ссылка')
+            .matches(RegExpURL, 'Пожалуйста, введите корректный URL')
             .required('Пожалуйста, добавьте ссылку на изображение'),
         description: Yup.string()
             .min(5, 'Пожалуйста, введите не меньше 5 символов')
@@ -69,7 +70,7 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
                 <Formik
                     initialValues={{
                         title: '',
-                        price: '',
+                        price: 0,
                         description: '',
                         categoryId: currentCategory.id,
                         image: '',
@@ -83,11 +84,11 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
                         setSubmitting(false);
                     }}
                 >
-                    {({isSubmitting, values}) => (
+                    {({isSubmitting}) => (
                         <Form style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
                             <DrawerBody flex={1}>
                                 <Stack spacing={6} py={4}>
-                                    <FormControl>
+                                    {categories.length > 0 && <FormControl>
                                         <FormLabel htmlFor='categoryId' fontSize='sm' color='gray.400'>Категория
                                             товара</FormLabel>
                                         <Field name="categoryId">
@@ -107,6 +108,7 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
                                             )}
                                         </Field>
                                     </FormControl>
+                                    }
 
                                     <FormControl>
                                         <FormLabel htmlFor='title' fontSize='sm' color='gray.400'>Наименование
