@@ -12,7 +12,7 @@ import RemoveCategoryModal from './modals/RemoveCategoryModal';
 import EditCategoryModal from './modals/EditCategoryModal';
 import {ToastError, ToastSuccess} from '../utilities/error-handling';
 import CreateCategoryModal from './modals/CreateCategory';
-import { rootURL } from '../constants/URLs';
+import {rootURL} from '../constants/URLs';
 import {isAdmin} from "../constants/isAdmin";
 
 export const CategoryList = () => {
@@ -58,7 +58,10 @@ export const CategoryList = () => {
     const onEditCategory = async (category: ICategory) => {
         await axios.put(
             `${rootURL}/categories/${category.id}`,
-            {'name': category.name}
+            {
+                'name': category.name,
+                'image': category.image
+            }
         )
             .then(() => {
                 fetchCategories();
@@ -76,7 +79,8 @@ export const CategoryList = () => {
         await axios.post(
             `${rootURL}/categories/create`,
             {
-                'name': category.name
+                'name': category.name,
+                'image': category.image
             }
         )
             .then(() => {
@@ -190,7 +194,7 @@ export const CategoryList = () => {
             <CreateCategoryModal
                 isOpen={createDisclosure.isOpen}
                 onClose={createDisclosure.onClose}
-                category={selectedCategory ?? {} as ICategory}
+                category={selectedCategory}
                 handleSelectedCategory={(category) => setSelectedCategory(category)}
                 onEditCategory={onCreateCategory}
             />
@@ -198,7 +202,6 @@ export const CategoryList = () => {
                 isOpen={editDisclosure.isOpen}
                 onClose={editDisclosure.onClose}
                 category={selectedCategory}
-                handleSelectedCategory={(e) => setSelectedCategory({...selectedCategory, name: e})}
                 onEditCategory={onEditCategory}
             />
             <RemoveCategoryModal
