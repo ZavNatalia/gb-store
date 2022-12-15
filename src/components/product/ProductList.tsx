@@ -99,8 +99,8 @@ const ProductList = () => {
         const result = {
             "title": values.title,
             "description": values.description,
-            "price": values.price,
-            "category": categories.find(c => c.id == values.categoryId),
+            "price": +values.price,
+            "category": values.categoryId,
             "image": [values.image]
         };
 

@@ -11,9 +11,10 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    Stack, Text
+    Stack,
+    Text
 } from "@chakra-ui/react";
-import { Field, Form, Formik } from 'formik';
+import {Field, Form, Formik} from 'formik';
 import * as Yup from "yup";
 
 interface EditCategoryModalProps {
@@ -27,7 +28,8 @@ type Values = {
     description: string
 };
 
-const CreateCategoryModal = ({ isOpen,
+const CreateCategoryModal = ({
+                                 isOpen,
                                  onClose,
                                  onCreateCategory
                              }: EditCategoryModalProps) => {
@@ -46,57 +48,56 @@ const CreateCategoryModal = ({ isOpen,
             <ModalContent>
                 <ModalHeader borderBottom='1px solid' borderBottomColor='gray.200'>Создание категории</ModalHeader>
                 <ModalCloseButton/>
-                <ModalBody my={4}>
-                    <Formik
-                        initialValues={{name: '', description: ''}}
-                        validationSchema={ValidationSchema}
-                        onSubmit={async (values: Values) => {
-                            onCreateCategory(values)
-                        }}
-                    >
-                        {({isValid, dirty}) => (
-                            <Form>
-                                <ModalBody my={4}>
-                                    <Stack spacing={4}>
-                                        <FormControl>
-                                            <FormLabel htmlFor='name' fontWeight='bold'>Название категории</FormLabel>
-                                            <Field name="name">
-                                                {({field, meta}: any) => (
-                                                    <>
-                                                        <Input name='name' type='string' {...field}/>
-                                                        {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </Field>
-                                        </FormControl>
-                                        <FormControl>
-                                            <FormLabel htmlFor='description' fontWeight='bold'>Описание категории</FormLabel>
-                                            <Field name="description">
-                                                {({field, meta}: any) => (
-                                                    <>
-                                                        <Input name='description' type='string' {...field}/>
-                                                        {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
-                                                        )}
-                                                    </>
-                                                )}
-                                            </Field>
-                                        </FormControl>
-                                    </Stack>
-                                </ModalBody>
-                                <ModalFooter>
-                                    <Button variant='ghost' mr={3} onClick={onClose}>
-                                        Отмена
-                                    </Button>
-                                    <Button isDisabled={!isValid || !dirty}
-                                            type='submit'>Создать</Button>
-                                </ModalFooter>
-                            </Form>
-                        )}
-                    </Formik>
-                </ModalBody>
+                <Formik
+                    initialValues={{name: '', description: ''}}
+                    validationSchema={ValidationSchema}
+                    onSubmit={async (values: Values) => {
+                        onCreateCategory(values)
+                    }}
+                >
+                    {({isValid, dirty}) => (
+                        <Form>
+                            <ModalBody>
+                                <Stack spacing={4}>
+                                    <FormControl>
+                                        <FormLabel htmlFor='name' fontWeight='bold'>Название категории</FormLabel>
+                                        <Field name="name">
+                                            {({field, meta}: any) => (
+                                                <>
+                                                    <Input name='name' type='string' {...field}/>
+                                                    {meta.touched && meta.error && (
+                                                        <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                    )}
+                                                </>
+                                            )}
+                                        </Field>
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel htmlFor='description' fontWeight='bold'>Описание
+                                            категории</FormLabel>
+                                        <Field name="description">
+                                            {({field, meta}: any) => (
+                                                <>
+                                                    <Input name='description' type='string' {...field}/>
+                                                    {meta.touched && meta.error && (
+                                                        <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                    )}
+                                                </>
+                                            )}
+                                        </Field>
+                                    </FormControl>
+                                </Stack>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button variant='ghost' mr={3} onClick={onClose}>
+                                    Отмена
+                                </Button>
+                                <Button isDisabled={!isValid || !dirty}
+                                        type='submit'>Создать</Button>
+                            </ModalFooter>
+                        </Form>
+                    )}
+                </Formik>
             </ModalContent>
         </Modal>
     );

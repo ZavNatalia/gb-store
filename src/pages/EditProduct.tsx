@@ -52,7 +52,7 @@ export const EditProduct = () => {
 
     const updateTitle = (v: string) => setProduct({...product, title: v})
     const updateDescription = (v: string) => setProduct({...product, description: v})
-    const updatePrice = (v: string) => setProduct({...product, price: v})
+    const updatePrice = (v: string) => setProduct({...product, price: +v})
     const updateImage = (v: string) => setProduct({...product, image: [v]})
 
 
@@ -62,8 +62,7 @@ export const EditProduct = () => {
     }
 
     const onSaveChanges = async () => {
-        await axios.put(`${rootURL}/items/update`,
-            {product})
+        await axios.put(`${rootURL}/items/update`, product)
             .then(() => {
                     ToastSuccess('The product has been updated successfully');
                 }

@@ -23,7 +23,7 @@ export const EditPrice = ({price, updatePrice}: EditPriceProps) => {
                         m={0}
                         width='150px'
                         fontSize='x-large'
-                        type={"number"}
+                        type='number'
                         _focus={{borderColor: 'yellow.500'}}
                         onChange={(e) => updatePrice(e.target.value)}/>
                     <SaveIcon isDisabled={price === 0}
