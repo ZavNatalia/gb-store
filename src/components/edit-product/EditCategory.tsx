@@ -16,7 +16,7 @@ const EditCategory = ({category, updateCategory}: EditCategoryProps) => {
 
     const fetchCategories = async () => {
         setIsLoading(true)
-        await axios.get(`${rootURL}/items/categories`)
+        await axios.get(`${rootURL}/categories/list`)
             .then(response => {
                 let result = response.data;
                 onChangeCategories(result);
