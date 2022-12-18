@@ -23,6 +23,7 @@ import {ICustomer} from "../models/ICustomer";
 import {Links} from './cart/Links';
 import {isAdmin} from '../constants/isAdmin';
 import { rootURL } from '../constants/URLs';
+import LogOut from './modals/LogOut';
 
 export const Header = () => {
     const {onChangeCurrentCategory} = useCategory();
@@ -31,6 +32,7 @@ export const Header = () => {
     const [customer, setCustomer] = useState({} as ICustomer);
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
+    const logOutDisclosure = useDisclosure();
 
     const signInBySocial = async (source: string) => {
         await axios.get(
@@ -82,6 +84,24 @@ export const Header = () => {
             })
             .finally(() => {
                 signUpDisclosure.onClose();
+            })
+    }
+    const logOutHandler = async () => {
+        await axios.post(
+            `${rootURL}/user/logout`, {
+                id: customer.id
+            }
+        )
+            .then(() => {
+                setCustomer({} as ICustomer)
+                ToastSuccess('Вы вышли из аккаунта');
+                setIsAuth(false);
+            })
+            .catch(error => {
+                ToastError(error.message);
+            })
+            .finally(() => {
+                logOutDisclosure.onClose();
             })
     }
 
@@ -144,7 +164,7 @@ export const Header = () => {
                         <MenuList>
                             {!isAdmin && isAuth && <MenuItem>Мои заказы</MenuItem>}
                             {isAuth && <MenuDivider/>}
-                            {isAuth && <MenuItem>Выйти</MenuItem>}
+                            {isAuth && <MenuItem onClick={() => logOutDisclosure.onOpen()}>Выйти</MenuItem>}
                         </MenuList>
                     </Menu>
                 </>}
@@ -159,6 +179,9 @@ export const Header = () => {
                     onClose={signUpDisclosure.onClose}
                     onOpenSignIn={signInDisclosure.onOpen}
                     signUpHandler={signUpHandler}/>
+            <LogOut isOpen={logOutDisclosure.isOpen}
+                    onClose={logOutDisclosure.onClose}
+                    logOutHandler={logOutHandler}/>
         </Flex>
     );
 }
