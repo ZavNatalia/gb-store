@@ -21,7 +21,6 @@ const ProductList = () => {
     const {currentCategory, onChangeCurrentCategory, categories} = useCategory();
     const {isOpen, onOpen, onClose} = useDisclosure()
     const [isLoading, setIsLoading] = useState(true);
-    // const [contentLength, setContentLength] = useState(0);
     const [total, setTotal] = useState(0);
 
     const fetchProducts = async () => {
@@ -35,7 +34,6 @@ const ProductList = () => {
             .then(response => {
                 setProducts([...products, ...response.data]);
                 setOffset(prevState => prevState + limit);
-                // setContentLength(+response.headers['content-length']);
             })
             .catch(e => setError(e.message))
             .finally(() => {
@@ -47,7 +45,7 @@ const ProductList = () => {
         setError('');
         await axios.get(`${rootURL}/items/quantity`)
             .then(response => {
-                setTotal(response.data);
+                setTotal(response.data.quantity);
             })
             .catch(e => setError(e.message))
             .finally(() => fetchProducts())
@@ -83,7 +81,7 @@ const ProductList = () => {
         const scrollHeight = e.target.documentElement.scrollHeight;
         const scrollTop = e.target.documentElement.scrollTop;
         const innerHeight = window.innerHeight;
-        if (scrollHeight - (scrollTop + innerHeight) < 200 && total > 0) {
+        if (scrollHeight - (scrollTop + innerHeight) < 50 && total > 0 && offset <= total) {
             setIsLoading(true)
         }
     }
