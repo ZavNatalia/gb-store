@@ -57,7 +57,7 @@ export const CategoryList = () => {
 
     const onEditCategory = async (category: ICategory) => {
         await axios.put(
-            `${rootURL}/categories/update`,
+            `${rootURL}/categories/${category.id}`,
             {category}
         )
             .then(() => {
