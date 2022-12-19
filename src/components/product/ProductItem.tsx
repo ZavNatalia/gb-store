@@ -34,7 +34,13 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             justifyContent='space-between'
             position='relative'
         >
-            {!isAdmin && <FavouriteSwitcher isFav={isFav}/>}
+            {!isAdmin && <Box position='absolute'
+                             right={2}
+                             top={2}>
+                <FavouriteSwitcher isFav={isFav}/>
+            </Box>
+
+           }
             <Box py={4}>
                 <Link
                     to={isAdmin ? `/edit/${id}/${title}` : `/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}>

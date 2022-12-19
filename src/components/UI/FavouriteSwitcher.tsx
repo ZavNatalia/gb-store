@@ -7,19 +7,11 @@ interface FavouriteSwitcherProps {
 }
 
 export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
-
-    const onAddFavourite = () => {
-    }
-
-    const onDeleteFavourite = () => {
-    }
-
+    const onAddFavourite = () => {}
+    const onDeleteFavourite = () => {}
     return (
         <IconButton icon={isFav ? <FaHeart/> : <FaRegHeart/>}
                     aria-label='Редактировать'
-                    position='absolute'
-                    right={2}
-                    top={2}
                     borderRadius='50%'
                     backgroundColor='white'
                     color={isFav ? 'red' : 'gray.400'}
@@ -29,6 +21,5 @@ export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
                     _focus={{boxShadow: 'none'}}
                     onClick={() => isFav ? onDeleteFavourite() : onAddFavourite()}
         />
-
     );
 };
