@@ -105,22 +105,21 @@ export const Product = () => {
                             товар</Button>
 
                     </HStack>}
-                    <HStack gap={10} pt={6}>
+                    <Flex gap={10} pt={6}>
                         <Flex maxH='600px'
                               maxW='600px'
                               minW='300px'
                               justifyContent='center'
-                              flex={3}
+                              flex={2}
                               position='relative'
                         >
                             <Carousel images={product.image}/>
                         </Flex>
-                        <VStack spacing={8} flex={1} alignItems='start' justifyContent='center'>
+                        <VStack spacing={8} flex={1} alignItems='start' justifyContent='center' mt='-60px'>
                             <HStack alignItems='flex-start'>
                                 <Text fontSize='xx-large' noOfLines={3}>{product.title}</Text>
                                 {!isAdmin && <FavouriteSwitcher isFav={true}/>}
                             </HStack>
-
                             <Text>{product.description}</Text>
                             <Flex
                                 border='1px solid' borderColor='gray.200' borderRadius='2xl' p={4}
@@ -133,7 +132,7 @@ export const Product = () => {
                                 </Box>
                             </Flex>
                         </VStack>
-                    </HStack>
+                    </Flex>
 
                 </>
             }

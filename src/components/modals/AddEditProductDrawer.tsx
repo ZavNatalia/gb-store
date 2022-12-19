@@ -13,6 +13,7 @@ import {
     FormControl,
     FormLabel,
     IconButton,
+    Image,
     Input,
     Select,
     Stack,
@@ -103,7 +104,7 @@ const AddEditProductDrawer = ({
                     }}
                 >
                     {({isSubmitting, values, isValid, dirty}) => (
-                        <Form style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
+                        <Form style={{height: 'calc(100% - 80px)', display: 'flex', flexDirection: 'column'}}>
                             <DrawerBody flex={1}>
                                 <Stack spacing={6} py={4}>
                                     {categories.length > 0 && <FormControl>
@@ -152,23 +153,27 @@ const AddEditProductDrawer = ({
                                                 <VStack spacing={3}>
                                                     {values?.image?.length > 0 &&
                                                         values.image?.map((image, index) => (
-                                                            <Flex key={index} gap={2} w='100%'>
-                                                                <Field name={`image.${index}`}>
-                                                                    {({field, meta}: any) => (
-                                                                        <Box w='100%'>
-                                                                            <Input type='url' variant='flushed'
-                                                                                   placeholder='Добавьте ссылку на изображение'
-                                                                                   isInvalid={meta.touched ? meta.error : false} {...field} />
-                                                                            {meta.touched && meta.error && (
-                                                                                <Text color='red.400' fontSize='sm'>Добавьте
-                                                                                    ссылку на изображение</Text>
-                                                                            )}
-                                                                        </Box>
-                                                                    )}
-                                                                </Field>
-                                                                <IconButton aria-label='Delete image' icon={<BiTrash/>}
-                                                                            onClick={() => remove(index)}/>
-                                                            </Flex>
+                                                            <Box key={index} w='100%'>
+                                                                <Image src={image} maxH='100px'/>
+                                                                <Flex  gap={2} >
+                                                                    <Field name={`image.${index}`}>
+                                                                        {({field, meta}: any) => (
+                                                                            <Box w='100%'>
+                                                                                <Input type='url' variant='flushed'
+                                                                                       placeholder='Добавьте ссылку на изображение'
+                                                                                       isInvalid={meta.touched ? meta.error : false} {...field} />
+                                                                                {meta.touched && meta.error && (
+                                                                                    <Text color='red.400' fontSize='sm'>Добавьте
+                                                                                        ссылку на изображение</Text>
+                                                                                )}
+                                                                            </Box>
+                                                                        )}
+                                                                    </Field>
+                                                                    <IconButton aria-label='Delete image' icon={<BiTrash/>}
+                                                                                onClick={() => remove(index)}/>
+                                                                </Flex>
+                                                            </Box>
+
                                                         ))}
                                                     {values.image.length < 5 && <Button
                                                         mt={4}
