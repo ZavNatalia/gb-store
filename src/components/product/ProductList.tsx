@@ -98,7 +98,7 @@ const ProductList = () => {
             "title": values.title,
             "description": values.description,
             "price": +values.price,
-            "categoryId": values.categoryId,
+            "category": values.categoryId,
             "images": values.images
         };
 
