@@ -21,8 +21,6 @@ const settings = {
 
 const Carousel = ({images}: CarouselProps) => {
     const [slider, setSlider] = React.useState<Slider | null>(null);
-    const top = useBreakpointValue({ base: '90%', md: '50%' });
-    const side = useBreakpointValue({ base: '30%', md: '10px' });
 
     return (
         <Box
@@ -32,11 +30,14 @@ const Carousel = ({images}: CarouselProps) => {
             overflow='hidden'>
             <IconButton
                 aria-label="left-arrow"
-                colorScheme="messenger"
+                colorScheme="gray"
                 borderRadius="full"
+                border='1px solid'
+                borderColor='gray.200'
                 position="absolute"
-                left={side}
-                top={top}
+                size='lg'
+                left='10px'
+                top='40%'
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
                 onClick={() => slider?.slickPrev()}>
@@ -44,11 +45,14 @@ const Carousel = ({images}: CarouselProps) => {
             </IconButton>
             <IconButton
                 aria-label="right-arrow"
-                colorScheme="messenger"
+                colorScheme="gray"
                 borderRadius="full"
+                border='1px solid'
+                borderColor='gray.200'
                 position="absolute"
-                right={side}
-                top={top}
+                size='lg'
+                right='10px'
+                top='40%'
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
                 onClick={() => slider?.slickNext()}>
