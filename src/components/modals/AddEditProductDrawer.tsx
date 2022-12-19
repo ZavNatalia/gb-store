@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+    Box,
     Button,
     Drawer,
     DrawerBody,
@@ -8,43 +9,59 @@ import {
     DrawerFooter,
     DrawerHeader,
     DrawerOverlay,
+    Flex,
     FormControl,
     FormLabel,
+    IconButton,
     Input,
     Select,
     Stack,
     Text,
-    Textarea
+    Textarea,
+    VStack
 } from "@chakra-ui/react";
-import {Field, Form, Formik, FormikHelpers} from 'formik';
+import {Field, FieldArray, Form, Formik, FormikHelpers} from 'formik';
 import * as Yup from "yup";
 import {useCategory} from "../../context/CategoryContext";
-import {RegExpURL} from "../../utils/RegExpURL";
+import {IProduct} from "../../models/IProduct";
+import {BiTrash} from "react-icons/bi";
 
 export interface Values {
     title: string;
     price: number;
     description: string;
     categoryId: number;
-    image: string;
+    images: string[];
 }
 
-interface NewProductDrawerProps {
+interface AddEditProductDrawerProps {
+    isEdit: boolean,
+    product?: IProduct,
     isOpen: boolean,
     onClose: () => void,
-    onAddNewProduct: (values: Values) => Promise<any>
+    onSubmit: (values: any) => void
 }
 
-const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerProps) => {
+const AddEditProductDrawer = ({
+                                  isEdit,
+                                  product = {} as IProduct,
+                                  isOpen,
+                                  onClose,
+                                  onSubmit
+                              }: AddEditProductDrawerProps) => {
     const {currentCategory, categories} = useCategory();
+
     const ValidationSchema = Yup.object().shape({
         title: Yup.string()
             .min(5, 'Пожалуйста, введите не меньше 5 символов')
             .max(100, 'Пожалуйста, введите не более 100 символов')
             .required('Пожалуйста, заполните обязательное поле'),
-        image: Yup.string()
-            .matches(RegExpURL, 'Пожалуйста, введите корректный URL')
-            .required('Пожалуйста, добавьте ссылку на изображение'),
+        // images: Yup.mixed()
+        //     .when('isArray', {
+        //         is: Array.isArray,
+        //         then: Yup.array().of(Yup.string()),
+        //         otherwise: Yup.string(),
+        //     }),
         description: Yup.string()
             .min(5, 'Пожалуйста, введите не меньше 5 символов')
             .max(600, 'Пожалуйста, введите не более 600 символов')
@@ -62,29 +79,29 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
             <DrawerOverlay backdropFilter='blur(2px)'/>
             <DrawerContent minWidth='500px'>
                 <DrawerCloseButton/>
-                <DrawerHeader borderBottomWidth='1px' backgroundColor='gray.100' boxShadow='md' minH='80px' display='flex'
-                              alignItems='center'>
-                    Новый товар
+                <DrawerHeader borderBottomWidth='1px' backgroundColor='gray.100' boxShadow='md' minH='80px'
+                              display='flex' alignItems='center'>
+                    {isEdit ? 'Редактирование товара' : 'Добавление нового товара'}
                 </DrawerHeader>
 
                 <Formik
                     initialValues={{
-                        title: '',
-                        price: 0,
-                        description: '',
-                        categoryId: currentCategory.id,
-                        image: '',
+                        title: product.title ?? '',
+                        price: product.price ?? 0,
+                        description: product.description ?? '',
+                        categoryId: product.category?.id ?? currentCategory.id,
+                        images: product.images ?? ['']
                     }}
                     validationSchema={ValidationSchema}
                     onSubmit={async (
                         values: Values,
                         {setSubmitting}: FormikHelpers<Values>
                     ) => {
-                        await onAddNewProduct(values);
+                        await onSubmit(values);
                         setSubmitting(false);
                     }}
                 >
-                    {({isSubmitting}) => (
+                    {({isSubmitting, values, isValid, dirty}) => (
                         <Form style={{height: '100%', display: 'flex', flexDirection: 'column'}}>
                             <DrawerBody flex={1}>
                                 <Stack spacing={6} py={4}>
@@ -126,23 +143,41 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
                                             )}
                                         </Field>
                                     </FormControl>
-
                                     <FormControl>
-                                        <FormLabel htmlFor='image' fontSize='sm' color='gray.400'>Фото
+                                        <FormLabel htmlFor='title' fontSize='sm' color='gray.400'>Изображения
                                             товара</FormLabel>
-                                        <Field name="image">
-                                            {({field, meta}: any) => (
-                                                <>
-                                                    <Input type='url' variant='flushed'
-                                                           placeholder='Добавьте ссылку на изображение'
-                                                           isInvalid={meta.touched ? meta.error : false} {...field} />
-                                                    {meta.touched && meta.error && (
-                                                        <Text color='red.400' fontSize='sm'>{meta.error}</Text>
-                                                    )}
-
-                                                </>
+                                        <FieldArray name="images">
+                                            {({remove, push}) => (
+                                                <VStack spacing={3}>
+                                                    {values?.images?.length > 0 &&
+                                                        values.images?.map((image, index) => (
+                                                            <Flex key={index} gap={2} w='100%'>
+                                                                <Field name={`images.${index}`}>
+                                                                    {({field, meta}: any) => (
+                                                                        <Box w='100%'>
+                                                                            <Input type='url' variant='flushed'
+                                                                                   placeholder='Добавьте ссылку на изображение'
+                                                                                   isInvalid={meta.touched ? meta.error : false} {...field} />
+                                                                            {meta.touched && meta.error && (
+                                                                                <Text color='red.400' fontSize='sm'>Добавьте
+                                                                                    ссылку на изображение</Text>
+                                                                            )}
+                                                                        </Box>
+                                                                    )}
+                                                                </Field>
+                                                                <IconButton aria-label='Delete image' icon={<BiTrash/>}
+                                                                            onClick={() => remove(index)}/>
+                                                            </Flex>
+                                                        ))}
+                                                    {values.images.length < 5 && <Button
+                                                        mt={4}
+                                                        onClick={() => push('')}
+                                                    >
+                                                        Добавить изображение
+                                                    </Button>}
+                                                </VStack>
                                             )}
-                                        </Field>
+                                        </FieldArray>
                                     </FormControl>
 
                                     <FormControl>
@@ -184,6 +219,7 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
                                     Отмена
                                 </Button>
                                 <Button colorScheme='yellow' type='submit' fontWeight='500' isLoading={isSubmitting}
+                                        isDisabled={!isValid || !dirty}
                                         loadingText='Сохранение...'>Сохранить</Button>
                             </DrawerFooter>
                         </Form>
@@ -194,4 +230,4 @@ const NewProductDrawer = ({isOpen, onClose, onAddNewProduct}: NewProductDrawerPr
     );
 };
 
-export default NewProductDrawer;
+export default AddEditProductDrawer;

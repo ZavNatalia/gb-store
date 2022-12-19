@@ -57,6 +57,7 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setIsAuth(true);
+                localStorage.setItem('token', data.access_token);
             })
             .catch(error => {
                 ToastError(error.message);
@@ -83,6 +84,11 @@ export const Header = () => {
             .finally(() => {
                 signUpDisclosure.onClose();
             })
+    }
+
+    const logOutHandler = () => {
+        localStorage.removeItem('token');
+        setIsAuth(false);
     }
 
     return (
@@ -144,7 +150,7 @@ export const Header = () => {
                         <MenuList>
                             {!isAdmin && isAuth && <MenuItem>Мои заказы</MenuItem>}
                             {isAuth && <MenuDivider/>}
-                            {isAuth && <MenuItem>Выйти</MenuItem>}
+                            {isAuth && <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>}
                         </MenuList>
                     </Menu>
                 </>}
