@@ -6,7 +6,7 @@ import {IProduct} from '../../models/IProduct';
 import ErrorMessage from "../UI/ErrorMessage";
 import {useCategory} from "../../context/CategoryContext";
 import {GrAdd} from "react-icons/gr";
-import NewProductDrawer, {Values} from './NewProductDrawer';
+import AddEditProductDrawer, {Values} from '../modals/AddEditProductDrawer';
 import {isEmpty} from "../../utilities/isEmpty";
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../UI/Loader";
@@ -86,7 +86,7 @@ const ProductList = () => {
             "price": values.price,
             "description": values.description,
             "categoryId": values.categoryId,
-            "images": [values.image]
+            "images": values.images
         };
 
         await axios.post('https://api.escuelajs.co/api/v1/products/', result)
@@ -94,7 +94,7 @@ const ProductList = () => {
                 if (currentCategory.id !== values.categoryId) {
                     onChangeCategory(values.categoryId);
                 }
-                ToastSuccess('The product was successfully added');
+                ToastSuccess('Товар был успешно добавлен');
                 onClose();
             })
             .catch(error => {
@@ -164,7 +164,7 @@ const ProductList = () => {
                     </Center>
                 )}
             </>
-            <NewProductDrawer isOpen={isOpen} onClose={onClose} onAddNewProduct={onAddNewProduct}/>
+            <AddEditProductDrawer isEdit={false} isOpen={isOpen} onClose={onClose} onSubmit={onAddNewProduct}/>
         </Box>
     );
 };

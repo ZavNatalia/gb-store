@@ -24,6 +24,6 @@ export const adminRoutes: IRoute[] = [
     { path: RouteNames.HOME, component: pages.Admin },
     { path: RouteNames.ALL_PRODUCTS, component: pages.Admin },
     { path: RouteNames.CATEGORY, component: pages.Admin },
-    { path: RouteNames.EDIT_PRODUCT, component: pages.EditProduct },
+    { path: RouteNames.PRODUCT, component: pages.Product },
 
 ]
