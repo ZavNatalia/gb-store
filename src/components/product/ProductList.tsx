@@ -98,14 +98,14 @@ const ProductList = () => {
             "title": values.title,
             "description": values.description,
             "price": +values.price,
-            "category": values.categoryId,
-            "images": values.images
+            "category": values.category,
+            "image": values.image
         };
 
         await axios.post(`${rootURL}/items/create`, result)
             .then(() => {
-                if (currentCategory.id !== values.categoryId) {
-                    onChangeCategory(values.categoryId);
+                if (currentCategory.id !== values.category) {
+                    onChangeCategory(values.category);
                 }
                 ToastSuccess('Товар был успешно добавлен');
                 onClose();

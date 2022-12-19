@@ -51,8 +51,8 @@ export const Product = () => {
     }, []);
 
     const onEditProduct = async (values: Values) => {
-        await axios.put(`https://api.escuelajs.co/api/v1/products/${productId}`,
-            values)
+        await axios.put(`${rootURL}/items/update`,
+            {...product, values})
             .then(() => {
                     ToastSuccess('The product has been updated successfully');
                     editDisclosure.onClose();
@@ -67,15 +67,15 @@ export const Product = () => {
     }
 
     const onRemoveProduct = async () => {
-        await axios.delete(`https://api.escuelajs.co/api/v1/products/${productId}`)
-            .then(() => {
-                    ToastSuccess('The product has been removed successfully');
-                    navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)
-                }
-            )
-            .catch((error) => {
-                ToastError(error.message);
-            })
+        // await axios.delete(`${rootURL}/items/${productId}`)
+        //     .then(() => {
+        //             ToastSuccess('The product has been removed successfully');
+        //             navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)
+        //         }
+        //     )
+        //     .catch((error) => {
+        //         ToastError(error.message);
+        //     })
     }
 
     return (

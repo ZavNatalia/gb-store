@@ -31,8 +31,8 @@ export interface Values {
     title: string;
     price: number;
     description: string;
-    categoryId: number;
-    images: string[];
+    category: number;
+    image: string[];
 }
 
 interface AddEditProductDrawerProps {
@@ -57,7 +57,7 @@ const AddEditProductDrawer = ({
             .min(5, 'Пожалуйста, введите не меньше 5 символов')
             .max(100, 'Пожалуйста, введите не более 100 символов')
             .required('Пожалуйста, заполните обязательное поле'),
-        // images: Yup.mixed()
+        // image: Yup.mixed()
         //     .when('isArray', {
         //         is: Array.isArray,
         //         then: Yup.array().of(Yup.string()),
@@ -90,8 +90,8 @@ const AddEditProductDrawer = ({
                         title: product.title ?? '',
                         price: product.price ?? 0,
                         description: product.description ?? '',
-                        categoryId: product.category?.id ?? currentCategory.id,
-                        images: product.image ?? ['']
+                        category: product.category?.id ?? currentCategory.id,
+                        image: product.image ?? ['']
                     }}
                     validationSchema={ValidationSchema}
                     onSubmit={async (
@@ -107,12 +107,12 @@ const AddEditProductDrawer = ({
                             <DrawerBody flex={1}>
                                 <Stack spacing={6} py={4}>
                                     {categories.length > 0 && <FormControl>
-                                        <FormLabel htmlFor='categoryId' fontSize='sm' color='gray.400'>Категория
+                                        <FormLabel htmlFor='category' fontSize='sm' color='gray.400'>Категория
                                             товара</FormLabel>
-                                        <Field name="categoryId">
+                                        <Field name="category">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Select id='categoryId' name='categoryId'
+                                                    <Select id='category' name='category'
                                                             {...field}>
                                                         {categories.map(category => (
                                                             <option value={category.id}
@@ -147,13 +147,13 @@ const AddEditProductDrawer = ({
                                     <FormControl>
                                         <FormLabel htmlFor='title' fontSize='sm' color='gray.400'>Изображения
                                             товара</FormLabel>
-                                        <FieldArray name="images">
+                                        <FieldArray name="image">
                                             {({remove, push}) => (
                                                 <VStack spacing={3}>
-                                                    {values?.images?.length > 0 &&
-                                                        values.images?.map((image, index) => (
+                                                    {values?.image?.length > 0 &&
+                                                        values.image?.map((image, index) => (
                                                             <Flex key={index} gap={2} w='100%'>
-                                                                <Field name={`images.${index}`}>
+                                                                <Field name={`image.${index}`}>
                                                                     {({field, meta}: any) => (
                                                                         <Box w='100%'>
                                                                             <Input type='url' variant='flushed'
@@ -170,7 +170,7 @@ const AddEditProductDrawer = ({
                                                                             onClick={() => remove(index)}/>
                                                             </Flex>
                                                         ))}
-                                                    {values.images.length < 5 && <Button
+                                                    {values.image.length < 5 && <Button
                                                         mt={4}
                                                         onClick={() => push('')}
                                                     >
