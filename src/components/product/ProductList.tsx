@@ -47,7 +47,7 @@ const ProductList = () => {
         }
     }, [isLoading]);
 
-    useEffect(() => {
+    const updateList = () => {
         setIsLoading(true);
         setProducts([]);
         setOffset(0);
@@ -55,6 +55,10 @@ const ProductList = () => {
             top: 0,
             left: 0,
         });
+    }
+
+    useEffect(() => {
+        updateList();
     }, [currentCategory]);
 
     useEffect(() => {
@@ -80,19 +84,19 @@ const ProductList = () => {
         }
     }
 
-    const onAddNewProduct = async (values: Values) => {
+    const onAddNewProduct = async (values: IProduct) => {
         const result = {
             "title": values.title,
             "price": values.price,
             "description": values.description,
-            "categoryId": values.categoryId,
+            "categoryId": values.category.id,
             "images": values.images
         };
 
         await axios.post('https://api.escuelajs.co/api/v1/products/', result)
             .then(() => {
-                if (currentCategory.id !== values.categoryId) {
-                    onChangeCategory(values.categoryId);
+                if (currentCategory.id !== values.category.id) {
+                    onChangeCategory(values.category.id);
                 }
                 ToastSuccess('Товар был успешно добавлен');
                 onClose();
@@ -100,7 +104,7 @@ const ProductList = () => {
             .catch(error => {
                 ToastError(error.message);
             }).finally(() => {
-                fetchProducts();
+                updateList();
             })
     }
 

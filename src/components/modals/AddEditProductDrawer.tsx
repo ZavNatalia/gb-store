@@ -98,7 +98,14 @@ const AddEditProductDrawer = ({
                         values: Values,
                         {setSubmitting}: FormikHelpers<Values>
                     ) => {
-                        await onSubmit(values);
+                        const result: Partial<IProduct> = {
+                            title: values.title,
+                            price: values.price,
+                            description: values.description,
+                            category: categories[values.categoryId - 1],
+                            images: values.images
+                        }
+                        await onSubmit(result);
                         setSubmitting(false);
                     }}
                 >

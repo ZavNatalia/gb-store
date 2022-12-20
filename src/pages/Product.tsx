@@ -49,9 +49,9 @@ export const Product = () => {
         getProduct();
     }, []);
 
-    const onEditProduct = async (values: Values) => {
+    const onEditProduct = async (result: IProduct) => {
         await axios.put(`https://api.escuelajs.co/api/v1/products/${productId}`,
-            values)
+            result)
             .then(() => {
                     ToastSuccess('The product has been updated successfully');
                     editDisclosure.onClose();
