@@ -113,7 +113,7 @@ const AddEditProductDrawer = ({
                         <Form style={{height: 'calc(100% - 80px)', display: 'flex', flexDirection: 'column'}}>
                             <DrawerBody flex={1}>
                                 <Stack spacing={6} py={4}>
-                                    {categories.length > 0 && <FormControl>
+                                    {categories?.length > 0 && <FormControl>
                                         <FormLabel htmlFor='categoryId' fontSize='sm' color='gray.400'>Категория
                                             товара</FormLabel>
                                         <Field name="categoryId">

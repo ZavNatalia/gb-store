@@ -102,7 +102,7 @@ const ProductList = () => {
             "title": values.title,
             "description": values.description,
             "price": +values.price,
-            "category": values.category.id,
+            "category": values.category?.id,
             "image": values.image
         };
 
@@ -113,11 +113,10 @@ const ProductList = () => {
                 }
                 ToastSuccess('Товар был успешно добавлен');
                 onClose();
+                updateList();
             })
             .catch(error => {
                 ToastError(error.message);
-            }).finally(() => {
-                updateList();
             })
     }
 
