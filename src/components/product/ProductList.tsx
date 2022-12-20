@@ -6,7 +6,7 @@ import {IProduct} from '../../models/IProduct';
 import ErrorMessage from "../UI/ErrorMessage";
 import {useCategory} from "../../context/CategoryContext";
 import {GrAdd} from "react-icons/gr";
-import AddEditProductDrawer, {Values} from '../modals/AddEditProductDrawer';
+import AddEditProductDrawer from '../modals/AddEditProductDrawer';
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../UI/Loader";
 import SkeletonList from '../UI/SkeletonList';
@@ -60,7 +60,7 @@ const ProductList = () => {
 
     // TODO: строка поиска /items/search/:searchRequest
 
-    useEffect(() => {
+    const updateList = () => {
         setIsLoading(true);
         setProducts([]);
         setOffset(0);
@@ -68,6 +68,10 @@ const ProductList = () => {
             top: 0,
             left: 0,
         });
+    }
+
+    useEffect(() => {
+        updateList();
     }, [currentCategory]);
 
     useEffect(() => {
@@ -93,19 +97,19 @@ const ProductList = () => {
         }
     }
 
-    const onAddNewProduct = async (values: Values) => {
+    const onAddNewProduct = async (values: IProduct) => {
         const result = {
             "title": values.title,
             "description": values.description,
             "price": +values.price,
-            "category": values.category,
+            "category": values.category.id,
             "image": values.image
         };
 
         await axios.post(`${rootURL}/items/create`, result)
             .then(() => {
-                if (currentCategory.id !== values.category) {
-                    onChangeCategory(values.category);
+                if (currentCategory.id !== values.category.id) {
+                    onChangeCategory(values.category.id);
                 }
                 ToastSuccess('Товар был успешно добавлен');
                 onClose();
@@ -113,7 +117,7 @@ const ProductList = () => {
             .catch(error => {
                 ToastError(error.message);
             }).finally(() => {
-                fetchTotal();
+                updateList();
             })
     }
 

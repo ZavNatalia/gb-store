@@ -50,9 +50,9 @@ export const Product = () => {
         getProduct();
     }, []);
 
-    const onEditProduct = async (values: Values) => {
+    const onEditProduct = async (result: IProduct) => {
         await axios.put(`${rootURL}/items/update`,
-            {...product, values})
+            {...product, ...result})
             .then(() => {
                     ToastSuccess('The product has been updated successfully');
                     editDisclosure.onClose();

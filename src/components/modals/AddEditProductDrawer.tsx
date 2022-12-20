@@ -26,13 +26,12 @@ import * as Yup from "yup";
 import {useCategory} from "../../context/CategoryContext";
 import {IProduct} from "../../models/IProduct";
 import {BiTrash} from "react-icons/bi";
-import {RegExpURL} from "../../utils/RegExpURL";
 
 export interface Values {
     title: string;
     price: number;
     description: string;
-    category: number;
+    categoryId: number;
     image: string[];
 }
 
@@ -91,7 +90,7 @@ const AddEditProductDrawer = ({
                         title: product.title ?? '',
                         price: product.price ?? 0,
                         description: product.description ?? '',
-                        category: product.category?.id ?? currentCategory.id,
+                        categoryId: product.category?.id ?? currentCategory.id,
                         image: product.image ?? ['']
                     }}
                     validationSchema={ValidationSchema}
@@ -99,7 +98,14 @@ const AddEditProductDrawer = ({
                         values: Values,
                         {setSubmitting}: FormikHelpers<Values>
                     ) => {
-                        await onSubmit(values);
+                        const result: Partial<IProduct> = {
+                            title: values.title,
+                            price: values.price,
+                            description: values.description,
+                            category: categories[values.categoryId - 1],
+                            image: values.image
+                        }
+                        await onSubmit(result);
                         setSubmitting(false);
                     }}
                 >
@@ -108,12 +114,12 @@ const AddEditProductDrawer = ({
                             <DrawerBody flex={1}>
                                 <Stack spacing={6} py={4}>
                                     {categories.length > 0 && <FormControl>
-                                        <FormLabel htmlFor='category' fontSize='sm' color='gray.400'>Категория
+                                        <FormLabel htmlFor='categoryId' fontSize='sm' color='gray.400'>Категория
                                             товара</FormLabel>
-                                        <Field name="category">
+                                        <Field name="categoryId">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Select id='category' name='category'
+                                                    <Select id='categoryId' name='categoryId'
                                                             {...field}>
                                                         {categories.map(category => (
                                                             <option value={category.id}
