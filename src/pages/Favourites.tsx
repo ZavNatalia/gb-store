@@ -10,7 +10,7 @@ import {IProduct} from "../models/IProduct";
 import {useCategory} from "../context/CategoryContext";
 
 export const Favourites = () => {
-    const [list, setList] = useState([] as IProduct[]);
+    const [list] = useState([] as IProduct[]);
     const {currentCategory} = useCategory();
 
     const EmptyList = () => (

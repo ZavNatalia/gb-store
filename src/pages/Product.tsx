@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Flex, HStack, Skeleton, SkeletonText, Text, useDisclosure, VStack} from "@chakra-ui/react";
-import {useNavigate, useParams} from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import axios from "axios";
 import {IProduct} from "../models/IProduct";
 import {formatCurrency} from "../utilities/formatCurrency";
@@ -26,8 +26,8 @@ export const Product = () => {
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
-    const {currentCategory, categories, onChangeCategories} = useCategory();
-    const navigate = useNavigate();
+    const {categories, onChangeCategories} = useCategory();
+    // const navigate = useNavigate();
 
     const quantity = getItemQuantity(Number(productId));
 

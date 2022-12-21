@@ -11,7 +11,7 @@ import {AiOutlineReload} from 'react-icons/ai';
 import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
 import EditCategoryModal from '../../modals/EditCategoryModal';
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
-import CreateCategoryModal from '../../modals/CreateCategory';
+import CreateCategoryModal from '../../modals/CreateCategoryModal';
 import {isAdmin} from "../../constants/isAdmin";
 import { rootURL } from '../../constants/URLs';
 
