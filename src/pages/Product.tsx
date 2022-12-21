@@ -9,7 +9,7 @@ import {useCart} from "../context/CartContext";
 import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
-import AddEditProductDrawer, {Values} from "../modals/AddEditProductDrawer";
+import AddEditProductDrawer from "../modals/AddEditProductDrawer";
 import {isAdmin} from "../constants/isAdmin";
 import Carousel from "../UI/Carousel";
 import {ToastError, ToastSuccess} from "../utilities/error-handling";

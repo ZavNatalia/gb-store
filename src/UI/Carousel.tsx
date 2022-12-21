@@ -1,6 +1,6 @@
-import {Box, IconButton, Image, useBreakpointValue} from '@chakra-ui/react';
+import {Box, IconButton, Image} from '@chakra-ui/react';
 import React from 'react';
-import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
+import {BiLeftArrowAlt, BiRightArrowAlt} from 'react-icons/bi';
 import Slider from 'react-slick';
 
 interface CarouselProps {
@@ -41,7 +41,7 @@ const Carousel = ({images}: CarouselProps) => {
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
                 onClick={() => slider?.slickPrev()}>
-                <BiLeftArrowAlt />
+                <BiLeftArrowAlt/>
             </IconButton>
             <IconButton
                 aria-label="right-arrow"
@@ -56,20 +56,20 @@ const Carousel = ({images}: CarouselProps) => {
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
                 onClick={() => slider?.slickNext()}>
-                <BiRightArrowAlt />
+                <BiRightArrowAlt/>
             </IconButton>
             <Slider {...settings} ref={(slider: any) => setSlider(slider)}>
                 {images.map((url, index) => (
-                <Image
-                    key={index}
-                    maxH='500px'
-                    maxW='100%'
-                    minH='500px'
-                    minW='500px'
-                    objectFit={'contain'}
-                    src={url}
-                    fallbackSrc={'/imgs/placeholder-image.jpg'}
-                />
+                    <Image
+                        key={index}
+                        maxH='500px'
+                        maxW='100%'
+                        minH='500px'
+                        minW='500px'
+                        objectFit={'contain'}
+                        src={url}
+                        fallbackSrc={'/imgs/placeholder-image.jpg'}
+                    />
                 ))}
             </Slider>
         </Box>
