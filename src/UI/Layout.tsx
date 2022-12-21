@@ -1,7 +1,7 @@
 import {Box, createStandaloneToast} from '@chakra-ui/react';
 import React, {FC, PropsWithChildren} from 'react';
-import Footer from '../Footer';
-import {Header} from '../Header';
+import Footer from '../components/Footer';
+import {Header} from '../components/Header';
 
 export const Layout: FC<PropsWithChildren<{}>> = ({children}) => {
     const { ToastContainer } = createStandaloneToast();

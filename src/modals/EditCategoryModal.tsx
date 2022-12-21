@@ -14,7 +14,7 @@ import {
     Stack,
     Text
 } from "@chakra-ui/react";
-import {ICategory} from "../../models/ICategory";
+import {ICategory} from "../models/ICategory";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 

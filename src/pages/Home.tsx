@@ -3,7 +3,7 @@ import {
     Grid,
     GridItem
 } from '@chakra-ui/react';
-import {CategoryList} from "../components/CategoryList";
+import {CategoryList} from "../components/category/CategoryList";
 import ProductList from '../components/product/ProductList';
 import CartSidebar from "../components/cart/CartSidebar";
 

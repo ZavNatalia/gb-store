@@ -1,19 +1,19 @@
 import {Box, Button, Center, Flex, Skeleton, Stack, Text, useDisclosure} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {NavItem} from './UI/NavItem';
-import {useCategory} from '../context/CategoryContext';
-import {ICategory} from '../models/ICategory';
-import {isEmpty} from '../utilities/isEmpty';
+import {NavItem} from '../../UI/NavItem';
+import {useCategory} from '../../context/CategoryContext';
+import {ICategory} from '../../models/ICategory';
+import {isEmpty} from '../../utilities/isEmpty';
 import {DeleteIcon, EditIcon} from '@chakra-ui/icons';
-import ErrorMessage from './UI/ErrorMessage';
+import ErrorMessage from '../../UI/ErrorMessage';
 import {AiOutlineReload} from 'react-icons/ai';
-import RemoveCategoryModal from './modals/RemoveCategoryModal';
-import EditCategoryModal from './modals/EditCategoryModal';
-import {ToastError, ToastSuccess} from '../utilities/error-handling';
-import CreateCategoryModal from './modals/CreateCategoryModal';
-import {rootURL} from '../constants/URLs';
-import {isAdmin} from "../constants/isAdmin";
+import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
+import EditCategoryModal from '../../modals/EditCategoryModal';
+import {ToastError, ToastSuccess} from '../../utilities/error-handling';
+import CreateCategoryModal from '../../modals/CreateCategory';
+import {isAdmin} from "../../constants/isAdmin";
+import { rootURL } from '../../constants/URLs';
 
 export const CategoryList = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -23,6 +23,7 @@ export const CategoryList = () => {
     const {currentCategory, categories, onChangeCurrentCategory, onChangeCategories} = useCategory();
     const [selectedCategory, setSelectedCategory] = useState({} as ICategory);
     const [error, setError] = useState('');
+
     const fetchCategories = async () => {
         setIsLoading(true)
         await axios.get(`${rootURL}/categories/list`)
@@ -142,10 +143,9 @@ export const CategoryList = () => {
                 height='calc(100vh - 80px)'
                 borderRightColor='gray.200'
                 overflowY='auto'>
-                {isAdmin && <Button mx={2} mb={2} onClick={() => {
-                    setSelectedCategory({} as ICategory);
-                    createDisclosure.onOpen();
-                }}>Добавить категорию</Button>}
+                {isAdmin && <Button mx={2} mb={2} onClick={() => createDisclosure.onOpen()}>
+                    Добавить категорию
+                </Button>}
 
                 {categories.length === 0 && <Center>
                     <Text mt={4} mx={2} color='gray' fontSize='sm'>

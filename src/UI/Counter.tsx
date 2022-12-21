@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, HStack, IconButton, Text} from "@chakra-ui/react";
 import {FaMinus, FaPlus} from "react-icons/fa";
-import {useCart} from "../../context/CartContext";
-import {IProduct} from '../../models/IProduct';
+import {useCart} from "../context/CartContext";
+import {IProduct} from '../models/IProduct';
 
 interface CounterProps {
     product: IProduct,

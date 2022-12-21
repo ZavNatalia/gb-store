@@ -4,7 +4,7 @@ import {Text} from "@chakra-ui/react";
 import {MdFavorite} from "react-icons/md";
 import {IoIosHeartEmpty} from "react-icons/io";
 import {Link} from "react-router-dom";
-import MainBlockLayout from '../components/UI/MainBlockLayout';
+import MainBlockLayout from '../UI/MainBlockLayout';
 import {ProductItem} from "../components/product/ProductItem";
 import {IProduct} from "../models/IProduct";
 import {useCategory} from "../context/CategoryContext";

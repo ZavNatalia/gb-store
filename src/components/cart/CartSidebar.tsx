@@ -12,7 +12,7 @@ import React from 'react';
 import {useCart} from "../../context/CartContext";
 import {formatCurrency} from "../../utilities/formatCurrency";
 import {Link} from "react-router-dom";
-import Counter from "../UI/Counter";
+import Counter from "../../UI/Counter";
 import {BsBag} from "react-icons/bs";
 import {useCategory} from "../../context/CategoryContext";
 

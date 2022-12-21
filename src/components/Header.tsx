@@ -17,13 +17,13 @@ import {useCategory} from "../context/CategoryContext";
 import {ICategory} from '../models/ICategory';
 import axios from "axios";
 import {ToastError, ToastSuccess} from "../utilities/error-handling";
-import SignIn from './modals/SignIn';
-import SignUp from "./modals/SignUp";
+import SignIn from '../modals/SignIn';
+import SignUp from "../modals/SignUp";
 import {ICustomer} from "../models/ICustomer";
 import {Links} from './cart/Links';
 import {isAdmin} from '../constants/isAdmin';
 import { rootURL } from '../constants/URLs';
-import LogOut from './modals/LogOut';
+import LogOut from '../modals/LogOut';
 
 export const Header = () => {
     const {onChangeCurrentCategory} = useCategory();

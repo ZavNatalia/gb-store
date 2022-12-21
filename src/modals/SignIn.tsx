@@ -8,9 +8,9 @@ import {
     ModalHeader,
     ModalOverlay
 } from '@chakra-ui/react';
-import {ICustomer} from "../../models/ICustomer";
-import AuthSocialButtons from '../auth/AuthSocialButtons';
-import SignInByEmailForm from "../auth/SignInByEmailForm";
+import {ICustomer} from "../models/ICustomer";
+import AuthSocialButtons from '../components/auth/AuthSocialButtons';
+import SignInByEmailForm from "../components/auth/SignInByEmailForm";
 
 
 interface SignInProps {

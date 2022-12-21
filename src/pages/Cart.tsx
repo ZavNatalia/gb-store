@@ -23,9 +23,9 @@ import {
 import {formatCurrency} from "../utilities/formatCurrency";
 import {Link} from 'react-router-dom';
 import {BsBag} from 'react-icons/bs';
-import Counter from "../components/UI/Counter";
+import Counter from "../UI/Counter";
 import {useCategory} from '../context/CategoryContext';
-import MainBlockLayout from '../components/UI/MainBlockLayout';
+import MainBlockLayout from '../UI/MainBlockLayout';
 import {OrderForm} from '../components/cart/OrderForm';
 
 export const Cart = () => {

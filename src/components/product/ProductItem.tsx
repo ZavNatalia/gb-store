@@ -5,8 +5,8 @@ import { isAdmin } from '../../constants/isAdmin';
 import {useCart} from "../../context/CartContext";
 import {IProduct} from '../../models/IProduct';
 import {formatCurrency} from "../../utilities/formatCurrency";
-import Counter from "../UI/Counter";
-import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
+import Counter from "../../UI/Counter";
+import {FavouriteSwitcher} from "../../UI/FavouriteSwitcher";
 
 interface ProductItemProps {
     product: IProduct

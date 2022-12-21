@@ -4,19 +4,19 @@ import {useNavigate, useParams} from 'react-router-dom';
 import axios from "axios";
 import {IProduct} from "../models/IProduct";
 import {formatCurrency} from "../utilities/formatCurrency";
-import Counter from "../components/UI/Counter";
+import Counter from "../UI/Counter";
 import {useCart} from "../context/CartContext";
-import {FavouriteSwitcher} from "../components/UI/FavouriteSwitcher";
-import MainBlockLayout from "../components/UI/MainBlockLayout";
+import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
+import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
-import AddEditProductDrawer, {Values} from "../components/modals/AddEditProductDrawer";
+import AddEditProductDrawer from "../modals/AddEditProductDrawer";
 import {isAdmin} from "../constants/isAdmin";
-import Carousel from "../components/UI/Carousel";
+import Carousel from "../UI/Carousel";
 import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
-import RemoveProductModal from "../components/modals/RemoveProductModal";
-import ErrorMessage from "../components/UI/ErrorMessage";
-import {rootURL} from "../constants/URLs";
+import RemoveProductModal from "../modals/RemoveProductModal";
+import ErrorMessage from "../UI/ErrorMessage";
+import { rootURL } from '../constants/URLs';
 
 export const Product = () => {
     const {productId} = useParams();
@@ -26,7 +26,7 @@ export const Product = () => {
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
-    const {currentCategory} = useCategory();
+    const {currentCategory, categories, onChangeCategories} = useCategory();
     const navigate = useNavigate();
 
     const quantity = getItemQuantity(Number(productId));
@@ -46,8 +46,25 @@ export const Product = () => {
             });
     };
 
+    const fetchCategories = async () => {
+        setIsLoading(true)
+        await axios.get(`${rootURL}/categories`)
+            .then(response => {
+                let result = response.data;
+                onChangeCategories(result);
+            }).catch(error => {
+                setError(error.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
+
     useEffect(() => {
         getProduct();
+        if (isEmpty(categories)) {
+            fetchCategories();
+        }
     }, []);
 
     const onEditProduct = async (result: IProduct) => {
