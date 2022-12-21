@@ -4,18 +4,18 @@ import {useNavigate, useParams} from 'react-router-dom';
 import axios from "axios";
 import {IProduct} from "../models/IProduct";
 import {formatCurrency} from "../utilities/formatCurrency";
-import Counter from "../components/UI/Counter";
+import Counter from "../UI/Counter";
 import {useCart} from "../context/CartContext";
-import {FavouriteSwitcher} from "../components/UI/FavouriteSwitcher";
-import MainBlockLayout from "../components/UI/MainBlockLayout";
+import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
+import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
-import AddEditProductDrawer, {Values} from "../components/modals/AddEditProductDrawer";
+import AddEditProductDrawer, {Values} from "../modals/AddEditProductDrawer";
 import {isAdmin} from "../constants/isAdmin";
-import Carousel from "../components/UI/Carousel";
+import Carousel from "../UI/Carousel";
 import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
-import RemoveProductModal from "../components/modals/RemoveProductModal";
-import ErrorMessage from "../components/UI/ErrorMessage";
+import RemoveProductModal from "../modals/RemoveProductModal";
+import ErrorMessage from "../UI/ErrorMessage";
 
 export const Product = () => {
     const {productId} = useParams();

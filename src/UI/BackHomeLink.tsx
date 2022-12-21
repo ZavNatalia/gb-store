@@ -2,7 +2,7 @@ import React from 'react';
 import {Icon} from "@chakra-ui/react";
 import {MdArrowBackIosNew} from "react-icons/md";
 import {Link} from "react-router-dom";
-import {useCategory} from "../../context/CategoryContext";
+import {useCategory} from "../context/CategoryContext";
 
 export const BackHomeLink = () => {
     const {currentCategory} = useCategory();

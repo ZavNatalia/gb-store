@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {RegExpURL} from "../../utils/RegExpURL";
+import {RegExpURL} from "../utils/RegExpURL";
 
 interface EditCategoryModalProps {
     isOpen: boolean,

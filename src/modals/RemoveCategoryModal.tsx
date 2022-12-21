@@ -10,7 +10,7 @@ import {
     ModalOverlay,
     Text
 } from "@chakra-ui/react";
-import {ICategory} from "../../models/ICategory";
+import {ICategory} from "../models/ICategory";
 
 interface RemoveCategoryModalProps {
     category: ICategory

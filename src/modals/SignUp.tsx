@@ -1,7 +1,7 @@
 import React from 'react';
-import {ICustomer} from "../../models/ICustomer";
+import {ICustomer} from "../models/ICustomer";
 import {Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay} from "@chakra-ui/react";
-import SignUpForm from '../auth/SignUpForm';
+import SignUpForm from '../components/auth/SignUpForm';
 
 interface SignUpProps {
     isOpen: boolean,

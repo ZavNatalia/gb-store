@@ -9,7 +9,7 @@ import {
     ModalOverlay,
     Text
 } from "@chakra-ui/react";
-import {IProduct} from "../../models/IProduct";
+import {IProduct} from "../models/IProduct";
 
 interface RemoveProductModalProps {
     product: IProduct

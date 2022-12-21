@@ -11,8 +11,8 @@ import {
     Text
 } from '@chakra-ui/react';
 import React, {FC, useEffect} from 'react';
-import { IProduct } from '../../models/IProduct';
-import {formatCurrency} from '../../utilities/formatCurrency';
+import { IProduct } from '../models/IProduct';
+import {formatCurrency} from '../utilities/formatCurrency';
 
 interface ProductItemModalInterface {
     product: IProduct,

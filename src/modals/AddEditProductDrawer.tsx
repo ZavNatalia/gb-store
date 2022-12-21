@@ -23,8 +23,8 @@ import {
 } from "@chakra-ui/react";
 import {Field, FieldArray, Form, Formik, FormikHelpers} from 'formik';
 import * as Yup from "yup";
-import {useCategory} from "../../context/CategoryContext";
-import {IProduct} from "../../models/IProduct";
+import {useCategory} from "../context/CategoryContext";
+import {IProduct} from "../models/IProduct";
 import {BiTrash} from "react-icons/bi";
 
 export interface Values {

@@ -1,18 +1,18 @@
 import {Box, Button, Center, Flex, Skeleton, Stack, Text, useDisclosure} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {NavItem} from './UI/NavItem';
-import {useCategory} from '../context/CategoryContext';
-import {ICategory} from '../models/ICategory';
-import {isEmpty} from '../utilities/isEmpty';
+import {NavItem} from '../../UI/NavItem';
+import {useCategory} from '../../context/CategoryContext';
+import {ICategory} from '../../models/ICategory';
+import {isEmpty} from '../../utilities/isEmpty';
 import {DeleteIcon, EditIcon} from '@chakra-ui/icons';
-import ErrorMessage from './UI/ErrorMessage';
+import ErrorMessage from '../../UI/ErrorMessage';
 import {AiOutlineReload} from 'react-icons/ai';
-import RemoveCategoryModal from './modals/RemoveCategoryModal';
-import EditCategoryModal from './modals/EditCategoryModal';
-import {ToastError, ToastSuccess} from '../utilities/error-handling';
-import CreateCategoryModal from './modals/CreateCategory';
-import {isAdmin} from "../constants/isAdmin";
+import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
+import EditCategoryModal from '../../modals/EditCategoryModal';
+import {ToastError, ToastSuccess} from '../../utilities/error-handling';
+import CreateCategoryModal from '../../modals/CreateCategory';
+import {isAdmin} from "../../constants/isAdmin";
 
 export const CategoryList = () => {
     const [isLoading, setIsLoading] = useState(false);
