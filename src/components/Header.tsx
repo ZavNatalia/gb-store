@@ -22,6 +22,7 @@ import SignUp from "../modals/SignUp";
 import {ICustomer} from "../models/ICustomer";
 import {Links} from './cart/Links';
 import {isAdmin} from '../constants/isAdmin';
+import { rootURL } from '../constants/URLs';
 
 export const Header = () => {
     const {onChangeCurrentCategory} = useCategory();
@@ -50,7 +51,7 @@ export const Header = () => {
 
     const signInByEmail = async ({email, password}: ICustomer) => {
         await axios.post(
-            `https://api.escuelajs.co/api/v1/auth/login`, {
+            `${rootURL}/auth/login`, {
                 email, password
             }
         )
@@ -68,7 +69,7 @@ export const Header = () => {
     }
     const signUpHandler = async ({name, email, password}: ICustomer) => {
         await axios.post(
-            `https://api.escuelajs.co/api/v1/users/`, {
+            `${rootURL}/users/`, {
                 name, email, password,
                 avatar: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Missing_avatar.svg'
             }

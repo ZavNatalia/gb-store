@@ -13,6 +13,7 @@ import EditCategoryModal from '../../modals/EditCategoryModal';
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategory';
 import {isAdmin} from "../../constants/isAdmin";
+import { rootURL } from '../../constants/URLs';
 
 export const CategoryList = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +26,7 @@ export const CategoryList = () => {
 
     const fetchCategories = async () => {
         setIsLoading(true)
-        await axios.get('https://api.escuelajs.co/api/v1/categories')
+        await axios.get(`${rootURL}/categories`)
             .then(response => {
                 let result = response.data;
                 onChangeCategories(result);
@@ -42,7 +43,7 @@ export const CategoryList = () => {
     }, []);
 
     const onRemoveCategory = async (id: number) => {
-        await axios.delete(`https://api.escuelajs.co/api/v1/categories/${id}`)
+        await axios.delete(`${rootURL}/categories/${id}`)
             .then(() => {
                 fetchCategories();
                 ToastSuccess('The category has been removed successfully');
@@ -57,7 +58,7 @@ export const CategoryList = () => {
 
     const onEditCategory = async (category: ICategory) => {
         await axios.put(
-            `https://api.escuelajs.co/api/v1/categories/${category.id}`,
+            `${rootURL}/categories/${category.id}`,
             {
                 'name': category.name,
                 'image': category.image
@@ -77,7 +78,7 @@ export const CategoryList = () => {
 
     const onCreateCategory = async (category: ICategory) => {
         await axios.post(
-            `https://api.escuelajs.co/api/v1/categories/`,
+            `${rootURL}/categories/`,
             {
                 'name': category.name,
                 'image': category.image

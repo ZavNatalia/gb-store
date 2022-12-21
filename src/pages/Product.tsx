@@ -16,6 +16,7 @@ import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
 import RemoveProductModal from "../modals/RemoveProductModal";
 import ErrorMessage from "../UI/ErrorMessage";
+import { rootURL } from '../constants/URLs';
 
 export const Product = () => {
     const {productId} = useParams();
@@ -25,7 +26,7 @@ export const Product = () => {
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
-    const {currentCategory} = useCategory();
+    const {currentCategory, categories, onChangeCategories} = useCategory();
     const navigate = useNavigate();
 
     const quantity = getItemQuantity(Number(productId));
@@ -34,7 +35,7 @@ export const Product = () => {
         setError('');
         setIsLoading(true);
         await axios
-            .get(`https://api.escuelajs.co/api/v1/products/${productId}`)
+            .get(`${rootURL}/products/${productId}`)
             .then(response => {
                 setProduct(response.data);
             }).catch(error => {
@@ -45,12 +46,29 @@ export const Product = () => {
             });
     };
 
+    const fetchCategories = async () => {
+        setIsLoading(true)
+        await axios.get(`${rootURL}/categories`)
+            .then(response => {
+                let result = response.data;
+                onChangeCategories(result);
+            }).catch(error => {
+                setError(error.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    };
+
     useEffect(() => {
         getProduct();
+        if (isEmpty(categories)) {
+            fetchCategories();
+        }
     }, []);
 
     const onEditProduct = async (result: IProduct) => {
-        await axios.put(`https://api.escuelajs.co/api/v1/products/${productId}`,
+        await axios.put(`${rootURL}/products/${productId}`,
             result)
             .then(() => {
                     ToastSuccess('The product has been updated successfully');
@@ -66,7 +84,7 @@ export const Product = () => {
     }
 
     const onRemoveProduct = async () => {
-        await axios.delete(`https://api.escuelajs.co/api/v1/products/${productId}`)
+        await axios.delete(`${rootURL}/products/${productId}`)
             .then(() => {
                     ToastSuccess('The product has been removed successfully');
                     navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)

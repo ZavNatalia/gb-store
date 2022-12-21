@@ -12,6 +12,7 @@ import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
 import { isAdmin } from '../../constants/isAdmin';
+import { rootURL } from '../../constants/URLs';
 
 const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -27,8 +28,8 @@ const ProductList = () => {
         setError('');
         await axios.get(
             isEmpty(currentCategory)
-                ? `https://api.escuelajs.co/api/v1/products?offset=${offset}&limit=${limit}`
-                : `https://api.escuelajs.co/api/v1/categories/${currentCategory.id}/products?offset=${offset}&limit=${limit}`
+                ? `${rootURL}/products?offset=${offset}&limit=${limit}`
+                : `${rootURL}/categories/${currentCategory.id}/products?offset=${offset}&limit=${limit}`
         )
             .then(response => {
                 setProducts([...products, ...response.data]);
@@ -93,7 +94,7 @@ const ProductList = () => {
             "images": values.images
         };
 
-        await axios.post('https://api.escuelajs.co/api/v1/products/', result)
+        await axios.post(`${rootURL}/products/`, result)
             .then(() => {
                 if (currentCategory.id !== values.category.id) {
                     onChangeCategory(values.category.id);

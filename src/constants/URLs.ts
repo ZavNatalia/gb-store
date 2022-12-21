@@ -1,0 +1,1 @@
+export const rootURL = `https://api.escuelajs.co/api/v1`;
