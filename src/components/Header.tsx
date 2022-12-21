@@ -87,10 +87,8 @@ export const Header = () => {
             })
     }
     const logOutHandler = async () => {
-        await axios.post(
-            `${rootURL}/user/logout`, {
-                id: customer.id
-            }
+        await axios.get(
+            `${rootURL}/user/logout?id=${customer.id}`,
         )
             .then(() => {
                 setCustomer({} as ICustomer)
