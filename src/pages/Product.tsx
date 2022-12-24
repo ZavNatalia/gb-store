@@ -48,7 +48,7 @@ export const Product = () => {
 
     const fetchCategories = async () => {
         setIsLoading(true)
-        await axios.get(`${rootURL}/categories`)
+        await axios.get(`${rootURL}/categories/list`)
             .then(response => {
                 let result = response.data;
                 onChangeCategories(result);
