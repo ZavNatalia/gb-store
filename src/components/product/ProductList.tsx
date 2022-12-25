@@ -12,6 +12,7 @@ import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
 import { isAdmin } from '../../constants/isAdmin';
 import { rootURL } from '../../constants/URLs';
+import { isEmpty } from '../../utilities/isEmpty';
 
 const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -26,10 +27,10 @@ const ProductList = () => {
     const fetchProducts = async () => {
         setError('');
         await axios.get(
-            // isEmpty(currentCategory)
-            //     ?
+            isEmpty(currentCategory)
+                ?
                 `${rootURL}/items/list?offset=${offset}&limit=${limit}`
-                // : `${rootURL}/items/categories/${currentCategory.name}`
+                : `${rootURL}/items/?param=${currentCategory.name}&offset=${offset}&limit=${limit}`
         )
             .then(response => {
                 setProducts([...products, ...response.data]);
@@ -61,13 +62,13 @@ const ProductList = () => {
     // TODO: строка поиска /items/search/:searchRequest
 
     const updateList = () => {
-        setIsLoading(true);
-        setProducts([]);
-        setOffset(0);
         window.scroll({
             top: 0,
             left: 0,
         });
+        setProducts([]);
+        setOffset(0);
+        setIsLoading(true);
     }
 
     useEffect(() => {
@@ -113,10 +114,12 @@ const ProductList = () => {
                 }
                 ToastSuccess('Товар был успешно добавлен');
                 onClose();
-                updateList();
             })
             .catch(error => {
                 ToastError(error.message);
+            })
+            .finally(() => {
+                updateList();
             })
     }
 
