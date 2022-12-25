@@ -16,7 +16,7 @@ import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
 import RemoveProductModal from "../modals/RemoveProductModal";
 import ErrorMessage from "../UI/ErrorMessage";
-import { rootURL } from '../constants/URLs';
+import {rootURL} from '../constants/URLs';
 
 export const Product = () => {
     const {productId} = useParams();
@@ -26,7 +26,7 @@ export const Product = () => {
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
-    const {categories, onChangeCategories} = useCategory();
+    const {onChangeCategories} = useCategory();
     // const navigate = useNavigate();
 
     const quantity = getItemQuantity(Number(productId));
@@ -49,9 +49,8 @@ export const Product = () => {
     const fetchCategories = async () => {
         setIsLoading(true)
         await axios.get(`${rootURL}/categories/list`)
-            .then(response => {
-                let result = response.data;
-                onChangeCategories(result);
+            .then(({data}) => {
+                onChangeCategories(data);
             }).catch(error => {
                 setError(error.message);
             })
@@ -62,14 +61,20 @@ export const Product = () => {
 
     useEffect(() => {
         getProduct();
-        if (isEmpty(categories)) {
-            fetchCategories();
-        }
+        fetchCategories();
     }, []);
 
     const onEditProduct = async (result: IProduct) => {
         await axios.put(`${rootURL}/items/update`,
-            {...product, ...result})
+            {
+                ...product,
+                title: result.title,
+                price: result.price,
+                category: result.category.id,
+                description: result.description,
+                image: result.image,
+                vendor: result.vendor
+            })
             .then(() => {
                     ToastSuccess('The product has been updated successfully');
                     editDisclosure.onClose();

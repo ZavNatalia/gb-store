@@ -6,5 +6,6 @@ export type IProduct = {
     price: number,
     category: ICategory,
     description: string,
-    image: string[]
+    image: string[],
+    vendor: string
 }
