@@ -88,7 +88,7 @@ const AddEditProductDrawer = ({
                 <Formik
                     initialValues={{
                         title: product.title ?? '',
-                        price: product.price ?? 0,
+                        price: product.price ?? '',
                         description: product.description ?? '',
                         categoryId: product.category?.id ?? currentCategory.id,
                         images: product.images ?? ['']

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Flex, HStack, Skeleton, SkeletonText, Text, useDisclosure, VStack} from "@chakra-ui/react";
 import {useNavigate, useParams} from 'react-router-dom';
-import axios from "axios";
 import {IProduct} from "../models/IProduct";
 import {formatCurrency} from "../utilities/formatCurrency";
 import Counter from "../UI/Counter";
@@ -16,8 +15,9 @@ import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
 import RemoveProductModal from "../modals/RemoveProductModal";
 import ErrorMessage from "../UI/ErrorMessage";
-import { rootURL } from '../constants/URLs';
 import CategoryService from "../api/CategoryService";
+import ProductService from "../api/ProductService";
+import {AiOutlineReload} from 'react-icons/ai';
 
 export const Product = () => {
     const {productId} = useParams();
@@ -33,18 +33,18 @@ export const Product = () => {
     const quantity = getItemQuantity(Number(productId));
 
     const getProduct = async () => {
-        setError('');
-        setIsLoading(true);
-        await axios
-            .get(`${rootURL}/products/${productId}`)
-            .then(response => {
-                setProduct(response.data);
-            }).catch(error => {
-                setError(error.message);
-            })
-            .finally(() => {
+        if (productId) {
+            setError('');
+            setIsLoading(true);
+            try {
+                const {data} = await ProductService.getProduct(productId);
+                setProduct(data);
+            } catch (e: any) {
+                setError(e?.message);
+            } finally {
                 setIsLoading(false);
-            });
+            }
+        }
     };
 
     const fetchCategories = async () => {
@@ -66,31 +66,29 @@ export const Product = () => {
     }, []);
 
     const onEditProduct = async (result: IProduct) => {
-        await axios.put(`${rootURL}/products/${productId}`,
-            result)
-            .then(() => {
-                    ToastSuccess('The product has been updated successfully');
-                    editDisclosure.onClose();
-                }
-            )
-            .catch((error) => {
-                ToastError(error.message);
-            })
-            .finally(() => {
+        if (productId) {
+            try {
+                await ProductService.updateProduct(result, productId);
+                ToastSuccess('The product has been updated successfully');
+                editDisclosure.onClose();
+            } catch (e: any) {
+                ToastError(e?.message);
+            } finally {
                 getProduct();
-            })
+            }
+        }
     }
 
     const onRemoveProduct = async () => {
-        await axios.delete(`${rootURL}/products/${productId}`)
-            .then(() => {
-                    ToastSuccess('The product has been removed successfully');
-                    navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)
-                }
-            )
-            .catch((error) => {
-                ToastError(error.message);
-            })
+        if (productId) {
+            try {
+                await ProductService.deleteProduct(productId);
+                ToastSuccess('The product has been removed successfully');
+                navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)
+            } catch (e: any) {
+                ToastError(e?.message);
+            }
+        }
     }
 
     return (
@@ -106,8 +104,9 @@ export const Product = () => {
             </Flex>}
 
             {!isLoading && error && (
-                <Box py='40px'>
+                <Box py='40px' textAlign='center'>
                     <ErrorMessage message={error}/>
+                    <Button leftIcon={<AiOutlineReload/>} mt={6} onClick={() => getProduct()}>Обновить страницу</Button>
                 </Box>
             )}
 
