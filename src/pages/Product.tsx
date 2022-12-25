@@ -17,6 +17,7 @@ import {useCategory} from "../context/CategoryContext";
 import RemoveProductModal from "../modals/RemoveProductModal";
 import ErrorMessage from "../UI/ErrorMessage";
 import { rootURL } from '../constants/URLs';
+import CategoryService from "../api/CategoryService";
 
 export const Product = () => {
     const {productId} = useParams();
@@ -47,17 +48,14 @@ export const Product = () => {
     };
 
     const fetchCategories = async () => {
-        setIsLoading(true)
-        await axios.get(`${rootURL}/categories`)
-            .then(response => {
-                let result = response.data;
-                onChangeCategories(result);
-            }).catch(error => {
-                setError(error.message);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+        try {
+            setIsLoading(true);
+            const {data} = await CategoryService.getCategories();
+            onChangeCategories(data);
+            setIsLoading(false);
+        } catch (error: any) {
+            setError(error?.message);
+        }
     };
 
     useEffect(() => {

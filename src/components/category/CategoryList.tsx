@@ -1,6 +1,5 @@
 import {Box, Button, Center, Flex, Skeleton, Stack, Text, useDisclosure} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import {NavItem} from '../../UI/NavItem';
 import {useCategory} from '../../context/CategoryContext';
 import {ICategory} from '../../models/ICategory';
@@ -13,7 +12,7 @@ import EditCategoryModal from '../../modals/EditCategoryModal';
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategory';
 import {isAdmin} from "../../constants/isAdmin";
-import { rootURL } from '../../constants/URLs';
+import CategoryService from "../../api/CategoryService";
 
 export const CategoryList = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -25,17 +24,14 @@ export const CategoryList = () => {
     const [error, setError] = useState('');
 
     const fetchCategories = async () => {
-        setIsLoading(true)
-        await axios.get(`${rootURL}/categories`)
-            .then(response => {
-                let result = response.data;
-                onChangeCategories(result);
-            }).catch(error => {
-                setError(error.message);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
+        try {
+            setIsLoading(true);
+            const {data} = await CategoryService.getCategories();
+            onChangeCategories(data);
+            setIsLoading(false);
+        } catch (error: any) {
+            setError(error?.message);
+        }
     };
 
     useEffect(() => {
@@ -43,57 +39,42 @@ export const CategoryList = () => {
     }, []);
 
     const onRemoveCategory = async (id: number) => {
-        await axios.delete(`${rootURL}/categories/${id}`)
-            .then(() => {
-                fetchCategories();
-                ToastSuccess('The category has been removed successfully');
-            })
-            .catch(error => {
-                ToastError(error.message);
-            })
-            .finally(() => {
-                removeDisclosure.onClose();
-            })
+        try {
+            await CategoryService.deleteCategory(id);
+            fetchCategories();
+            ToastSuccess('The category has been removed successfully');
+            removeDisclosure.onClose();
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
     }
 
     const onEditCategory = async (category: ICategory) => {
-        await axios.put(
-            `${rootURL}/categories/${category.id}`,
-            {
+        try {
+            await CategoryService.updateCategory(category.id, {
                 'name': category.name,
                 'image': category.image
-            }
-        )
-            .then(() => {
-                fetchCategories();
-                ToastSuccess('The category has been updated successfully');
-            })
-            .catch(error => {
-                ToastError(error.message);
-            })
-            .finally(() => {
-                editDisclosure.onClose();
-            })
+            });
+            fetchCategories();
+            ToastSuccess('The category has been updated successfully');
+            editDisclosure.onClose();
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
     }
 
     const onCreateCategory = async (category: ICategory) => {
-        await axios.post(
-            `${rootURL}/categories/`,
-            {
+        try {
+            await CategoryService.createCategory({
                 'name': category.name,
                 'image': category.image
-            }
-        )
-            .then(() => {
-                fetchCategories();
-                ToastSuccess('The category has been created successfully');
-            })
-            .catch(error => {
-                ToastError(error.message);
-            })
-            .finally(() => {
-                createDisclosure.onClose();
-            })
+            });
+            fetchCategories();
+            ToastSuccess('The category has been created successfully');
+            createDisclosure.onClose();
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
     }
 
     const updateList = () => {
