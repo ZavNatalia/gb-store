@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Avatar,
     Button,
@@ -22,22 +22,30 @@ import SignUp from "../modals/SignUp";
 import {ICustomer} from "../models/ICustomer";
 import {Links} from './cart/Links';
 import {isAdmin} from '../constants/isAdmin';
-import { rootURL } from '../constants/URLs';
+import {rootURL} from '../constants/URLs';
+import EditProfileModal from '../modals/EditProfileModal';
+
 
 export const Header = () => {
     const {onChangeCurrentCategory} = useCategory();
 
-    const [isAuth, setIsAuth] = useState(false);
+    const [isAuth, setIsAuth] = useState(!!localStorage.getItem('token'));
     const [customer, setCustomer] = useState({} as ICustomer);
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
+    const editProfileDisclosure = useDisclosure();
+
+    useEffect(() => {
+        if (isAuth) {
+            getUserWithSession();
+        }
+    }, [])
 
     const signInBySocial = async (source: string) => {
         await axios.get(
             `/user/login/${source}`
         )
             .then(({data}) => {
-                console.log(data);
                 ToastSuccess('Вы успешно авторизовались');
                 setIsAuth(true);
             })
@@ -65,6 +73,7 @@ export const Header = () => {
             })
             .finally(() => {
                 signInDisclosure.onClose();
+                getUserWithSession();
             })
     }
     const signUpHandler = async ({name, email, password}: ICustomer) => {
@@ -77,6 +86,7 @@ export const Header = () => {
             .then(({data}) => {
                 setCustomer(data)
                 ToastSuccess('Вы успешно зарегистрировались');
+                localStorage.setItem('token', data.access_token);
                 setIsAuth(true);
             })
             .catch(error => {
@@ -90,6 +100,40 @@ export const Header = () => {
     const logOutHandler = () => {
         localStorage.removeItem('token');
         setIsAuth(false);
+    }
+
+    const getUserWithSession = async () => {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+      await axios.get(`${rootURL}/auth/profile`, config)
+          .then(({data}) => {
+              setCustomer(data)
+          })
+          .catch(error => {
+              ToastError(error.message);
+              if (error.message === 'Unauthorized') {
+                  localStorage.removeItem('token');
+                  setIsAuth(false);
+              }
+          })
+    }
+
+    const onEditProfile = async (values: ICustomer) => {
+        await axios.put(
+            `${rootURL}/users/${customer.id}`, values
+        )
+            .then(({data}) => {
+                setCustomer(data)
+                ToastSuccess('Ваши данные были успешно изменены');
+            })
+            .catch(error => {
+                ToastError(error.message);
+            })
+            .finally(() => {
+                editProfileDisclosure.onClose();
+            })
     }
 
     return (
@@ -149,13 +193,21 @@ export const Header = () => {
                             />
                         </MenuButton>
                         <MenuList>
-                            {!isAdmin && isAuth && <MenuItem>Мои заказы</MenuItem>}
-                            {isAuth && <MenuDivider/>}
-                            {isAuth && <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>}
+                            {!isAdmin &&
+                                <MenuItem onClick={editProfileDisclosure.onOpen} >Профиль</MenuItem>
+                            }
+                            {!isAdmin && <MenuItem disabled>Мои заказы</MenuItem>}
+                            <MenuDivider/>
+                            <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
                         </MenuList>
                     </Menu>
                 </>}
             </Flex>
+
+            <EditProfileModal customer={customer}
+                              isOpen={editProfileDisclosure.isOpen}
+                              onClose={editProfileDisclosure.onClose}
+                              onEditProfile={onEditProfile}/>
 
             <SignIn isOpen={signInDisclosure.isOpen}
                     onClose={signInDisclosure.onClose}
