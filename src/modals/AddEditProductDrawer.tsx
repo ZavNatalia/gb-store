@@ -114,7 +114,7 @@ const AddEditProductDrawer = ({
                             <DrawerBody flex={1}>
                                 <Stack spacing={6} py={4}>
                                     {categories.length > 0 && <FormControl>
-                                        <FormLabel htmlFor='categoryId' fontSize='sm' color='gray.400'>Категория
+                                        <FormLabel htmlFor='categoryId' fontSize='m' color='gray.500'>Категория
                                             товара</FormLabel>
                                         <Field name="categoryId">
                                             {({field, meta}: any) => (
@@ -136,13 +136,12 @@ const AddEditProductDrawer = ({
                                     }
 
                                     <FormControl>
-                                        <FormLabel htmlFor='title' fontSize='sm' color='gray.400'>Наименование
+                                        <FormLabel htmlFor='title' fontSize='m' color='gray.500'>Наименование
                                             товара</FormLabel>
                                         <Field name="title">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Input variant='flushed' type="text"
-                                                           placeholder="Введите наименование товара..."
+                                                    <Input type="text"
                                                            isInvalid={meta.touched ? meta.error : false} {...field} />
                                                     {meta.touched && meta.error && (
                                                         <Text color='red.400' fontSize='sm'>{meta.error}</Text>
@@ -152,7 +151,7 @@ const AddEditProductDrawer = ({
                                         </Field>
                                     </FormControl>
                                     <FormControl>
-                                        <FormLabel htmlFor='title' fontSize='sm' color='gray.400'>Изображения
+                                        <FormLabel htmlFor='title' fontSize='m' color='gray.500'>Изображения
                                             товара</FormLabel>
                                         <FieldArray name="images">
                                             {({remove, push}) => (
@@ -165,7 +164,7 @@ const AddEditProductDrawer = ({
                                                                     <Field name={`images.${index}`}>
                                                                         {({field, meta}: any) => (
                                                                             <Box w='100%'>
-                                                                                <Input type='url' variant='flushed'
+                                                                                <Input type='url' fontSize='sm'
                                                                                        placeholder='Добавьте ссылку на изображение'
                                                                                        isInvalid={meta.touched ? meta.error : false} {...field} />
                                                                                 {meta.touched && meta.error && (
@@ -193,16 +192,15 @@ const AddEditProductDrawer = ({
                                     </FormControl>
 
                                     <FormControl>
-                                        <FormLabel htmlFor='description' fontSize='sm'
-                                                   color='gray.400'>Описание</FormLabel>
+                                        <FormLabel htmlFor='description' fontSize='m'
+                                                   color='gray.500'>Описание</FormLabel>
                                         <Field name="description">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Textarea id='description' name='description'
-                                                              placeholder='Введите описание...' p={1} maxHeight='300px'
+                                                    <Textarea id='description' name='description' p={1} maxHeight='300px'
                                                               isInvalid={meta.touched ? meta.error : false} {...field} />
                                                     {meta.touched && meta.error && (
-                                                        <Text color='red.400' fontSize='sm'>{meta.error}</Text>
+                                                        <Text color='red.400' fontSize='m'>{meta.error}</Text>
                                                     )}
                                                 </>
                                             )}
@@ -210,12 +208,11 @@ const AddEditProductDrawer = ({
                                     </FormControl>
 
                                     <FormControl>
-                                        <FormLabel htmlFor='price' fontSize='sm' color='gray.400'>Цена</FormLabel>
+                                        <FormLabel htmlFor='price' fontSize='m' color='gray.500'>Цена</FormLabel>
                                         <Field name="price">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Input variant='flushed' type="number"
-                                                           placeholder='Введите цену товара...'
+                                                    <Input type="number"
                                                            isInvalid={meta.touched ? meta.error : false} {...field} />
                                                     {meta.touched && meta.error && (
                                                         <Text color='red.400' fontSize='sm'>{meta.error}</Text>
