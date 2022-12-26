@@ -113,10 +113,8 @@ export const Header = () => {
           })
           .catch(error => {
               ToastError(error.message);
-              if (error.message === 'Unauthorized') {
-                  localStorage.removeItem('token');
-                  setIsAuth(false);
-              }
+              localStorage.removeItem('token');
+              setIsAuth(false);
           })
     }
 
