@@ -57,6 +57,8 @@ export const CategoryList = () => {
             editDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
+        } finally {
+            onChangeCurrentCategory({...category, name: category.name});
         }
     }
 

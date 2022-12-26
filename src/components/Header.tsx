@@ -22,7 +22,8 @@ import SignUp from "../modals/SignUp";
 import {ICustomer} from "../models/ICustomer";
 import {Links} from './cart/Links';
 import {isAdmin} from '../constants/isAdmin';
-import { rootURL } from '../constants/URLs';
+import {rootURL} from '../constants/URLs';
+import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
 export const Header = () => {
@@ -33,13 +34,19 @@ export const Header = () => {
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
     const logOutDisclosure = useDisclosure();
+    const editProfileDisclosure = useDisclosure();
+
+    // useEffect(() => {
+    //     if (isAuth) {
+    //         getUserWithSession();
+    //     }
+    // }, [])
 
     const signInBySocial = async (source: string) => {
         await axios.get(
             `${rootURL}/user/login/${source}`
         )
             .then(({data}) => {
-                console.log(data);
                 ToastSuccess('Вы успешно авторизовались');
                 setIsAuth(true);
             })
@@ -60,12 +67,17 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setIsAuth(true);
+                setCustomer({
+                    firstname, email
+                })
+                // localStorage.setItem('token', data.access_token);
             })
             .catch(error => {
                 ToastError(error.message);
             })
             .finally(() => {
                 signInDisclosure.onClose();
+                // getUserWithSession();
             })
     }
     const signUpHandler = async ({firstname, email, password}: ICustomer) => {
@@ -77,6 +89,7 @@ export const Header = () => {
             .then(({data}) => {
                 setCustomer(data)
                 ToastSuccess('Вы успешно зарегистрировались');
+                // localStorage.setItem('token', data.access_token);
                 setIsAuth(true);
             })
             .catch(error => {
@@ -100,6 +113,38 @@ export const Header = () => {
             })
             .finally(() => {
                 logOutDisclosure.onClose();
+            })
+    }
+
+    // const getUserWithSession = async () => {
+    //     const token = localStorage.getItem('token');
+    //     const config = {
+    //         headers: { Authorization: `Bearer ${token}` }
+    //     };
+    //   await axios.get(`${rootURL}/auth/profile`, config)
+    //       .then(({data}) => {
+    //           setCustomer(data)
+    //       })
+    //       .catch(error => {
+    //           ToastError(error.message);
+    //           localStorage.removeItem('token');
+    //           setIsAuth(false);
+    //       })
+    // }
+
+    const onEditProfile = async (values: ICustomer) => {
+        await axios.put(
+            `${rootURL}/users/${customer.id}`, values
+        )
+            .then(({data}) => {
+                setCustomer(data)
+                ToastSuccess('Ваши данные были успешно изменены');
+            })
+            .catch(error => {
+                ToastError(error.message);
+            })
+            .finally(() => {
+                editProfileDisclosure.onClose();
             })
     }
 
@@ -160,13 +205,21 @@ export const Header = () => {
                             />
                         </MenuButton>
                         <MenuList>
-                            {!isAdmin && isAuth && <MenuItem>Мои заказы</MenuItem>}
-                            {isAuth && <MenuDivider/>}
-                            {isAuth && <MenuItem onClick={() => logOutDisclosure.onOpen()}>Выйти</MenuItem>}
+                            {!isAdmin &&
+                                <MenuItem onClick={editProfileDisclosure.onOpen}>Профиль</MenuItem>
+                            }
+                            {!isAdmin && <MenuItem>Мои заказы</MenuItem>}
+                            <MenuDivider/>
+                            <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
                         </MenuList>
                     </Menu>
                 </>}
             </Flex>
+
+            <EditProfileModal customer={customer}
+                              isOpen={editProfileDisclosure.isOpen}
+                              onClose={editProfileDisclosure.onClose}
+                              onEditProfile={onEditProfile}/>
 
             <SignIn isOpen={signInDisclosure.isOpen}
                     onClose={signInDisclosure.onClose}

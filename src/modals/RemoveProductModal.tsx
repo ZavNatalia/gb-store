@@ -22,7 +22,7 @@ const RemoveProductModal = ({product, isOpen, onClose, onRemoveProduct}: RemoveP
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.16)'}}/>
-            <ModalContent>
+            <ModalContent borderRadius='2xl'>
                 <ModalHeader borderBottom='1px solid' borderBottomColor='gray.200'>Удалить товар</ModalHeader>
                 <ModalCloseButton/>
                 <ModalBody my={4}>

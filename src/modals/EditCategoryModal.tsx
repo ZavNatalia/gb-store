@@ -47,7 +47,7 @@ const EditCategoryModal = ({
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.16)'}}/>
-            <ModalContent>
+            <ModalContent borderRadius='2xl'>
                 <ModalHeader borderBottom='1px solid' borderBottomColor='gray.200'>Редактирование
                     категории</ModalHeader>
                 <ModalCloseButton/>

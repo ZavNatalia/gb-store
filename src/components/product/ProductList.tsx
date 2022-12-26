@@ -1,18 +1,20 @@
 import {Box, Button, Center, Flex, Heading, SimpleGrid, Text, useDisclosure} from '@chakra-ui/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ProductItem} from "./ProductItem";
-import axios from "axios";
 import {IProduct} from '../../models/IProduct';
 import ErrorMessage from "../../UI/ErrorMessage";
 import {useCategory} from "../../context/CategoryContext";
 import {GrAdd} from "react-icons/gr";
 import AddEditProductDrawer from '../../modals/AddEditProductDrawer';
+import {isEmpty} from "../../utilities/isEmpty";
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
-import { isAdmin } from '../../constants/isAdmin';
+import {isAdmin} from '../../constants/isAdmin';
+import CategoryService from "../../api/CategoryService";
+import ProductService from "../../api/ProductService";
 import { rootURL } from '../../constants/URLs';
-import { isEmpty } from '../../utilities/isEmpty';
+import axios from 'axios';
 
 const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -24,22 +26,24 @@ const ProductList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [total, setTotal] = useState(0);
 
+    useEffect(() => {
+        updateList();
+    }, []);
+
     const fetchProducts = async () => {
         setError('');
-        await axios.get(
-            isEmpty(currentCategory)
-                ?
-                `${rootURL}/items/list?offset=${offset}&limit=${limit}`
-                : `${rootURL}/items/?param=${currentCategory.name}&offset=${offset}&limit=${limit}`
-        )
-            .then(response => {
-                setProducts([...products, ...response.data]);
-                setOffset(prevState => prevState + limit);
-            })
-            .catch(e => setError(e.message))
-            .finally(() => {
-                setIsLoading(false)
-            });
+        try {
+            const response = isEmpty(currentCategory)
+                ? await ProductService.getPaginatedProducts(offset, limit)
+                : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit)
+
+            setProducts([...products, ...response.data]);
+            setOffset(prevState => prevState + limit);
+        } catch (e: any) {
+            setError(e?.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const fetchTotal = async () => {
@@ -58,8 +62,6 @@ const ProductList = () => {
             fetchTotal();
         }
     }, [isLoading]);
-
-    // TODO: строка поиска /items/search/:searchRequest
 
     const updateList = () => {
         window.scroll({
@@ -104,23 +106,21 @@ const ProductList = () => {
             "description": values.description,
             "price": +values.price,
             "category": values.category?.id,
-            "image": values.image
+            "image": values.image,
+            "vendor": values.vendor
         };
-
-        await axios.post(`${rootURL}/items/create`, result)
-            .then(() => {
-                if (currentCategory.id !== values.category.id) {
-                    onChangeCategory(values.category.id);
-                }
-                ToastSuccess('Товар был успешно добавлен');
-                onClose();
-            })
-            .catch(error => {
-                ToastError(error.message);
-            })
-            .finally(() => {
-                updateList();
-            })
+        try {
+            await ProductService.createProduct(result);
+            if (currentCategory.id !== values.category.id) {
+                onChangeCategory(values.category.id);
+            }
+            ToastSuccess('Товар был успешно добавлен');
+            onClose();
+        } catch (e: any) {
+            ToastError(e?.message);
+        } finally {
+            updateList();
+        }
     }
 
     const memoizedList = useMemo(() => (
