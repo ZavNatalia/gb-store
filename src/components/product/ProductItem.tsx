@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 import { isAdmin } from '../../constants/isAdmin';
 import {useCart} from "../../context/CartContext";
 import {IProduct} from '../../models/IProduct';
-import {formatCurrency} from "../../utilities/formatCurrency";
+import {toCurrency} from "../../utilities/formatCurrency";
 import Counter from "../../UI/Counter";
 import {FavouriteSwitcher} from "../../UI/FavouriteSwitcher";
 
@@ -55,7 +55,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
                     </Flex>
                     <Stack height='130px' alignItems='start' justifyContent='center' px={4}>
                         <Text fontWeight={700} fontSize={'xl'}>
-                            {formatCurrency(Number(price))}
+                            {toCurrency(price)}
                         </Text>
                         <Text textAlign='left' fontSize={'md'} fontWeight={500} noOfLines={3}>
                             {title}

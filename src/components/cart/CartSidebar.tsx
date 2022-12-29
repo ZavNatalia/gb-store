@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import {useCart} from "../../context/CartContext";
-import {formatCurrency} from "../../utilities/formatCurrency";
+import {toCurrency} from "../../utilities/formatCurrency";
 import {Link} from "react-router-dom";
 import Counter from "../../UI/Counter";
 import {BsBag} from "react-icons/bs";
@@ -49,7 +49,7 @@ const CartSidebar = () => {
                                     <Flex gap={2} flexDirection='column'>
                                         <Text fontSize='sm' noOfLines={3}>{product.title}</Text>
                                         <Text fontSize='sm'
-                                              color='gray.500'>{formatCurrency(Number(product.price))}</Text>
+                                              color='gray.500'>{toCurrency(product.price)}</Text>
                                     </Flex>
                                 </Link>
                                 <Counter product={product} quantity={quantity}/>
@@ -82,7 +82,7 @@ const CartSidebar = () => {
                     >
                         Перейти в корзину&nbsp;
                         <Text as={"span"} fontSize='xl' fontWeight='bold'>
-                            {formatCurrency(getTotalCost())}
+                            {toCurrency(getTotalCost())}
                         </Text>
                     </Button>
                 </Link>
@@ -109,7 +109,7 @@ const CartSidebar = () => {
                 <Box borderTop='1px solid' borderColor='gray.300' pt={3} pr={3} color='gray' fontSize='sm'
                      textAlign='right'>
                     <Text>Доставка 15–30 мин </Text>
-                    <Text>{formatCurrency(getDeliveryCost())}</Text>
+                    <Text>{toCurrency(getDeliveryCost())}</Text>
                 </Box>}
             <CartLink/>
         </Flex>

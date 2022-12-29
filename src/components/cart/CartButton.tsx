@@ -2,7 +2,7 @@ import React from 'react';
 import {useCart} from "../../context/CartContext";
 import {Button, IconButton, Text} from "@chakra-ui/react";
 import {BsBagFill} from "react-icons/bs";
-import {formatCurrency} from "../../utilities/formatCurrency";
+import {toCurrency} from "../../utilities/formatCurrency";
 
 const CartButton = () => {
     const {cartItems, getTotalCost} = useCart();
@@ -11,7 +11,7 @@ const CartButton = () => {
             {cartItems.length > 0 ?
                 <Button leftIcon={<BsBagFill fontSize='x-large'/>} colorScheme='yellow' variant='solid'
                         fontSize='large'>
-                    <Text as='span' pt={1} fontWeight='normal'>{formatCurrency(getTotalCost())}</Text>
+                    <Text as='span' pt={1} fontWeight='normal'>{toCurrency(getTotalCost())}</Text>
                 </Button>
                 :
                 <IconButton

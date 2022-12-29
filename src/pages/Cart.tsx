@@ -20,7 +20,7 @@ import {
     Th,
     Tr
 } from "@chakra-ui/react";
-import {formatCurrency} from "../utilities/formatCurrency";
+import {toCurrency} from "../utilities/formatCurrency";
 import {Link} from 'react-router-dom';
 import {BsBag} from 'react-icons/bs';
 import Counter from "../UI/Counter";
@@ -39,19 +39,19 @@ export const Cart = () => {
                     <Tr>
                         <Td>Товары</Td>
                         <Td fontWeight='bold'>
-                            {formatCurrency(getGoodsCost())}
+                            {toCurrency(getGoodsCost())}
                         </Td>
                     </Tr>
                     <Tr>
                         <Td>Доставка</Td>
-                        <Td fontWeight='bold'>{formatCurrency(getDeliveryCost())}</Td>
+                        <Td fontWeight='bold'>{toCurrency(getDeliveryCost())}</Td>
                     </Tr>
                 </Tbody>
                 <Tfoot>
                     <Tr borderTop='1px solid' borderColor='gray.200'>
                         <Th fontSize='large' fontWeight='bold'>К оплате</Th>
                         <Th isNumeric fontSize='large' fontWeight='bold'>
-                            {formatCurrency(getTotalCost())}
+                            {toCurrency(getTotalCost())}
                         </Th>
                     </Tr>
                 </Tfoot>
@@ -98,7 +98,7 @@ export const Cart = () => {
                                 <Flex flexGrow={1} flexDirection='column' px={4}>
                                     <Text fontSize='sm'>{product.title}</Text>
                                     <Text fontSize='sm'
-                                          color='gray.500'>{formatCurrency(Number(product.price))}</Text>
+                                          color='gray.500'>{toCurrency(product.price)}</Text>
                                 </Flex>
                             </Link>
                             <Spacer/>
