@@ -6,7 +6,7 @@ export enum RouteNames {
     EDIT_PRODUCT = '/edit/:productId/:productTitle',
     ALL_PRODUCTS = '/all',
     CATEGORY = '/:currentCategory',
-    PRODUCT = '/:currentCategory/:productId/:productTitle',
+    PRODUCT = '/:category/:productId/:productTitle',
     FAVOURITES = '/favourites',
     CART = '/cart',
 }

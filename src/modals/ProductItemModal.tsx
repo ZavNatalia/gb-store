@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import React, {FC, useEffect} from 'react';
 import { IProduct } from '../models/IProduct';
-import {formatCurrency} from '../utilities/formatCurrency';
+import {toCurrency} from '../utilities/formatCurrency';
 
 interface ProductItemModalInterface {
     product: IProduct,
@@ -41,7 +41,7 @@ const ProductItemModal: FC<ProductItemModalInterface> = ({product, onOpen, isOpe
                     <ModalCloseButton/>
                     <ModalBody>
                         <Heading fontSize='lg'>
-                            {product.title} - {formatCurrency(Number(product.price))}
+                            {product.title} - {toCurrency(product.price)}
                         </Heading>
                         <Text fontSize='sm'>Category: {product.category.name}</Text>
                         <Text fontSize='sm'>Description: {product.description}</Text>
