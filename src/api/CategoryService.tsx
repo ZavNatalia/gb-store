@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import { rootURL } from "../constants/URLs";
 import {ICategory} from "../models/ICategory";
-import {IProduct} from "../models/IProduct";
 
 export default class CategoryService {
     static async getCategories(): Promise<AxiosResponse<ICategory[]>> {

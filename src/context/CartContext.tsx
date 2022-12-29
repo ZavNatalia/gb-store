@@ -14,7 +14,7 @@ type CartContextProps = {
     openCart: () => void
     closeCart: () => void
     isOpen: boolean
-    getItemQuantity: (id: number) => number
+    getItemQuantity: (id: string | undefined) => number
     getTotalQuantity: () => number
     getTotalCost: () => number
     getGoodsCost: () => number
@@ -40,8 +40,8 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const cartQuantity = cartItems.reduce((quantity, item) => item.quantity + quantity, 0)
 
-    const getItemQuantity = (id: number) => {
-        return cartItems.find(item => item.product.id === id)?.quantity || 0;
+    const getItemQuantity = (id: string | undefined) => {
+        return cartItems.find(item => item.product.id == id)?.quantity || 0;
     }
 
     const getTotalQuantity = () => {

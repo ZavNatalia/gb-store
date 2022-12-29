@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Flex, HStack, Skeleton, SkeletonText, Text, useDisclosure, VStack} from "@chakra-ui/react";
 import {useParams} from 'react-router-dom';
-import axios from "axios";
 import {IProduct} from "../models/IProduct";
-import {formatCurrency} from "../utilities/formatCurrency";
+import {toCurrency} from "../utilities/formatCurrency";
 import Counter from "../UI/Counter";
 import {useCart} from "../context/CartContext";
 import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
@@ -28,10 +27,10 @@ export const Product = () => {
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
-    const {currentCategory, categories, onChangeCategories} = useCategory();
+    const {onChangeCategories} = useCategory();
     // const navigate = useNavigate();
 
-    const quantity = getItemQuantity(Number(productId));
+    const quantity = getItemQuantity(productId);
 
     const getProduct = async () => {
         if (productId) {
@@ -147,7 +146,7 @@ export const Product = () => {
                                 justifyContent='space-between' alignItems='center' minW='350px' w='100%' gap={3} my={5}
                                 maxW='450px'>
                                 <Text flex={1} color='red.600'
-                                      fontSize='x-large'>{formatCurrency(Number(product.price))}</Text>
+                                      fontSize='x-large'>{toCurrency(product.price)}</Text>
                                 {!isAdmin && <Box flex={1} textAlign='right'>
                                     <Counter product={product} quantity={quantity} buttonColor='yellow.400'/>
                                 </Box>}

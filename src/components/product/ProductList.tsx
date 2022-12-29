@@ -11,10 +11,7 @@ import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
 import {isAdmin} from '../../constants/isAdmin';
-import CategoryService from "../../api/CategoryService";
 import ProductService from "../../api/ProductService";
-import { rootURL } from '../../constants/URLs';
-import axios from 'axios';
 
 const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -23,45 +20,53 @@ const ProductList = () => {
     const [limit] = useState(8);
     const {currentCategory, onChangeCurrentCategory, categories} = useCategory();
     const {isOpen, onOpen, onClose} = useDisclosure()
-    const [isLoading, setIsLoading] = useState(true);
-    const [total, setTotal] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
+    const [quantity, setQuantity] = useState(0);
 
     useEffect(() => {
         updateList();
-    }, []);
-
-    const fetchProducts = async () => {
-        setError('');
-        try {
-            const response = isEmpty(currentCategory)
-                ? await ProductService.getPaginatedProducts(offset, limit)
-                : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit)
-
-            setProducts([...products, ...response.data]);
-            setOffset(prevState => prevState + limit);
-        } catch (e: any) {
-            setError(e?.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const fetchTotal = async () => {
-        setError('');
-        await axios.get(`${rootURL}/items/quantity`)
-            .then(response => {
-                setTotal(response.data.quantity);
-            })
-            .catch(e => setError(e.message))
-            .finally(() => fetchProducts())
-    };
-
+        fetchQuantity();
+    }, [currentCategory]);
 
     useEffect(() => {
         if (isLoading) {
-            fetchTotal();
+            fetchProducts();
         }
     }, [isLoading]);
+
+    const fetchProducts = async () => {
+        setError('');
+        if (products.length < quantity) {
+            try {
+                const {data} = isEmpty(currentCategory)
+                    ? await ProductService.getPaginatedProducts(offset, limit)
+                    : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit)
+
+                setProducts([...products, ...data]);
+                setOffset(prevState => prevState + limit);
+            } catch (e: any) {
+                setError(e?.message);
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            setIsLoading(false)
+        }
+
+    };
+
+    const fetchQuantity = async () => {
+        setError('');
+        try {
+            const {data} = await ProductService.getQuantity(currentCategory.name);
+            setQuantity(data.quantity);
+            setIsLoading(true)
+
+        } catch (e: any) {
+            setError(e?.message);
+        }
+    };
+
 
     const updateList = () => {
         window.scroll({
@@ -70,12 +75,8 @@ const ProductList = () => {
         });
         setProducts([]);
         setOffset(0);
-        setIsLoading(true);
     }
 
-    useEffect(() => {
-        updateList();
-    }, [currentCategory]);
 
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler)
@@ -88,7 +89,7 @@ const ProductList = () => {
         const scrollHeight = e.target.documentElement.scrollHeight;
         const scrollTop = e.target.documentElement.scrollTop;
         const innerHeight = window.innerHeight;
-        if (scrollHeight - (scrollTop + innerHeight) < 50 && total > 0 && offset <= total) {
+        if (scrollHeight - (scrollTop + innerHeight) < 50 && quantity > 0 && offset < quantity) {
             setIsLoading(true)
         }
     }
@@ -113,19 +114,19 @@ const ProductList = () => {
             await ProductService.createProduct(result);
             if (currentCategory.id !== values.category.id) {
                 onChangeCategory(values.category.id);
+            } else {
+                fetchQuantity();
             }
             ToastSuccess('Товар был успешно добавлен');
             onClose();
         } catch (e: any) {
             ToastError(e?.message);
-        } finally {
-            updateList();
         }
     }
 
     const memoizedList = useMemo(() => (
         <>
-            {products.map(product => (
+            {products?.map(product => (
                 <ProductItem product={product} key={product.id}/>
             ))}
         </>
@@ -175,13 +176,15 @@ const ProductList = () => {
                     }
                 </Flex>
                 <SimpleGrid minChildWidth='250px' width='100%' spacing='10'>
-                    {products.length === 0 ? <NoContent/> : memoizedList}
+                    {memoizedList}
                 </SimpleGrid>
                 {isLoading && products.length > 0 && (
                     <Center mt={10}>
                         <Loader/>
                     </Center>
                 )}
+                {!isLoading && quantity === 0 && <NoContent/>}
+
             </>
             <AddEditProductDrawer isEdit={false} isOpen={isOpen} onClose={onClose} onSubmit={onAddNewProduct}/>
         </Box>

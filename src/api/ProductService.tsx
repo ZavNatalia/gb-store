@@ -12,11 +12,17 @@ export default class ProductService {
     static async getAllProductsByCategory(name: string, offset: number, limit: number): Promise<AxiosResponse<IProduct[]>> {
         return axios.get<IProduct[]>(`${rootURL}/items/?param=${name}&offset=${offset}&limit=${limit}`)
     }
-    static async createProduct(product: any): Promise<AxiosResponse<IProduct>> {
+    static async createProduct(product: any): Promise<AxiosResponse> {
         return axios.post<IProduct>(`${rootURL}/items/create`, product)
     }
-    static async updateProduct(product: any): Promise<AxiosResponse<IProduct>> {
+    static async updateProduct(product: any): Promise<AxiosResponse> {
         return axios.put<IProduct>(`${rootURL}/items/update`, product)
+    }
+    static async getQuantity(categoryName?: string): Promise<AxiosResponse> {
+        if (!!categoryName) {
+            return axios.get<number>(`${rootURL}/items/quantity?categoryName=${categoryName}`)
+        }
+        return axios.get<number>(`${rootURL}/items/quantity`)
     }
     // static async deleteProduct(id: string): Promise<AxiosResponse> {
     //     return axios.delete<IProduct>(`${rootURL}/products/${id}`)

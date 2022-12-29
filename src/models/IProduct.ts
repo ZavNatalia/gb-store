@@ -1,7 +1,7 @@
 import {ICategory} from "./ICategory";
 
 export type IProduct = {
-    id: number,
+    id: string,
     title: string,
     price: number,
     category: ICategory,
