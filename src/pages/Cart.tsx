@@ -80,7 +80,7 @@ export const Cart = () => {
                 {cartItems.map(({product, quantity}) => (
                     <ListItem key={product.id} pr={2}>
                         <HStack spacing={3}>
-                            <Link to={`/${currentCategory?.name?.toLowerCase() ?? 'all'}/${product.id}/${product.title}`}
+                            <Link to={`/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}
                                   target='_blank'
                                   style={{display: "flex", alignItems: 'center'}}>
                                 <Flex maxH='110px'
@@ -100,7 +100,7 @@ export const Cart = () => {
                                 <Flex flexGrow={1} flexDirection='column' px={4}>
                                     <Text fontSize='sm'>{product.title}</Text>
                                     <Text fontSize='sm'
-                                          color='gray.500'>{toCurrency(Number(product.price))}</Text>
+                                          color='gray.500'>{toCurrency(product.price)}</Text>
                                 </Flex>
                             </Link>
                             <Spacer/>
