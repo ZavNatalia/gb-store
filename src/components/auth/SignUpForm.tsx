@@ -3,6 +3,7 @@ import {Field, Form, Formik, FormikHelpers} from "formik";
 import {Button, FormControl, Input, Stack, Text} from "@chakra-ui/react";
 import * as Yup from "yup";
 import {ICustomer} from "../../models/ICustomer";
+import {RegExpURL} from "../../utilities/RegExpURL";
 
 interface SignUpFormProps {
     signUpHandler: (data: ICustomer) => void
@@ -12,6 +13,7 @@ export interface Values {
     name: string;
     email: string;
     password: string;
+    avatar: string
 }
 
 const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
@@ -24,7 +26,9 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
         password: Yup.string()
             .min(8, 'Пароль должен содержать минимум 8 символов')
             .max(16, 'Пароль может содержать максимум 16 символов')
-            .required('Пожалуйста, введите ваш пароль')
+            .required('Пожалуйста, введите ваш пароль'),
+        avatar: Yup.string()
+            .matches(RegExpURL, 'Пожалуйста, введите корректный URL'),
     });
 
     return (
@@ -32,7 +36,8 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
             initialValues={{
                 name: '',
                 email: '',
-                password: ''
+                password: '',
+                avatar: ''
             }}
             validationSchema={ValidationSchema}
             onSubmit={async (
@@ -86,6 +91,18 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
                                                isInvalid={meta.touched ? meta.error : false} {...field} />
                                         {meta.touched && meta.error && (
                                             <Text color='red.400' fontSize='md'>{meta.error}</Text>
+                                        )}
+                                    </>
+                                )}
+                            </Field>
+                        </FormControl>
+                        <FormControl>
+                            <Field name="avatar">
+                                {({field, meta}: any) => (
+                                    <>
+                                        <Input name='avatar' type='string' placeholder='Добавьте ссылку на ваш аватар' {...field}/>
+                                        {meta.touched && meta.error && (
+                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
                                         )}
                                     </>
                                 )}
