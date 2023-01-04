@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Button, Flex, HStack, Skeleton, SkeletonText, Text, useDisclosure, VStack} from "@chakra-ui/react";
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {IProduct} from "../models/IProduct";
 import {toCurrency} from "../utilities/formatCurrency";
 import Counter from "../UI/Counter";
@@ -27,8 +27,8 @@ export const Product = () => {
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
-    const {onChangeCategories} = useCategory();
-    // const navigate = useNavigate();
+    const {onChangeCategories, currentCategory} = useCategory();
+    const navigate = useNavigate();
 
     const quantity = getItemQuantity(productId);
 
@@ -86,15 +86,15 @@ export const Product = () => {
     }
 
     const onRemoveProduct = async () => {
-        // if (productId) {
-        //     try {
-        //         await ProductService.deleteProduct(productId);
-        //         ToastSuccess('The product has been removed successfully');
-        //         navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)
-        //     } catch (e: any) {
-        //         ToastError(e?.message);
-        //     }
-        // }
+        if (productId) {
+            try {
+                await ProductService.deleteProduct(productId);
+                ToastSuccess('The product has been removed successfully');
+                navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)
+            } catch (e: any) {
+                ToastError(e?.message);
+            }
+        }
     }
 
     return (

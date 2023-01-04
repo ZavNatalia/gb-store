@@ -24,7 +24,7 @@ export default class ProductService {
         }
         return axios.get<number>(`${rootURL}/items/quantity`)
     }
-    // static async deleteProduct(id: string): Promise<AxiosResponse> {
-    //     return axios.delete<IProduct>(`${rootURL}/products/${id}`)
-    // }
+    static async deleteProduct(id: string): Promise<AxiosResponse> {
+        return axios.delete<IProduct>(`${rootURL}/items/delete/${id}`)
+    }
 }
