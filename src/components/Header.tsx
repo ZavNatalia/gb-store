@@ -76,18 +76,12 @@ export const Header = () => {
                 getUserWithSession();
             })
     }
-    const signUpHandler = async ({name, email, password}: ICustomer) => {
+    const signUpHandler = async (data: ICustomer) => {
         await axios.post(
-            `${rootURL}/users/`, {
-                name, email, password,
-                avatar: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Missing_avatar.svg'
-            }
+            `${rootURL}/users/`, data
         )
-            .then(({data}) => {
-                setCustomer(data)
-                ToastSuccess('Вы успешно зарегистрировались');
-                localStorage.setItem('token', data.access_token);
-                setIsAuth(true);
+            .then(() => {
+                ToastSuccess('Вы успешно зарегистрировались и можете авторизоваться');
             })
             .catch(error => {
                 ToastError(error.message);
