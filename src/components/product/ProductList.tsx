@@ -36,7 +36,9 @@ const ProductList = () => {
                 : await CategoryService.getAllProductsByCategory(currentCategory.id)
 
             setProducts([...products, ...response.data]);
-            setOffset(prevState => prevState + limit);
+            if (isEmpty(currentCategory)) {
+                setOffset(prevState => prevState + limit);
+            }
             setContentLength(+response.headers['content-length']);
         } catch (e: any) {
             setError(e?.message);
@@ -66,9 +68,11 @@ const ProductList = () => {
     }, [currentCategory]);
 
     useEffect(() => {
-        document.addEventListener('scroll', scrollHandler)
-        return function () {
-            document.removeEventListener('scroll', scrollHandler)
+        if (isEmpty(currentCategory)) {
+            document.addEventListener('scroll', scrollHandler)
+            return function () {
+                document.removeEventListener('scroll', scrollHandler)
+            }
         }
     })
 
@@ -76,7 +80,7 @@ const ProductList = () => {
         const scrollHeight = e.target.documentElement.scrollHeight;
         const scrollTop = e.target.documentElement.scrollTop;
         const innerHeight = window.innerHeight;
-        if (scrollHeight - (scrollTop + innerHeight) < 200 && contentLength > 2) {
+        if (scrollHeight - (scrollTop + innerHeight) < 200 && contentLength > 2 ) {
             setIsLoading(true)
         }
     }
@@ -112,8 +116,8 @@ const ProductList = () => {
 
     const memoizedList = useMemo(() => (
         <>
-            {products.map(product => (
-                <ProductItem product={product} key={product.id}/>
+            {products.map((product) => (
+                <ProductItem product={product} key={product.id + product.title}/>
             ))}
         </>
     ), [products]);
