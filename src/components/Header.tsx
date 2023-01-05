@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Avatar,
     Button,
@@ -26,6 +26,8 @@ import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
+const ACCESS_TOKEN = 'access_token';
+
 export const Header = () => {
     const {onChangeCurrentCategory} = useCategory();
 
@@ -36,26 +38,37 @@ export const Header = () => {
     const logOutDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
 
-    // useEffect(() => {
-    //     if (isAuth) {
-    //         getUserWithSession();
-    //     }
-    // }, [])
+    useEffect(() => {
+        if (getToken()) {
+            getUserWithSession();
+        }
+    }, []);
+
+    const setToken = (token: string) => {
+        return localStorage.setItem(ACCESS_TOKEN, token);
+    }
+    const getToken = () => {
+        return localStorage.getItem(ACCESS_TOKEN)
+    }
+    const removeToken = () => {
+        return localStorage.removeItem(ACCESS_TOKEN)
+    }
 
     const signInBySocial = async (source: string) => {
-        await axios.get(
-            `${rootURL}/user/login/${source}`
-        )
-            .then(({data}) => {
-                ToastSuccess('Вы успешно авторизовались');
-                setIsAuth(true);
-            })
-            .catch(error => {
-                ToastError(error.message);
-            })
-            .finally(() => {
-                signInDisclosure.onClose();
-            })
+        ToastError('not implemented')
+        // await axios.get(
+        //     `${rootURL}/user/login/${source}`
+        // )
+        //     .then(({data}) => {
+        //         ToastSuccess('Вы успешно авторизовались');
+        //         setIsAuth(true);
+        //     })
+        //     .catch(error => {
+        //         ToastError(error.message);
+        //     })
+        //     .finally(() => {
+        //         signInDisclosure.onClose();
+        //     })
     }
 
     const signInByEmail = async ({firstname, email, password}: ICustomer) => {
@@ -66,18 +79,17 @@ export const Header = () => {
         )
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
-                setIsAuth(true);
+                setToken(data.access_token);
                 setCustomer({
                     firstname, email
                 })
-                // localStorage.setItem('token', data.access_token);
             })
             .catch(error => {
                 ToastError(error.message);
             })
             .finally(() => {
                 signInDisclosure.onClose();
-                // getUserWithSession();
+                getUserWithSession();
             })
     }
     const signUpHandler = async ({firstname, email, password}: ICustomer) => {
@@ -89,14 +101,14 @@ export const Header = () => {
             .then(({data}) => {
                 setCustomer(data)
                 ToastSuccess('Вы успешно зарегистрировались');
-                // localStorage.setItem('token', data.access_token);
-                setIsAuth(true);
+                setToken(data.access_token);
             })
             .catch(error => {
                 ToastError(error.message);
             })
             .finally(() => {
                 signUpDisclosure.onClose();
+                getUserWithSession();
             })
     }
     const logOutHandler = async () => {
@@ -107,6 +119,7 @@ export const Header = () => {
                 setCustomer({} as ICustomer)
                 ToastSuccess('Вы вышли из аккаунта');
                 setIsAuth(false);
+                removeToken();
             })
             .catch(error => {
                 ToastError(error.message);
@@ -116,21 +129,22 @@ export const Header = () => {
             })
     }
 
-    // const getUserWithSession = async () => {
-    //     const token = localStorage.getItem('token');
-    //     const config = {
-    //         headers: { Authorization: `Bearer ${token}` }
-    //     };
-    //   await axios.get(`${rootURL}/auth/profile`, config)
-    //       .then(({data}) => {
-    //           setCustomer(data)
-    //       })
-    //       .catch(error => {
-    //           ToastError(error.message);
-    //           localStorage.removeItem('token');
-    //           setIsAuth(false);
-    //       })
-    // }
+    const getUserWithSession = async () => {
+        const token = getToken();
+        const config = {
+            headers: { Authorization: `Bearer ${token}` }
+        };
+      await axios.get(`${rootURL}/user/profile`, config)
+          .then(({data}) => {
+              setCustomer(data);
+              setIsAuth(true);
+          })
+          .catch(error => {
+              ToastError(error.message);
+              removeToken();
+              setIsAuth(false);
+          })
+    }
 
     const onEditProfile = async (values: ICustomer) => {
         await axios.put(
