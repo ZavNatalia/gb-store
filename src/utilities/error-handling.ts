@@ -21,3 +21,13 @@ export const ToastError = (error: string) => {
         isClosable: true,
     })
 };
+export const ToastInfo = (info: string) => {
+    const { toast } = createStandaloneToast();
+    return toast({
+        title: 'Info',
+        description: info,
+        status: 'info',
+        duration: 6000,
+        isClosable: true,
+    })
+};
