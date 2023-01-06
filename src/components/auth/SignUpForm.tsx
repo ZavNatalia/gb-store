@@ -28,7 +28,8 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
             .max(16, 'Пароль может содержать максимум 16 символов')
             .required('Пожалуйста, введите ваш пароль'),
         avatar: Yup.string()
-            .matches(RegExpURL, 'Пожалуйста, введите корректный URL'),
+            .matches(RegExpURL, 'Пожалуйста, введите корректный URL')
+            .required('Пожалуйста, добавьте ссылку на ваш аватар')
     });
 
     return (
@@ -100,7 +101,8 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
                             <Field name="avatar">
                                 {({field, meta}: any) => (
                                     <>
-                                        <Input name='avatar' type='string' placeholder='Добавьте ссылку на ваш аватар' {...field}/>
+                                        <Input name='avatar' type='string' isInvalid={meta.touched ? meta.error : false}
+                                               placeholder='Добавьте ссылку на ваш аватар' {...field}/>
                                         {meta.touched && meta.error && (
                                             <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
                                         )}

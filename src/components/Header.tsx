@@ -185,9 +185,7 @@ export const Header = () => {
                             />
                         </MenuButton>
                         <MenuList>
-                            {!isAdmin &&
-                                <MenuItem onClick={editProfileDisclosure.onOpen} >Профиль</MenuItem>
-                            }
+                            <MenuItem onClick={editProfileDisclosure.onOpen} >Профиль</MenuItem>
                             {!isAdmin && <MenuItem disabled>Мои заказы</MenuItem>}
                             <MenuDivider/>
                             <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
