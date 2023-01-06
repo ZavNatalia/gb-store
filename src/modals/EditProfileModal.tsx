@@ -29,9 +29,10 @@ interface EditCategoryModalProps {
 }
 
 type Values = {
-    firstname: string | undefined;
-    avatar?: string | undefined;
+    first_name: string | undefined;
+    last_name?: string | undefined;
     email: string | undefined;
+    address?: string | undefined;
 };
 
 const EditProfileModal = ({
@@ -41,10 +42,12 @@ const EditProfileModal = ({
                               onEditProfile
                           }: EditCategoryModalProps) => {
     const ValidationSchema = Yup.object().shape({
-        firstname: Yup.string()
+        first_name: Yup.string()
             .required('Пожалуйста, введите ваше имя'),
-        avatar: Yup.string()
-            .matches(RegExpURL, 'Пожалуйста, введите корректный URL'),
+        last_name: Yup.string()
+            .required('Пожалуйста, введите вашу фамилию'),
+        address: Yup.string()
+            .required('Пожалуйста, введите ваш адрес'),
         email: Yup.string()
             .email('Пожалуйста, введите корректный  email')
             .required('Пожалуйста, введите ваш E-mail'),
@@ -59,13 +62,14 @@ const EditProfileModal = ({
 
                 <Formik
                     initialValues={{
-                        firstname: customer?.firstname ?? '',
-                        avatar: customer?.avatar ?? '',
+                        first_name: customer?.first_name ?? '',
+                        last_name: customer?.last_name ?? '',
+                        address: '',
                         email: customer?.email ?? ''
                     }}
                     validationSchema={ValidationSchema}
                     onSubmit={async (values: Values) => {
-                        onEditProfile({...customer, firstname: values.firstname, avatar: values.avatar})
+                        onEditProfile({...customer, first_name: values.first_name, last_name: values.last_name})
                     }}
                 >
                     {({isValid, dirty}) => (
@@ -79,12 +83,11 @@ const EditProfileModal = ({
                                         />
                                     </Center>
                                     <FormControl>
-                                        <FormLabel htmlFor='firstname' fontWeight='bold'>Как к вам
-                                            обращаться</FormLabel>
-                                        <Field name="firstname">
+                                        <FormLabel htmlFor='first_name' fontWeight='bold'>Ваше имя</FormLabel>
+                                        <Field name="first_name">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Input name='firstname' type='string' {...field}/>
+                                                    <Input name='first_name' type='string' {...field}/>
                                                     {meta.touched && meta.error && (
                                                         <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
                                                     )}
@@ -93,11 +96,24 @@ const EditProfileModal = ({
                                         </Field>
                                     </FormControl>
                                     <FormControl>
-                                        <FormLabel htmlFor='avatar' fontWeight='bold'>Аватар</FormLabel>
-                                        <Field name="avatar">
+                                        <FormLabel htmlFor='last_name' fontWeight='bold'>Ваша фамилия</FormLabel>
+                                        <Field name="last_name">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Input name='avatar' type='string' {...field}/>
+                                                    <Input name='last_name' type='string' {...field}/>
+                                                    {meta.touched && meta.error && (
+                                                        <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                    )}
+                                                </>
+                                            )}
+                                        </Field>
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel htmlFor='address' fontWeight='bold'>Ваш адрес</FormLabel>
+                                        <Field name="address">
+                                            {({field, meta}: any) => (
+                                                <>
+                                                    <Input name='address' type='string' {...field}/>
                                                     {meta.touched && meta.error && (
                                                         <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
                                                     )}
@@ -107,7 +123,6 @@ const EditProfileModal = ({
                                     </FormControl>
                                     <FormControl>
                                         <FormLabel htmlFor='email' fontWeight='bold'>Email</FormLabel>
-
                                         <Field name='email'>
                                             {({field, meta}: any) => (
                                                 <>

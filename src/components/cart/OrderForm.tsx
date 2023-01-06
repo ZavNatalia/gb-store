@@ -19,7 +19,8 @@ import {useCustomer} from "../../context/CustomerContext";
 import {ToastSuccess} from "../../utilities/error-handling";
 
 interface Values {
-    name: string;
+    first_name: string;
+    last_name: string;
     address: string;
     email: string;
     phone: string;
@@ -31,7 +32,10 @@ export const OrderForm = () => {
     const {customer} = useCustomer();
 
     const ValidationSchema = Yup.object().shape({
-        name: Yup.string()
+        first_name: Yup.string()
+            .max(70, 'Пожалуйста, введите не более 70 символов')
+            .required('Пожалуйста, заполните обязательное поле'),
+        last_name: Yup.string()
             .max(70, 'Пожалуйста, введите не более 70 символов')
             .required('Пожалуйста, заполните обязательное поле'),
         address: Yup.string()
@@ -47,7 +51,8 @@ export const OrderForm = () => {
     return (
         <Formik
             initialValues={{
-                name: customer?.firstname ?? '',
+                first_name: customer?.first_name ?? '',
+                last_name: customer?.last_name ?? '',
                 address: '',
                 email: customer?.email ?? '',
                 phone: '',
@@ -70,8 +75,8 @@ export const OrderForm = () => {
             {({isSubmitting, isValid, dirty}) => (
                     <Form>
                         <VStack spacing={3} px={1} alignItems='start'>
-                            <FormControl id="name">
-                                <Field name="name">
+                            <FormControl id="first_name">
+                                <Field name="first_name">
                                     {({field, meta}: any) => (
                                         <>
                                             <InputGroup>
@@ -81,6 +86,26 @@ export const OrderForm = () => {
                                                 />
                                                 <Input type="text"
                                                        placeholder="Введите Ваше имя..."
+                                                       isInvalid={meta.touched ? meta.error : false} {...field} />
+                                            </InputGroup>
+                                            {meta.touched && meta.error && (
+                                                <Text color='red.400' fontSize='sm' mt={1}>{meta.error}</Text>
+                                            )}
+                                        </>
+                                    )}
+                                </Field>
+                            </FormControl>
+                            <FormControl id="last_name">
+                                <Field name="last_name">
+                                    {({field, meta}: any) => (
+                                        <>
+                                            <InputGroup>
+                                                <InputLeftElement
+                                                    pointerEvents="none"
+                                                    children={<BsPerson color="gray.800"/>}
+                                                />
+                                                <Input type="text"
+                                                       placeholder="Введите Вашу фамилию..."
                                                        isInvalid={meta.touched ? meta.error : false} {...field} />
                                             </InputGroup>
                                             {meta.touched && meta.error && (

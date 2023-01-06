@@ -64,11 +64,11 @@ export const Header = () => {
             })
     }
 
-    const signInByEmail = async ({firstname, email, password}: ICustomer) => {
+    const signInByEmail = async ({first_name, email, password}: ICustomer) => {
         setIsLoading(true);
         await axios.post(
             `${rootURL}/user/login`, {
-                firstname, email, password
+                first_name, email, password
             }
         )
             .then(({data}) => {
@@ -84,10 +84,10 @@ export const Header = () => {
                 getUserWithSession();
             })
     }
-    const signUpHandler = async ({firstname, email, password}: ICustomer) => {
+    const signUpHandler = async ({first_name, email, password}: ICustomer) => {
         await axios.post(
             `${rootURL}/user/create`, {
-                firstname, email, password
+                first_name, email, password
             }
         )
             .then(({data}) => {
@@ -128,7 +128,7 @@ export const Header = () => {
         };
       await axios.get(`${rootURL}/user/profile`, config)
           .then(({data}) => {
-              onChangeCustomer(data);
+              onChangeCustomer(data.user_data);
               setIsAuth(true);
           })
           .catch(error => {
@@ -143,7 +143,7 @@ export const Header = () => {
 
     const onEditProfile = async (values: ICustomer) => {
         await axios.put(
-            `${rootURL}/users/${customer.id}`, values
+            `${rootURL}/user/profile/edit/${customer.id}`, values
         )
             .then(({data}) => {
                 onChangeCustomer(data);
