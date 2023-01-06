@@ -6,7 +6,8 @@ import {ICustomer} from "../../models/ICustomer";
 import {RegExpURL} from "../../utilities/RegExpURL";
 
 interface SignUpFormProps {
-    signUpHandler: (data: ICustomer) => void
+    signUpHandler: (data: ICustomer) => void;
+    isLoading: boolean
 }
 
 export interface Values {
@@ -16,7 +17,7 @@ export interface Values {
     avatar: string
 }
 
-const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
+const SignUpForm = ({signUpHandler, isLoading}: SignUpFormProps) => {
     const ValidationSchema = Yup.object().shape({
         name: Yup.string()
             .required('Пожалуйста, введите вашe имя'),
@@ -110,8 +111,12 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
                                 )}
                             </Field>
                         </FormControl>
-                        <Button type='submit' colorScheme='yellow'
-                                isDisabled={!isValid || !dirty}>Зарегистрироваться</Button>
+                        <Button type='submit'
+                                colorScheme='yellow'
+                                isLoading={isLoading}
+                                isDisabled={!isValid || !dirty}>
+                            Зарегистрироваться
+                        </Button>
                     </Stack>
                 </Form>
             )}

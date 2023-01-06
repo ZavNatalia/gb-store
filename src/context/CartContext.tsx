@@ -5,7 +5,7 @@ type CartProviderProps = {
     children: ReactNode
 }
 
-type CartItem = {
+export type CartItem = {
     product: IProduct,
     quantity: number
 }
@@ -21,6 +21,7 @@ type CartContextProps = {
     getDeliveryCost: () => number
     increaseCartQuantity: (product: IProduct) => void
     decreaseCartQuantity: (product: IProduct) => void
+    emptyCart: () => void
     cartQuantity: number
     cartItems: CartItem[]
 }
@@ -103,6 +104,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
         })
     }
 
+    const emptyCart = () => {
+        setCartItems([])
+    }
+
     return (
         <CartContext.Provider
             value={{
@@ -113,6 +118,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
                 getDeliveryCost,
                 increaseCartQuantity,
                 decreaseCartQuantity,
+                emptyCart,
                 cartQuantity,
                 cartItems,
                 openCart,

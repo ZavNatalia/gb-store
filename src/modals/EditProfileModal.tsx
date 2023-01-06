@@ -59,9 +59,9 @@ const EditProfileModal = ({
 
                 <Formik
                     initialValues={{
-                        name: customer.name,
-                        avatar: customer.avatar ?? '',
-                        email: customer.email
+                        name: customer?.name ?? '',
+                        avatar: customer?.avatar ?? '',
+                        email: customer?.email ?? ''
                     }}
                     validationSchema={ValidationSchema}
                     onSubmit={async (values: Values) => {

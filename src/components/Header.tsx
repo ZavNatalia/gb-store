@@ -16,7 +16,7 @@ import {Link} from 'react-router-dom';
 import {useCategory} from "../context/CategoryContext";
 import {ICategory} from '../models/ICategory';
 import axios from "axios";
-import {ToastError, ToastSuccess} from "../utilities/error-handling";
+import {ToastError, ToastInfo, ToastSuccess} from "../utilities/error-handling";
 import SignIn from '../modals/SignIn';
 import SignUp from "../modals/SignUp";
 import {ICustomer} from "../models/ICustomer";
@@ -24,16 +24,19 @@ import {Links} from './cart/Links';
 import {isAdmin} from '../constants/isAdmin';
 import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
-
+import {getToken, removeToken, setToken} from "../utilities/local-storage-handling";
+import {useCustomer} from "../context/CustomerContext";
+import {useCart} from "../context/CartContext";
 
 export const Header = () => {
-    const {onChangeCurrentCategory} = useCategory();
-
-    const [isAuth, setIsAuth] = useState(!!localStorage.getItem('token'));
-    const [customer, setCustomer] = useState({} as ICustomer);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isAuth, setIsAuth] = useState(!!getToken());
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
+    const {emptyCart} = useCart();
+    const {onChangeCurrentCategory} = useCategory();
+    const {customer, onChangeCustomer} = useCustomer();
 
     useEffect(() => {
         if (isAuth) {
@@ -42,22 +45,24 @@ export const Header = () => {
     }, [])
 
     const signInBySocial = async (source: string) => {
-        await axios.get(
-            `/user/login/${source}`
-        )
-            .then(({data}) => {
-                ToastSuccess('Вы успешно авторизовались');
-                setIsAuth(true);
-            })
-            .catch(error => {
-                ToastError(error.message);
-            })
-            .finally(() => {
-                signInDisclosure.onClose();
-            })
+        ToastInfo('not implemented');
+        // await axios.get(
+        //     `/user/login/${source}`
+        // )
+        //     .then(({data}) => {
+        //         ToastSuccess('Вы успешно авторизовались');
+        //         setIsAuth(true);
+        //     })
+        //     .catch(error => {
+        //         ToastError(error.message);
+        //     })
+        //     .finally(() => {
+        //         signInDisclosure.onClose();
+        //     })
     }
 
     const signInByEmail = async ({email, password}: ICustomer) => {
+        setIsLoading(true);
         await axios.post(
             `${rootURL}/auth/login`, {
                 email, password
@@ -66,7 +71,7 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setIsAuth(true);
-                localStorage.setItem('token', data.access_token);
+                setToken(data.access_token);
             })
             .catch(error => {
                 ToastError(error.message);
@@ -77,6 +82,7 @@ export const Header = () => {
             })
     }
     const signUpHandler = async (data: ICustomer) => {
+        setIsLoading(true);
         await axios.post(
             `${rootURL}/users/`, data
         )
@@ -87,28 +93,33 @@ export const Header = () => {
                 ToastError(error.message);
             })
             .finally(() => {
+                setIsLoading(false);
                 signUpDisclosure.onClose();
             })
     }
 
     const logOutHandler = () => {
-        localStorage.removeItem('token');
+        removeToken();
+        onChangeCustomer({});
+        emptyCart();
         setIsAuth(false);
     }
 
     const getUserWithSession = async () => {
-        const token = localStorage.getItem('token');
         const config = {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${getToken()}` }
         };
       await axios.get(`${rootURL}/auth/profile`, config)
           .then(({data}) => {
-              setCustomer(data)
+              onChangeCustomer(data);
           })
           .catch(error => {
               ToastError(error.message);
-              localStorage.removeItem('token');
+              removeToken();
               setIsAuth(false);
+          })
+          .finally(() => {
+              setIsLoading(false);
           })
     }
 
@@ -117,7 +128,7 @@ export const Header = () => {
             `${rootURL}/users/${customer.id}`, values
         )
             .then(({data}) => {
-                setCustomer(data)
+                onChangeCustomer(data);
                 ToastSuccess('Ваши данные были успешно изменены');
             })
             .catch(error => {
@@ -186,8 +197,11 @@ export const Header = () => {
                         </MenuButton>
                         <MenuList>
                             <MenuItem onClick={editProfileDisclosure.onOpen} >Профиль</MenuItem>
-                            {!isAdmin && <MenuItem disabled>Мои заказы</MenuItem>}
-                            <MenuDivider/>
+                            {!isAdmin &&
+                                <Link to={'/orders'}>
+                                    <MenuItem>Мои заказы</MenuItem>
+                                </Link>
+                            }                            <MenuDivider/>
                             <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
                         </MenuList>
                     </Menu>
@@ -200,11 +214,13 @@ export const Header = () => {
                               onEditProfile={onEditProfile}/>
 
             <SignIn isOpen={signInDisclosure.isOpen}
+                    isLoading={isLoading}
                     onClose={signInDisclosure.onClose}
                     onOpenSignUp={signUpDisclosure.onOpen}
                     signInHandler={signInBySocial}
                     signInByEmail={signInByEmail}/>
             <SignUp isOpen={signUpDisclosure.isOpen}
+                    isLoading={isLoading}
                     onClose={signUpDisclosure.onClose}
                     onOpenSignIn={signInDisclosure.onOpen}
                     signUpHandler={signUpHandler}/>
