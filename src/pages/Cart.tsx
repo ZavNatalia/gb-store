@@ -66,11 +66,19 @@ export const Cart = () => {
             <Icon fontSize='140px' color='gray.400' as={BsBag}/>
             <Heading fontSize='xx-large' my={2}>В вашей корзине пока пусто</Heading>
             <Text color='gray'>Тут появятся товары, которые вы закажете.</Text>
-            <Link to={`/${currentCategory?.name?.toLowerCase() ?? 'all'}`}>
-                <Button colorScheme='yellow' px={10} mt={10}>
-                    В каталог
-                </Button>
-            </Link>
+            <HStack mt={10}>
+                <Link to={`/${currentCategory?.name?.toLowerCase() ?? 'all'}`}>
+                    <Button colorScheme='blackAlpha' px={10}>
+                        В каталог
+                    </Button>
+                </Link>
+                <Link to={`/orders`}>
+                    <Button colorScheme='yellow' px={10}>
+                        Мои заказы
+                    </Button>
+                </Link>
+            </HStack>
+
         </Flex>
     );
 

@@ -11,6 +11,7 @@ import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
 import {isAdmin} from '../../constants/isAdmin';
+import CategoryService from "../../api/CategoryService";
 import ProductService from "../../api/ProductService";
 
 const ProductList = () => {
@@ -52,7 +53,6 @@ const ProductList = () => {
         } else {
             setIsLoading(false)
         }
-
     };
 
     const fetchQuantity = async () => {

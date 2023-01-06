@@ -19,6 +19,7 @@ import {
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {ICustomer} from "../models/ICustomer";
+import {RegExpURL} from "../utilities/RegExpURL";
 
 interface EditCategoryModalProps {
     customer: ICustomer,
@@ -39,13 +40,11 @@ const EditProfileModal = ({
                               onClose,
                               onEditProfile
                           }: EditCategoryModalProps) => {
-
-    const URL = /^((https?|ftp):\/\/)?(www.)?(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
     const ValidationSchema = Yup.object().shape({
         firstname: Yup.string()
             .required('Пожалуйста, введите ваше имя'),
         avatar: Yup.string()
-            .matches(URL, 'Пожалуйста, введите корректный URL'),
+            .matches(RegExpURL, 'Пожалуйста, введите корректный URL'),
         email: Yup.string()
             .email('Пожалуйста, введите корректный  email')
             .required('Пожалуйста, введите ваш E-mail'),
@@ -60,9 +59,9 @@ const EditProfileModal = ({
 
                 <Formik
                     initialValues={{
-                        firstname: customer.firstname,
-                        avatar: customer.avatar ?? '',
-                        email: customer.email
+                        firstname: customer?.firstname ?? '',
+                        avatar: customer?.avatar ?? '',
+                        email: customer?.email ?? ''
                     }}
                     validationSchema={ValidationSchema}
                     onSubmit={async (values: Values) => {
@@ -108,6 +107,7 @@ const EditProfileModal = ({
                                     </FormControl>
                                     <FormControl>
                                         <FormLabel htmlFor='email' fontWeight='bold'>Email</FormLabel>
+
                                         <Field name='email'>
                                             {({field, meta}: any) => (
                                                 <>

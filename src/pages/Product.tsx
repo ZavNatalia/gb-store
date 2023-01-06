@@ -147,9 +147,9 @@ export const Product = () => {
                                 maxW='450px'>
                                 <Text flex={1} color='red.600'
                                       fontSize='x-large'>{toCurrency(product.price)}</Text>
-                                {!isAdmin && <Box flex={1} textAlign='right'>
+                                <Box flex={1} textAlign='right'>
                                     <Counter product={product} quantity={quantity} buttonColor='yellow.400'/>
-                                </Box>}
+                                </Box>
                             </Flex>
                         </VStack>
                     </Flex>

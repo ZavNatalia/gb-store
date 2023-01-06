@@ -16,7 +16,7 @@ import {Link} from 'react-router-dom';
 import {useCategory} from "../context/CategoryContext";
 import {ICategory} from '../models/ICategory';
 import axios from "axios";
-import {ToastError, ToastSuccess} from "../utilities/error-handling";
+import {ToastError, ToastInfo, ToastSuccess} from "../utilities/error-handling";
 import SignIn from '../modals/SignIn';
 import SignUp from "../modals/SignUp";
 import {ICustomer} from "../models/ICustomer";
@@ -26,52 +26,46 @@ import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
-const ACCESS_TOKEN = 'access_token';
+import {getToken, removeToken, setToken} from "../utilities/local-storage-handling";
+import {useCustomer} from "../context/CustomerContext";
+import {useCart} from "../context/CartContext";
 
 export const Header = () => {
-    const {onChangeCurrentCategory} = useCategory();
-
-    const [isAuth, setIsAuth] = useState(false);
-    const [customer, setCustomer] = useState({} as ICustomer);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isAuth, setIsAuth] = useState(!!getToken());
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
     const logOutDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
+    const {emptyCart} = useCart();
+    const {onChangeCurrentCategory} = useCategory();
+    const {customer, onChangeCustomer} = useCustomer();
 
     useEffect(() => {
-        if (getToken()) {
+        if (isAuth) {
             getUserWithSession();
         }
-    }, []);
-
-    const setToken = (token: string) => {
-        return localStorage.setItem(ACCESS_TOKEN, token);
-    }
-    const getToken = () => {
-        return localStorage.getItem(ACCESS_TOKEN)
-    }
-    const removeToken = () => {
-        return localStorage.removeItem(ACCESS_TOKEN)
-    }
+    }, [])
 
     const signInBySocial = async (source: string) => {
-        ToastError('not implemented')
-        // await axios.get(
-        //     `${rootURL}/user/login/${source}`
-        // )
-        //     .then(({data}) => {
-        //         ToastSuccess('Вы успешно авторизовались');
-        //         setIsAuth(true);
-        //     })
-        //     .catch(error => {
-        //         ToastError(error.message);
-        //     })
-        //     .finally(() => {
-        //         signInDisclosure.onClose();
-        //     })
+        await axios.get(
+            `${rootURL}/user/login/${source}`
+        )
+            .then(({data}) => {
+                ToastSuccess('Вы успешно авторизовались');
+                setToken(data.access_token);
+                setIsAuth(true);
+            })
+            .catch(error => {
+                ToastError(error.message);
+            })
+            .finally(() => {
+                signInDisclosure.onClose();
+            })
     }
 
     const signInByEmail = async ({firstname, email, password}: ICustomer) => {
+        setIsLoading(true);
         await axios.post(
             `${rootURL}/user/login`, {
                 firstname, email, password
@@ -80,9 +74,7 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setToken(data.access_token);
-                setCustomer({
-                    firstname, email
-                })
+                setIsAuth(true);
             })
             .catch(error => {
                 ToastError(error.message);
@@ -99,7 +91,7 @@ export const Header = () => {
             }
         )
             .then(({data}) => {
-                setCustomer(data)
+                onChangeCustomer(data);
                 ToastSuccess('Вы успешно зарегистрировались');
                 setToken(data.access_token);
             })
@@ -107,8 +99,8 @@ export const Header = () => {
                 ToastError(error.message);
             })
             .finally(() => {
+                setIsLoading(false);
                 signUpDisclosure.onClose();
-                getUserWithSession();
             })
     }
     const logOutHandler = async () => {
@@ -116,10 +108,11 @@ export const Header = () => {
             `${rootURL}/user/logout?id=${customer.id}`,
         )
             .then(() => {
-                setCustomer({} as ICustomer)
-                ToastSuccess('Вы вышли из аккаунта');
+                onChangeCustomer({});
+                emptyCart();
                 setIsAuth(false);
                 removeToken();
+                ToastSuccess('Вы вышли из аккаунта');
             })
             .catch(error => {
                 ToastError(error.message);
@@ -130,19 +123,21 @@ export const Header = () => {
     }
 
     const getUserWithSession = async () => {
-        const token = getToken();
         const config = {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${getToken()}` }
         };
       await axios.get(`${rootURL}/user/profile`, config)
           .then(({data}) => {
-              setCustomer(data);
+              onChangeCustomer(data);
               setIsAuth(true);
           })
           .catch(error => {
               ToastError(error.message);
               removeToken();
               setIsAuth(false);
+          })
+          .finally(() => {
+              setIsLoading(false);
           })
     }
 
@@ -151,7 +146,7 @@ export const Header = () => {
             `${rootURL}/users/${customer.id}`, values
         )
             .then(({data}) => {
-                setCustomer(data)
+                onChangeCustomer(data);
                 ToastSuccess('Ваши данные были успешно изменены');
             })
             .catch(error => {
@@ -219,11 +214,12 @@ export const Header = () => {
                             />
                         </MenuButton>
                         <MenuList>
+                            <MenuItem onClick={editProfileDisclosure.onOpen} >Профиль</MenuItem>
                             {!isAdmin &&
-                                <MenuItem onClick={editProfileDisclosure.onOpen}>Профиль</MenuItem>
-                            }
-                            {!isAdmin && <MenuItem>Мои заказы</MenuItem>}
-                            <MenuDivider/>
+                                <Link to={'/orders'}>
+                                    <MenuItem>Мои заказы</MenuItem>
+                                </Link>
+                            }                            <MenuDivider/>
                             <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
                         </MenuList>
                     </Menu>
@@ -236,11 +232,13 @@ export const Header = () => {
                               onEditProfile={onEditProfile}/>
 
             <SignIn isOpen={signInDisclosure.isOpen}
+                    isLoading={isLoading}
                     onClose={signInDisclosure.onClose}
                     onOpenSignUp={signUpDisclosure.onOpen}
                     signInHandler={signInBySocial}
                     signInByEmail={signInByEmail}/>
             <SignUp isOpen={signUpDisclosure.isOpen}
+                    isLoading={isLoading}
                     onClose={signUpDisclosure.onClose}
                     onOpenSignIn={signInDisclosure.onOpen}
                     signUpHandler={signUpHandler}/>
