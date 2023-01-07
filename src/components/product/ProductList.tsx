@@ -115,6 +115,7 @@ const ProductList = () => {
             if (currentCategory.id !== values.category.id) {
                 onChangeCategory(values.category.id);
             } else {
+                updateList();
                 fetchQuantity();
             }
             ToastSuccess('Товар был успешно добавлен');

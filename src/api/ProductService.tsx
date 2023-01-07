@@ -12,6 +12,9 @@ export default class ProductService {
     static async getAllProductsByCategory(name: string, offset: number, limit: number): Promise<AxiosResponse<IProduct[]>> {
         return axios.get<IProduct[]>(`${rootURL}/items/?param=${name}&offset=${offset}&limit=${limit}`)
     }
+    static async getProductsBySearchQuery(searchQuery: string, offset: number, limit: number): Promise<AxiosResponse<IProduct[]>> {
+        return axios.get<IProduct[]>(`${rootURL}/items/search/?param=${searchQuery}&offset=${offset}&limit=${limit}`)
+    }
     static async createProduct(product: any): Promise<AxiosResponse> {
         return axios.post<IProduct>(`${rootURL}/items/create`, product)
     }
