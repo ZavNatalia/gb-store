@@ -43,11 +43,12 @@ const EditProfileModal = ({
                           }: EditCategoryModalProps) => {
     const ValidationSchema = Yup.object().shape({
         first_name: Yup.string()
+            .max(100, 'Пожалуйста, введите не более 50 символов')
             .required('Пожалуйста, введите ваше имя'),
         last_name: Yup.string()
-            .required('Пожалуйста, введите вашу фамилию'),
+            .max(100, 'Пожалуйста, введите не более 50 символов'),
         address: Yup.string()
-            .required('Пожалуйста, введите ваш адрес'),
+            .max(100, 'Пожалуйста, введите не более 200 символов'),
         email: Yup.string()
             .email('Пожалуйста, введите корректный  email')
             .required('Пожалуйста, введите ваш E-mail'),

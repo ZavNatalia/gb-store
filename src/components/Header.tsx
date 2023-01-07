@@ -142,8 +142,11 @@ export const Header = () => {
     }
 
     const onEditProfile = async (values: ICustomer) => {
+        const config = {
+            headers: { Authorization: `Bearer ${getToken()}` }
+        };
         await axios.put(
-            `${rootURL}/user/profile/edit/${customer.id}`, values
+            `${rootURL}/user/profile/edit`, values, config
         )
             .then(({data}) => {
                 onChangeCustomer(data);

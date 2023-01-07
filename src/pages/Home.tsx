@@ -12,7 +12,7 @@ export const Home = () => {
         <Grid
             templateAreas={`"nav main aside"`}
             gridTemplateRows={'1fr'}
-            gridTemplateColumns={'220px 1fr 450px'}
+            gridTemplateColumns={'250px 1fr 450px'}
             h='100%'
             color='blackAlpha.800'
             bg='gray.50'
