@@ -18,6 +18,7 @@ import ErrorMessage from "../UI/ErrorMessage";
 import CategoryService from "../api/CategoryService";
 import ProductService from "../api/ProductService";
 import {AiOutlineReload} from 'react-icons/ai';
+import {isFav} from "../components/product/ProductItem";
 
 export const Product = () => {
     const {productId} = useParams();
@@ -129,22 +130,21 @@ export const Product = () => {
                         >
                             <Carousel images={product.images}/>
                         </Flex>
-                        <VStack spacing={8} flex={1} alignItems='start' justifyContent='center' mt='-60px'>
-                            <HStack alignItems='flex-start'>
-                                <Text fontSize='xx-large' noOfLines={3}>{product.title}</Text>
-                                {!isAdmin && <FavouriteSwitcher isFav={true}/>}
-                            </HStack>
-                            <Text>{product.description}</Text>
+                        <VStack spacing={8} flex={1} alignItems='start' justifyContent='center' mt='-100px'>
                             <Flex
                                 border='1px solid' borderColor='gray.200' borderRadius='2xl' p={4}
-                                justifyContent='space-between' alignItems='center' minW='350px' w='100%' gap={3} my={5}
-                                maxW='450px'>
+                                justifyContent='space-between' alignItems='center' width='100%' minW='360px' maxW='460px' gap={3}>
                                 <Text flex={1} color='red.600'
                                       fontSize='x-large'>{toCurrency(product.price)}</Text>
-                                {!isAdmin && <Box flex={1} textAlign='right'>
+                                <Box flex={1} textAlign='right'>
                                     <Counter product={product} quantity={quantity} buttonColor='yellow.400'/>
-                                </Box>}
+                                </Box>
                             </Flex>
+                            <HStack alignItems='flex-start'>
+                                <Text fontSize='xx-large' noOfLines={3}>{product.title}</Text>
+                                <FavouriteSwitcher isFav={isFav}/>
+                            </HStack>
+                            <Text>{product.description}</Text>
                         </VStack>
                     </Flex>
 

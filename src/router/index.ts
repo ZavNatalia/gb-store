@@ -21,11 +21,3 @@ export const routes: IRoute[] = [
     { path: RouteNames.CART, component: pages.Cart },
     { path: RouteNames.ORDERS, component: pages.Orders }
 ]
-
-export const adminRoutes: IRoute[] = [
-    { path: RouteNames.HOME, component: pages.Admin },
-    { path: RouteNames.ALL_PRODUCTS, component: pages.Admin },
-    { path: RouteNames.CATEGORY, component: pages.Admin },
-    { path: RouteNames.PRODUCT, component: pages.Product },
-
-]

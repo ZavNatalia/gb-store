@@ -3,6 +3,7 @@ import {Button, HStack, IconButton, Text} from "@chakra-ui/react";
 import {FaMinus, FaPlus} from "react-icons/fa";
 import {useCart} from "../context/CartContext";
 import {IProduct} from '../models/IProduct';
+import {isAdmin} from "../constants/isAdmin";
 
 interface CounterProps {
     product: IProduct,
@@ -24,6 +25,7 @@ const Counter = ({product, quantity, buttonColor = 'gray.50'}: CounterProps) => 
                         py={6}
                         transition='all .3s ease'
                         _hover={{boxShadow: 'md'}}
+                        isDisabled={isAdmin}
                         onClick={() => increaseCartQuantity(product)}
                 >
                     В корзину
