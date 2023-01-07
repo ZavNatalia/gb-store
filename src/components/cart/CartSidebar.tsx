@@ -1,24 +1,13 @@
-import {
-    Text,
-    Heading,
-    List,
-    ListItem,
-    Flex,
-    Image,
-    Button,
-    HStack, Icon, Box
-} from '@chakra-ui/react';
+import {Box, Button, Flex, Heading, HStack, Icon, Image, List, ListItem, Text} from '@chakra-ui/react';
 import React from 'react';
 import {useCart} from "../../context/CartContext";
 import {toCurrency} from "../../utilities/formatCurrency";
 import {Link} from "react-router-dom";
 import Counter from "../../UI/Counter";
 import {BsBag} from "react-icons/bs";
-import {useCategory} from "../../context/CategoryContext";
 
 const CartSidebar = () => {
     const {cartItems, getTotalCost, getDeliveryCost} = useCart();
-    const {currentCategory} = useCategory();
 
     const CartList = () => (
         <>
@@ -42,8 +31,7 @@ const CartSidebar = () => {
                                             minH='100px'
                                             minW='100px'
                                             objectFit={'contain'}
-                                            src={product.images[0]}
-                                            fallbackSrc={'/imgs/placeholder-image.jpg'}
+                                            src={product.images[0] ?? '/imgs/placeholder-image.jpg'}
                                         />
                                     </Flex>
                                     <Flex gap={2} flexDirection='column'>

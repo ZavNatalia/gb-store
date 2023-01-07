@@ -9,7 +9,7 @@ interface MainBlockLayoutProps {
 
 const MainBlockLayout = ({title, children}: MainBlockLayoutProps) => {
     return (
-        <Flex flexDirection='column' flex={1} mx='auto' w='70%' maxW='1200px' p={5}>
+        <Flex flexDirection='column' flex={1} mx='auto' w='80%' maxW='1300px' p={5}>
             <BackHomeLink/>
             {title && <Heading my={5}>{title}</Heading>}
             {children}
