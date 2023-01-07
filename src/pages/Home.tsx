@@ -7,6 +7,7 @@ import {CategoryList} from "../components/category/CategoryList";
 import ProductList from '../components/product/ProductList';
 import CartSidebar from "../components/cart/CartSidebar";
 import {useCart} from "../context/CartContext";
+import { isAdmin } from '../constants/isAdmin';
 
 export const Home = () => {
     const {isOpen} = useCart();
@@ -14,7 +15,7 @@ export const Home = () => {
         <Grid
             templateAreas={`"nav main aside"`}
             gridTemplateRows={'1fr'}
-            gridTemplateColumns={`220px 1fr ${isOpen ? '450px' : 0}`}
+            gridTemplateColumns={`260px minmax(350px, 1fr) ${isOpen && !isAdmin ? '450px' : 0}`}
             h='100%'
             color='blackAlpha.800'
             bg='gray.50'
@@ -26,7 +27,7 @@ export const Home = () => {
                 <ProductList/>
             </GridItem>
             <GridItem area={'aside'}>
-                {isOpen && <CartSidebar/>}
+                {isOpen && !isAdmin && <CartSidebar/>}
             </GridItem>
         </Grid>
     );
