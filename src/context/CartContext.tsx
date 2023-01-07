@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useState} from "react";
+import React, {ReactNode, useContext, useEffect, useState} from "react";
 import {IProduct} from "../models/IProduct";
 
 type CartProviderProps = {
@@ -39,7 +39,15 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-    const cartQuantity = cartItems.reduce((quantity, item) => item.quantity + quantity, 0)
+    const cartQuantity = cartItems.reduce((quantity, item) => item.quantity + quantity, 0);
+
+    useEffect(() => {
+        if (cartQuantity > 0) {
+            openCart();
+        } else {
+            closeCart();
+        }
+    }, [cartQuantity])
 
     const getItemQuantity = (id: string | undefined) => {
         return cartItems.find(item => item.product.id == id)?.quantity || 0;

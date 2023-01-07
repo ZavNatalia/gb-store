@@ -1,7 +1,7 @@
 import {Box, Flex, Image, Stack, Text} from '@chakra-ui/react';
 import {FC} from "react";
 import {Link} from 'react-router-dom';
-import { isAdmin } from '../../constants/isAdmin';
+import {isAdmin} from '../../constants/isAdmin';
 import {useCart} from "../../context/CartContext";
 import {IProduct} from '../../models/IProduct';
 import {toCurrency} from "../../utilities/formatCurrency";
@@ -12,12 +12,12 @@ interface ProductItemProps {
     product: IProduct
 }
 
+export const isFav = false;
+
 export const ProductItem: FC<ProductItemProps> = ({product}) => {
     const {id, image, price, title} = product;
     const {getItemQuantity} = useCart();
     const quantity = getItemQuantity(id);
-
-    const isFav = false;
 
     return (
         <Flex
@@ -34,13 +34,11 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             justifyContent='space-between'
             position='relative'
         >
-            {!isAdmin && <Box position='absolute'
-                             right={2}
-                             top={2}>
+            <Box position='absolute'
+                 right={2}
+                 top={2}>
                 <FavouriteSwitcher isFav={isFav}/>
             </Box>
-
-           }
             <Box py={4}>
                 <Link
                     to={isAdmin ? `/edit/${id}/${title}` : `/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}>
@@ -62,9 +60,9 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
                         </Text>
                     </Stack>
                 </Link>
-                {!isAdmin && <Box px={4}>
+                <Box px={4}>
                     <Counter product={product} quantity={quantity}/>
-                </Box>}
+                </Box>
             </Box>
         </Flex>
     );
