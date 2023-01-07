@@ -29,8 +29,8 @@ interface EditCategoryModalProps {
 }
 
 type Values = {
-    first_name: string | undefined;
-    last_name?: string | undefined;
+    firstname: string | undefined;
+    lastname?: string | undefined;
     email: string | undefined;
     address?: string | undefined;
 };
@@ -42,10 +42,10 @@ const EditProfileModal = ({
                               onEditProfile
                           }: EditCategoryModalProps) => {
     const ValidationSchema = Yup.object().shape({
-        first_name: Yup.string()
+        firstname: Yup.string()
             .max(100, 'Пожалуйста, введите не более 50 символов')
             .required('Пожалуйста, введите ваше имя'),
-        last_name: Yup.string()
+        lastname: Yup.string()
             .max(100, 'Пожалуйста, введите не более 50 символов'),
         address: Yup.string()
             .max(100, 'Пожалуйста, введите не более 200 символов'),
@@ -63,14 +63,14 @@ const EditProfileModal = ({
 
                 <Formik
                     initialValues={{
-                        first_name: customer?.first_name ?? '',
-                        last_name: customer?.last_name ?? '',
+                        firstname: customer?.firstname ?? '',
+                        lastname: customer?.lastname ?? '',
                         address: '',
                         email: customer?.email ?? ''
                     }}
                     validationSchema={ValidationSchema}
                     onSubmit={async (values: Values) => {
-                        onEditProfile({...customer, first_name: values.first_name, last_name: values.last_name})
+                        onEditProfile({...customer, firstname: values.firstname, lastname: values.lastname})
                     }}
                 >
                     {({isValid, dirty}) => (
@@ -84,11 +84,11 @@ const EditProfileModal = ({
                                         />
                                     </Center>
                                     <FormControl>
-                                        <FormLabel htmlFor='first_name' fontWeight='bold'>Ваше имя</FormLabel>
-                                        <Field name="first_name">
+                                        <FormLabel htmlFor='firstname' fontWeight='bold'>Ваше имя</FormLabel>
+                                        <Field name="firstname">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Input name='first_name' type='string' {...field}/>
+                                                    <Input name='firstname' type='string' {...field}/>
                                                     {meta.touched && meta.error && (
                                                         <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
                                                     )}
@@ -97,11 +97,11 @@ const EditProfileModal = ({
                                         </Field>
                                     </FormControl>
                                     <FormControl>
-                                        <FormLabel htmlFor='last_name' fontWeight='bold'>Ваша фамилия</FormLabel>
-                                        <Field name="last_name">
+                                        <FormLabel htmlFor='lastname' fontWeight='bold'>Ваша фамилия</FormLabel>
+                                        <Field name="lastname">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Input name='last_name' type='string' {...field}/>
+                                                    <Input name='lastname' type='string' {...field}/>
                                                     {meta.touched && meta.error && (
                                                         <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
                                                     )}

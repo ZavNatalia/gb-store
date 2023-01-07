@@ -64,11 +64,11 @@ export const Header = () => {
             })
     }
 
-    const signInByEmail = async ({first_name, email, password}: ICustomer) => {
+    const signInByEmail = async ({firstname, email, password}: ICustomer) => {
         setIsLoading(true);
         await axios.post(
             `${rootURL}/user/login`, {
-                first_name, email, password
+                firstname, email, password
             }
         )
             .then(({data}) => {
@@ -84,10 +84,10 @@ export const Header = () => {
                 getUserWithSession();
             })
     }
-    const signUpHandler = async ({first_name, email, password}: ICustomer) => {
+    const signUpHandler = async ({firstname, email, password}: ICustomer) => {
         await axios.post(
             `${rootURL}/user/create`, {
-                first_name, email, password
+                firstname, email, password
             }
         )
             .then(({data}) => {

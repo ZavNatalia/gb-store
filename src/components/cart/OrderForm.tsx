@@ -19,8 +19,8 @@ import {useCustomer} from "../../context/CustomerContext";
 import {ToastSuccess} from "../../utilities/error-handling";
 
 interface Values {
-    first_name: string;
-    last_name: string;
+    firstname: string;
+    lastname: string;
     address: string;
     email: string;
     phone: string;
@@ -32,10 +32,10 @@ export const OrderForm = () => {
     const {customer} = useCustomer();
 
     const ValidationSchema = Yup.object().shape({
-        first_name: Yup.string()
+        firstname: Yup.string()
             .max(70, 'Пожалуйста, введите не более 70 символов')
             .required('Пожалуйста, заполните обязательное поле'),
-        last_name: Yup.string()
+        lastname: Yup.string()
             .max(70, 'Пожалуйста, введите не более 70 символов')
             .required('Пожалуйста, заполните обязательное поле'),
         address: Yup.string()
@@ -51,8 +51,8 @@ export const OrderForm = () => {
     return (
         <Formik
             initialValues={{
-                first_name: customer?.first_name ?? '',
-                last_name: customer?.last_name ?? '',
+                firstname: customer?.firstname ?? '',
+                lastname: customer?.lastname ?? '',
                 address: '',
                 email: customer?.email ?? '',
                 phone: '',
@@ -75,8 +75,8 @@ export const OrderForm = () => {
             {({isSubmitting, isValid, dirty}) => (
                     <Form>
                         <VStack spacing={3} px={1} alignItems='start'>
-                            <FormControl id="first_name">
-                                <Field name="first_name">
+                            <FormControl id="firstname">
+                                <Field name="firstname">
                                     {({field, meta}: any) => (
                                         <>
                                             <InputGroup>
@@ -95,8 +95,8 @@ export const OrderForm = () => {
                                     )}
                                 </Field>
                             </FormControl>
-                            <FormControl id="last_name">
-                                <Field name="last_name">
+                            <FormControl id="lastname">
+                                <Field name="lastname">
                                     {({field, meta}: any) => (
                                         <>
                                             <InputGroup>
