@@ -100,13 +100,13 @@ export const Product = () => {
 
     return (
         <MainBlockLayout>
-            {isLoading && <Flex gap={10} pt={15}>
-                <Skeleton height='500px' rounded='2xl' maxW='500px' flex={2} startColor='gray.300'
+            {isLoading && <Flex gap={10} mt='60px'>
+                <Skeleton height='400px' rounded='2xl' maxW='600px' flex={2} startColor='gray.300'
                           endColor='gray.300'/>
-                <Flex flexDirection='column' justifyContent='center' flex={1} height='500px' gap={5}>
-                    <SkeletonText noOfLines={3} spacing='4' pb={5}/>
+                <Flex flexDirection='column' justifyContent='center'  mt='-10px' flex={1} height='500px' maxW='500px' gap={5}>
+                    <Skeleton height='84px' w='320px' mt={8} borderRadius='2xl'/>
+                    <SkeletonText noOfLines={3} spacing='2' my={8}/>
                     <SkeletonText noOfLines={4} spacing='4'/>
-                    <Skeleton height='48px' w='144px' mt={8} borderRadius='2xl'/>
                 </Flex>
             </Flex>}
 
@@ -139,7 +139,7 @@ export const Product = () => {
                         <VStack spacing={8} flex={1} alignItems='start' justifyContent='center' mt='-100px'>
                             <Flex
                                 border='1px solid' borderColor='gray.200' borderRadius='2xl' p={4}
-                                justifyContent='space-between' alignItems='center' width='100%' minW='360px' maxW='460px' gap={3}>
+                                justifyContent='space-between' alignItems='center' minW='320px' maxW='400px' gap={3}>
                                 <Text flex={1} color='red.600'
                                       fontSize='x-large'>{toCurrency(product.price)}</Text>
                                 <Box flex={1} textAlign='right'>

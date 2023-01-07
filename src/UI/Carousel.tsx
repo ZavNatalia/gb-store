@@ -40,6 +40,7 @@ const Carousel = ({images}: CarouselProps) => {
                 top='40%'
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
+                hidden={images.length <=1}
                 onClick={() => slider?.slickPrev()}>
                 <BiLeftArrowAlt/>
             </IconButton>
@@ -55,6 +56,7 @@ const Carousel = ({images}: CarouselProps) => {
                 top='40%'
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
+                hidden={images.length <=1}
                 onClick={() => slider?.slickNext()}>
                 <BiRightArrowAlt/>
             </IconButton>
