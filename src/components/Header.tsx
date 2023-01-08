@@ -73,7 +73,7 @@ export const Header = () => {
         )
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
-                setToken(data.access_token);
+                setToken(data);
                 setIsAuth(true);
             })
             .catch(error => {
@@ -128,7 +128,7 @@ export const Header = () => {
         };
       await axios.get(`${rootURL}/user/profile`, config)
           .then(({data}) => {
-              onChangeCustomer(data.user_data);
+              onChangeCustomer(data);
               setIsAuth(true);
           })
           .catch(error => {
