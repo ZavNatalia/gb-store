@@ -73,7 +73,7 @@ export const Header = () => {
         )
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
-                setToken(data);
+                setToken(data.access_token);
                 setIsAuth(true);
             })
             .catch(error => {
