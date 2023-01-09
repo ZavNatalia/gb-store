@@ -5,6 +5,13 @@ export interface ICustomer {
     firstname?: string,
     lastname?: string,
     password?: string,
-    address?: string,
+    address?: IAddress,
     role?: string
+}
+
+export interface IAddress {
+    zipcode?: string,
+    country?: string,
+    city?: string,
+    street?: string
 }
