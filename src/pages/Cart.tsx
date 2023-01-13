@@ -67,7 +67,7 @@ export const Cart = () => {
             <Heading fontSize='xx-large' my={2}>В вашей корзине пока пусто</Heading>
             <Text color='gray'>Тут появятся товары, которые вы закажете.</Text>
             <HStack mt={10}>
-                <Link to={`/${currentCategory?.name?.toLowerCase() ?? 'all'}`}>
+                <Link to={`/${currentCategory?.name?.toLowerCase() ?? ''}`}>
                     <Button colorScheme='blackAlpha' px={10}>
                         В каталог
                     </Button>

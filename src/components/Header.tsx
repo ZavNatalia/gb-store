@@ -110,6 +110,7 @@ export const Header = () => {
                 onChangeCustomer({});
                 emptyCart();
                 setIsAuth(false);
+                onChangeAdmin(false);
                 removeToken();
                 ToastSuccess('Вы вышли из аккаунта');
             })
@@ -175,7 +176,7 @@ export const Header = () => {
               justifyContent='space-between'
               zIndex={100}
         >
-            <Link to='/all' onClick={() => onChangeCurrentCategory({} as ICategory)}>
+            <Link to='' onClick={() => onChangeCurrentCategory({} as ICategory)}>
                 <Flex alignItems='center' color='gray.500' textTransform={"uppercase"} ml={4}>
                     <svg width="52" height="52"
                          xmlns="http://www.w3.org/2000/svg">

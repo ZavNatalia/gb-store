@@ -159,7 +159,7 @@ const ProductList = () => {
         >
             <>
                 <Flex justifyContent='space-between' gap={5}>
-                    <Heading mb={5}>{currentCategory?.name?.toUpperCase() ?? 'All'.toUpperCase()}</Heading>
+                    <Heading mb={5}>{currentCategory?.name?.toUpperCase() ?? 'Все товары'.toUpperCase()}</Heading>
                     {isAdmin &&
                         <Button
                             position='fixed'

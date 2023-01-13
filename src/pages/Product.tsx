@@ -92,7 +92,7 @@ export const Product = () => {
             try {
                 await ProductService.deleteProduct(productId);
                 ToastSuccess('The product has been removed successfully');
-                navigate(`/${currentCategory?.name?.toLowerCase() ?? 'all'}`)
+                navigate(`/${currentCategory?.name?.toLowerCase() ?? ''}`)
             } catch (e: any) {
                 ToastError(e?.message);
             }

@@ -142,7 +142,7 @@ export const CategoryList = () => {
                     fontWeight={isEmpty(currentCategory) ? '800' : '400'}
                     onClick={() => onChangeCurrentCategory({} as ICategory)}
                 >
-                    All
+                    Все товары
                 </NavItem>}
                 {categories?.map((category) => (
                     <Flex

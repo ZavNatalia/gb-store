@@ -12,7 +12,7 @@ export const Orders = () => {
     const EmptyList = () => (
         <Flex alignItems='center' justifyContent='center' gap={4} flexDirection='column' mt='100px'>
             <Heading fontSize='x-large' my={2}>Список заказов пуст</Heading>
-            <Link to={`/${currentCategory?.name?.toLowerCase() ?? 'all'}`}>
+            <Link to={`/${currentCategory?.name?.toLowerCase() ?? ''}`}>
                 <Button colorScheme='yellow' px={10} mt={6}>
                     В каталог
                 </Button>
