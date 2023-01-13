@@ -64,6 +64,8 @@ const AddEditProductDrawer = ({
         //         then: Yup.array().of(Yup.string()),
         //         otherwise: Yup.string(),
         //     }),
+        categoryId: Yup.string()
+            .required('Пожалуйста, выберите категорию'),
         description: Yup.string()
             .min(5, 'Пожалуйста, введите не меньше 5 символов')
             .max(600, 'Пожалуйста, введите не более 600 символов')
@@ -94,7 +96,7 @@ const AddEditProductDrawer = ({
                         title: product.title ?? '',
                         price: product.price ?? '',
                         description: product.description ?? '',
-                        categoryId: product.category?.id ?? currentCategory.id,
+                        categoryId: product.category?.id ?? currentCategory?.id,
                         image: product.image ?? [''],
                         vendor: product.vendor ?? ''
                     }}
@@ -125,7 +127,7 @@ const AddEditProductDrawer = ({
                                         <Field name="categoryId">
                                             {({field, meta}: any) => (
                                                 <>
-                                                    <Select id='categoryId' name='categoryId'
+                                                    <Select id='categoryId' name='categoryId' placeholder='Выберите категорию'
                                                             {...field}>
                                                         {categories.map(category => (
                                                             <option value={category.id}

@@ -10,15 +10,15 @@ import {isEmpty} from "../../utilities/isEmpty";
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
-import {isAdmin} from '../../constants/isAdmin';
-import CategoryService from "../../api/CategoryService";
 import ProductService from "../../api/ProductService";
+import {useCustomer} from "../../context/CustomerContext";
 
 const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [error, setError] = useState('');
     const [offset, setOffset] = useState(0);
     const [limit] = useState(8);
+    const {isAdmin} = useCustomer();
     const {currentCategory, onChangeCurrentCategory, categories} = useCategory();
     const {isOpen, onOpen, onClose} = useDisclosure()
     const [isLoading, setIsLoading] = useState(false);
@@ -176,7 +176,7 @@ const ProductList = () => {
                         </Button>
                     }
                 </Flex>
-                <SimpleGrid minChildWidth='250px' width='100%' spacing='10'>
+                <SimpleGrid minChildWidth='250px' width='100%' spacing='10' placeItems='center'>
                     {memoizedList}
                 </SimpleGrid>
                 {isLoading && products.length > 0 && (

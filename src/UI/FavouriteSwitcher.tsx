@@ -1,13 +1,14 @@
 import React from 'react';
 import {IconButton} from "@chakra-ui/react";
 import {FaHeart, FaRegHeart} from "react-icons/fa";
-import {isAdmin} from "../constants/isAdmin";
+import {useCustomer} from "../context/CustomerContext";
 
 interface FavouriteSwitcherProps {
     isFav: boolean
 }
 
 export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
+    const {isAdmin} = useCustomer();
     const onAddFavourite = () => {}
     const onDeleteFavourite = () => {}
     return (

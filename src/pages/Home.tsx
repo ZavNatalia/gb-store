@@ -7,10 +7,11 @@ import {CategoryList} from "../components/category/CategoryList";
 import ProductList from '../components/product/ProductList';
 import CartSidebar from "../components/cart/CartSidebar";
 import {useCart} from "../context/CartContext";
-import { isAdmin } from '../constants/isAdmin';
+import {useCustomer} from "../context/CustomerContext";
 
 export const Home = () => {
     const {isOpen} = useCart();
+    const {isAdmin} = useCustomer();
     return (
         <Grid
             templateAreas={`"nav main aside"`}

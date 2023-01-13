@@ -16,12 +16,11 @@ import {Link} from 'react-router-dom';
 import {useCategory} from "../context/CategoryContext";
 import {ICategory} from '../models/ICategory';
 import axios from "axios";
-import {ToastError, ToastInfo, ToastSuccess} from "../utilities/error-handling";
+import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import SignIn from '../modals/SignIn';
 import SignUp from "../modals/SignUp";
 import {ICustomer} from "../models/ICustomer";
 import {Links} from './cart/Links';
-import {isAdmin} from '../constants/isAdmin';
 import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
@@ -39,7 +38,7 @@ export const Header = () => {
     const editProfileDisclosure = useDisclosure();
     const {emptyCart} = useCart();
     const {onChangeCurrentCategory} = useCategory();
-    const {customer, onChangeCustomer} = useCustomer();
+    const {customer, onChangeCustomer, onChangeAdmin, isAdmin} = useCustomer();
 
     useEffect(() => {
         if (isAuth) {
@@ -129,6 +128,9 @@ export const Header = () => {
       await axios.get(`${rootURL}/user/profile`, config)
           .then(({data}) => {
               onChangeCustomer(data);
+              if (data.rights.name === 'Admin') {
+                  onChangeAdmin(true);
+              }
               setIsAuth(true);
           })
           .catch(error => {
@@ -196,6 +198,9 @@ export const Header = () => {
                         spacing={2}
                         marginX={6}
                         fontSize='25px'>
+                        {isAdmin &&  <Text ml={2} fontSize='2xl' fontWeight='thin' color='gray'>
+                            Панель администратора
+                            </Text>}
                         {!isAdmin && Links.map(({title, icon, path}) => (
                             <Link to={path} key={title}>
                                 {icon}

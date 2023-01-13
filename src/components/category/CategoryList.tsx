@@ -11,14 +11,15 @@ import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
 import EditCategoryModal from '../../modals/EditCategoryModal';
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategoryModal';
-import {isAdmin} from "../../constants/isAdmin";
 import CategoryService from "../../api/CategoryService";
+import {useCustomer} from "../../context/CustomerContext";
 
 export const CategoryList = () => {
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const createDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
+    const {isAdmin} = useCustomer();
     const {currentCategory, categories, onChangeCurrentCategory, onChangeCategories} = useCategory();
     const [selectedCategory, setSelectedCategory] = useState({} as ICategory);
     const [error, setError] = useState('');
