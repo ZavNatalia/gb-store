@@ -129,7 +129,7 @@ export const Header = () => {
       await axios.get(`${rootURL}/user/profile`, config)
           .then(({data}) => {
               onChangeCustomer(data);
-              if (data.rights.name === 'Admin') {
+              if (data.rights?.name?.toLowerCase() === 'admin') {
                   onChangeAdmin(true);
               }
               setIsAuth(true);
@@ -217,7 +217,7 @@ export const Header = () => {
                             minW={0}>
                             <Avatar
                                 size={'md'}
-                                src={customer?.avatar ?? '/imgs/avatar-placeholder.png'}
+                                src='/imgs/avatar-placeholder.png'
                                 border='1px solid'
                                 borderColor='gray.400'
                             />

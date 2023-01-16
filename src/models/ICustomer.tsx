@@ -1,17 +1,22 @@
 export interface ICustomer {
-    avatar?: string
+    id?: string,
+    password?: string,
+    rights?: IRights
+    address?: IAddress,
     email?: string
-    id?: number,
     firstname?: string,
     lastname?: string,
-    password?: string,
-    address?: IAddress,
-    role?: string
 }
 
 export interface IAddress {
-    zipcode?: string,
-    country?: string,
     city?: string,
+    country?: string,
     street?: string
+    zipcode?: string,
+}
+
+export interface IRights {
+    id: string,
+    name: string,
+    rules: any
 }

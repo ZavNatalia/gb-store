@@ -85,7 +85,7 @@ const EditProfileModal = ({
                                 <Stack spacing={4}>
                                     <Center mb={6}>
                                         <Avatar
-                                            src={customer.avatar}
+                                            src='/imgs/avatar-placeholder.png'
                                             size='2xl'
                                         />
                                     </Center>
