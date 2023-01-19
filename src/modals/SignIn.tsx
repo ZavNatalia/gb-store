@@ -10,7 +10,7 @@ interface SignInProps {
     onClose: () => void,
     onOpenSignUp: () => void,
     signInHandler: (source: string) => void
-    signInByEmail: (data: ICustomer) => void
+    signInByEmail: (data: Partial<ICustomer>) => void
 }
 
 const SignIn = ({isOpen, isLoading, onClose, onOpenSignUp, signInHandler, signInByEmail}: SignInProps) => {

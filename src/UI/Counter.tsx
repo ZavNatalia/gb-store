@@ -4,16 +4,17 @@ import {FaMinus, FaPlus} from "react-icons/fa";
 import {useCart} from "../context/CartContext";
 import {IProduct} from '../models/IProduct';
 import {useCustomer} from "../context/CustomerContext";
+import {ToastInfo} from "../utilities/error-handling";
 
 interface CounterProps {
     product: IProduct,
-    quantity: number,
+    quantity?: number,
     buttonColor?: string
 }
 
-const Counter = ({product, quantity, buttonColor = 'gray.50'}: CounterProps) => {
-    const {isAdmin} = useCustomer();
-    const {increaseCartQuantity, decreaseCartQuantity} = useCart();
+const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps) => {
+    const {isAdmin, isAuth} = useCustomer();
+    const {onAddItemToCart, onDeleteItemFromCart} = useCart();
     return (
         <>
             {quantity === 0 ? (
@@ -27,7 +28,13 @@ const Counter = ({product, quantity, buttonColor = 'gray.50'}: CounterProps) => 
                         transition='all .3s ease'
                         _hover={{boxShadow: 'md'}}
                         isDisabled={isAdmin}
-                        onClick={() => increaseCartQuantity(product)}
+                        onClick={() => {
+                            if (!isAuth) {
+                                ToastInfo('Авторизуйтесь для добавления товаров в корзину')
+                            } else {
+                                onAddItemToCart(product.id)
+                            }
+                        }}
                 >
                     В корзину
                 </Button>
@@ -46,7 +53,7 @@ const Counter = ({product, quantity, buttonColor = 'gray.50'}: CounterProps) => 
                                 borderRadius='xl'
                                 py={6}
                                 _focus={{boxShadow: 'none'}}
-                                onClick={() => decreaseCartQuantity(product)}
+                                onClick={() => onDeleteItemFromCart(product.id)}
                     />
                     <Text textAlign={"center"} fontSize={"large"} fontWeight='bold' px={2}>
                         {quantity}
@@ -57,7 +64,7 @@ const Counter = ({product, quantity, buttonColor = 'gray.50'}: CounterProps) => 
                                 borderRadius='xl'
                                 py={6}
                                 _focus={{boxShadow: 'none'}}
-                                onClick={() => increaseCartQuantity(product)}
+                                onClick={() => onAddItemToCart(product.id)}
                     />
                 </HStack>
             )}

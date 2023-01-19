@@ -5,11 +5,11 @@ import * as Yup from "yup";
 import {ICustomer} from "../../models/ICustomer";
 
 interface SignInByEmailFormProps {
-    signInByEmail: (data: ICustomer) => void,
+    signInByEmail: (data: Partial<ICustomer>) => void,
     isLoading: boolean
 }
 
-export interface Values {
+export interface SignInByEmailFormValues {
     email: string;
     password: string;
 }
@@ -33,8 +33,8 @@ const SignInByEmailForm = ({signInByEmail, isLoading}: SignInByEmailFormProps) =
             }}
             validationSchema={ValidationSchema}
             onSubmit={async (
-                values: Values,
-                {setSubmitting}: FormikHelpers<Values>
+                values: SignInByEmailFormValues,
+                {setSubmitting}: FormikHelpers<SignInByEmailFormValues>
             ) => {
                 signInByEmail(values)
                 setSubmitting(false);

@@ -19,6 +19,10 @@ import {useCart} from "../../context/CartContext";
 import {useCustomer} from "../../context/CustomerContext";
 import {ToastInfo} from "../../utilities/error-handling";
 
+interface OrderFormProps {
+    handleFormSubmit: (values: Values) => void
+}
+
 interface Values {
     firstname: string;
     lastname: string;
@@ -31,8 +35,8 @@ interface Values {
     comment: string;
 }
 
-export const OrderForm = () => {
-    const {cartItems, emptyCart} = useCart();
+export const OrderForm = ({handleFormSubmit}: OrderFormProps) => {
+    const {cart} = useCart();
     const {customer} = useCustomer();
 
     const ValidationSchema = Yup.object().shape({
@@ -75,15 +79,12 @@ export const OrderForm = () => {
                 values: Values,
                 {setSubmitting}: FormikHelpers<Values>
             ) => {
-                const order = Object.assign({}, [cartItems], values);
-                setTimeout(() => {
-                    console.log(order);
-                    emptyCart();
-                    setSubmitting(false);
-                    console.log(order);
-                    ToastInfo('not implemented')
-                    // ToastSuccess('Спасибо за заказ. В ближайшее время наши операторы свяжутся с вами для уточнения сроков доставки.')
-                }, 1000)
+                const order = Object.assign({}, [cart.items], values);
+                console.log(order);
+                handleFormSubmit(order)
+                setSubmitting(false);
+                ToastInfo('not implemented')
+                // ToastSuccess('Спасибо за заказ. В ближайшее время наши операторы свяжутся с вами для уточнения сроков доставки.')
             }}
         >
             {({isSubmitting, isValid, dirty}) => (

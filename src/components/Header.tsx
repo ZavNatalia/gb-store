@@ -25,20 +25,19 @@ import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
-import {getToken, removeToken, setToken} from "../utilities/local-storage-handling";
+import {getToken, removeCartId, removeToken, setToken} from "../utilities/local-storage-handling";
 import {useCustomer} from "../context/CustomerContext";
 import {useCart} from "../context/CartContext";
 
 export const Header = () => {
     const [isLoading, setIsLoading] = useState(false);
-    const [isAuth, setIsAuth] = useState(!!getToken());
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
     const logOutDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
-    const {emptyCart} = useCart();
+    const {onOpenCart, onEmptyCart} = useCart();
     const {onChangeCurrentCategory} = useCategory();
-    const {customer, onChangeCustomer, onChangeAdmin, isAdmin} = useCustomer();
+    const {customer, onChangeCustomer, onChangeAdmin, isAdmin, isAuth, onChangeAuth} = useCustomer();
 
     useEffect(() => {
         if (isAuth) {
@@ -53,7 +52,7 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setToken(data.access_token);
-                setIsAuth(true);
+                onChangeAuth(true);
             })
             .catch(error => {
                 ToastError(error.message);
@@ -63,7 +62,7 @@ export const Header = () => {
             })
     }
 
-    const signInByEmail = async ({firstname, email, password}: ICustomer) => {
+    const signInByEmail = async ({firstname, email, password}: Partial<ICustomer>) => {
         setIsLoading(true);
         await axios.post(
             `${rootURL}/user/login`, {
@@ -73,7 +72,7 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setToken(data.access_token);
-                setIsAuth(true);
+                onChangeAuth(true);
             })
             .catch(error => {
                 ToastError(error.message);
@@ -83,7 +82,8 @@ export const Header = () => {
                 getUserWithSession();
             })
     }
-    const signUpHandler = async ({firstname, email, password}: ICustomer) => {
+
+    const signUpHandler = async ({firstname, email, password}: Partial<ICustomer>) => {
         await axios.post(
             `${rootURL}/user/create`, {
                 firstname, email, password
@@ -107,11 +107,12 @@ export const Header = () => {
             `${rootURL}/user/logout?id=${customer.id}`,
         )
             .then(() => {
-                onChangeCustomer({});
-                emptyCart();
-                setIsAuth(false);
+                onChangeCustomer({} as ICustomer);
+                onChangeAuth(false);
                 onChangeAdmin(false);
+                onEmptyCart();
                 removeToken();
+                removeCartId();
                 ToastSuccess('Вы вышли из аккаунта');
             })
             .catch(error => {
@@ -132,12 +133,13 @@ export const Header = () => {
               if (data.rights?.name?.toLowerCase() === 'admin') {
                   onChangeAdmin(true);
               }
-              setIsAuth(true);
+              onChangeAuth(true);
+              onOpenCart(data.id);
           })
           .catch(error => {
               ToastError(error.message);
               removeToken();
-              setIsAuth(false);
+              onChangeAuth(false);
           })
           .finally(() => {
               setIsLoading(false);

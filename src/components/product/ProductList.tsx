@@ -42,11 +42,14 @@ const ProductList = () => {
                 const {data} = isEmpty(currentCategory)
                     ? await ProductService.getPaginatedProducts(offset, limit)
                     : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit)
-
                 setProducts([...products, ...data]);
                 setOffset(prevState => prevState + limit);
             } catch (e: any) {
-                setError(e?.message);
+                if (products?.length > 0) {
+                    ToastError(e?.message);
+                } else {
+                    setError(e?.message);
+                }
             } finally {
                 setIsLoading(false);
             }
@@ -63,7 +66,7 @@ const ProductList = () => {
             setIsLoading(true)
 
         } catch (e: any) {
-            setError(e?.message);
+            ToastError(e?.message);
         }
     };
 

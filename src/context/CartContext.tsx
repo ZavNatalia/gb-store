@@ -1,5 +1,9 @@
-import React, {ReactNode, useContext, useEffect, useState} from "react";
+import React, {ReactNode, useContext, useState} from "react";
 import {IProduct} from "../models/IProduct";
+import CartService from "../api/CartService";
+import {ToastError, ToastInfo} from "../utilities/error-handling";
+import {getCartId, removeCartId, setCartId} from "../utilities/local-storage-handling";
+import {ICart} from "../models/ICart";
 
 type CartProviderProps = {
     children: ReactNode
@@ -11,19 +15,19 @@ export type CartItem = {
 }
 
 type CartContextProps = {
-    openCart: () => void
-    closeCart: () => void
-    isOpen: boolean
-    getItemQuantity: (id: string | undefined) => number
+    onOpenCart: (userId: string) => void
     getTotalQuantity: () => number
     getTotalCost: () => number
-    getGoodsCost: () => number
+    getItemsCost: () => number
     getDeliveryCost: () => number
-    increaseCartQuantity: (product: IProduct) => void
-    decreaseCartQuantity: (product: IProduct) => void
-    emptyCart: () => void
-    cartQuantity: number
-    cartItems: CartItem[]
+    onAddItemToCart: (id: string) => void
+    onDeleteItemFromCart: (id: string) => void
+    onRemoveCart: () => void
+    onEmptyCart: () => void
+    onFetchCart: (id: string) => void
+    getCartQuantity: () => number
+    cart: ICart,
+    getItemQuantity: (id: string) => number
 }
 
 export const DELIVERY_COST_BASE = 100;
@@ -35,103 +39,120 @@ export const useCart = () => {
 }
 
 export const CartProvider = ({children}: CartProviderProps) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [cart, setCart] = useState<ICart>({} as ICart);
 
-    const [cartItems, setCartItems] = useState<CartItem[]>([]);
+    const cartId = getCartId();
 
-    const cartQuantity = cartItems.reduce((quantity, item) => item.quantity + quantity, 0);
+    const getCartQuantity = () => {
+        return cart?.items?.reduce((quantity, item) => item.quantity + quantity, 0);
+    };
 
-    useEffect(() => {
-        if (cartQuantity > 0) {
-            openCart();
-        } else {
-            closeCart();
-        }
-    }, [cartQuantity])
-
-    const getItemQuantity = (id: string | undefined) => {
-        return cartItems.find(item => item.product.id == id)?.quantity || 0;
+    const getItemQuantity = (id: string) => {
+        return cart?.items?.find(({item}) => item.id == id)?.quantity ?? 0
     }
 
     const getTotalQuantity = () => {
-        return cartItems.reduce((total, cartItem) => {
-            return total + cartItem.quantity
+        return cart?.items?.reduce((total, {quantity}) => {
+            return total + quantity
         }, 0)
     }
 
-    const getGoodsCost = () => {
-        return cartItems.reduce((total, cartItem) => {
-            return total + cartItem.quantity * Number(cartItem?.product?.price)
+    const getItemsCost = () => {
+        return cart?.items?.reduce((total, cartItem) => {
+            return total + cartItem.quantity * Number(cartItem.item.price)
         }, 0)
     }
 
     const getTotalCost = () => {
-        return getGoodsCost() + getDeliveryCost()
+        return getItemsCost() + getDeliveryCost()
     }
 
     const getDeliveryCost = () => {
         return getTotalQuantity() < 6 ? DELIVERY_COST_BASE : DELIVERY_COST_BASE * 3
     }
 
-    const openCart = () => {
-        setIsOpen(true);
-    }
-    const closeCart = () => {
-        setIsOpen(false);
-    }
-
-    const increaseCartQuantity = (product: IProduct) => {
-        setCartItems(currItems => {
-            if (currItems.find(item => item.product.id === product.id) == null) {
-                return [...currItems, {product, quantity: 1}]
-            } else {
-                return currItems.map(item => {
-                    if (item.product.id === product.id) {
-                        return {...item, quantity: item.quantity + 1}
-                    } else {
-                        return item;
-                    }
-                })
+    const onCreateCart = async (userId: string) => {
+        if (userId) {
+            try {
+                const {data} = await CartService.createCart(userId);
+                setCartId(data.id);
+                onFetchCart(data.id);
+            } catch (e: any) {
+                ToastError(e?.message);
             }
-        })
-    }
+        }
+    };
+    const onFetchCart = async (cartID: string) => {
+        try {
+            const {data} = await CartService.getCart(cartID);
+            setCart(data);
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
+    };
 
-    const decreaseCartQuantity = (product: IProduct) => {
-        setCartItems(currItems => {
-            if (currItems.find(item => item.product.id === product.id)?.quantity === 1) {
-                return currItems.filter(item => item.product.id !== product.id);
-            } else {
-                return currItems.map(item => {
-                    if (item.product.id === product.id) {
-                        return {...item, quantity: item.quantity - 1}
-                    } else {
-                        return item;
-                    }
-                })
+    const onRemoveCart = async () => {
+        if (cartId) {
+            try {
+                await CartService.deleteCart(cartId);
+                onEmptyCart();
+                removeCartId();
+            } catch (e: any) {
+                ToastError(e?.message);
             }
-        })
+        }
+    };
+
+    const onOpenCart = (userId: string) => {
+        if (!cartId) {
+            onCreateCart(userId);
+        } else {
+            onFetchCart(cartId);
+        }
     }
 
-    const emptyCart = () => {
-        setCartItems([])
+    const onAddItemToCart = async (id: string) => {
+        if (cartId && id) {
+            try {
+                await CartService.addItemToCart(cartId, id);
+                onFetchCart(cartId);
+            } catch (e: any) {
+                ToastInfo(e?.message);
+            }
+        }
+    }
+
+    const onDeleteItemFromCart = async (id: string) => {
+        if (cartId) {
+            try {
+                await CartService.deleteItemFromCart(cartId, id);
+                onFetchCart(cartId);
+            } catch (e: any) {
+                ToastInfo(e?.message);
+            }
+        }
+    }
+
+    const onEmptyCart = () => {
+        setCart({} as ICart)
     }
 
     return (
         <CartContext.Provider
             value={{
                 getItemQuantity,
-                getGoodsCost,
+                getItemsCost,
                 getTotalQuantity,
                 getTotalCost,
                 getDeliveryCost,
-                increaseCartQuantity,
-                decreaseCartQuantity,
-                emptyCart,
-                cartQuantity,
-                cartItems,
-                openCart,
-                closeCart,
-                isOpen
+                onAddItemToCart,
+                onDeleteItemFromCart,
+                onFetchCart,
+                getCartQuantity,
+                cart,
+                onOpenCart,
+                onRemoveCart,
+                onEmptyCart
             }}>
             {children}
         </CartContext.Provider>

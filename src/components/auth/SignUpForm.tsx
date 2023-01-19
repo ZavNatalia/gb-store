@@ -2,14 +2,13 @@ import React from 'react';
 import {Field, Form, Formik, FormikHelpers} from "formik";
 import {Button, FormControl, Input, Stack, Text} from "@chakra-ui/react";
 import * as Yup from "yup";
-import {ICustomer} from "../../models/ICustomer";
 
 interface SignUpFormProps {
-    signUpHandler: (data: ICustomer) => void;
+    signUpHandler: (data: SignUpFormValues) => void;
     isLoading: boolean
 }
 
-export interface Values {
+export interface SignUpFormValues {
     firstname: string;
     email: string;
     password: string;
@@ -37,8 +36,8 @@ const SignUpForm = ({signUpHandler, isLoading}: SignUpFormProps) => {
             }}
             validationSchema={ValidationSchema}
             onSubmit={async (
-                values: Values,
-                {setSubmitting}: FormikHelpers<Values>
+                values: SignUpFormValues,
+                {setSubmitting}: FormikHelpers<SignUpFormValues>
             ) => {
                 signUpHandler(values)
                 setSubmitting(false);

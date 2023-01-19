@@ -1,5 +1,5 @@
 export interface ICustomer {
-    id?: string,
+    id: string,
     password?: string,
     rights?: IRights
     address?: IAddress,

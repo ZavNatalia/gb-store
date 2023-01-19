@@ -10,13 +10,12 @@ import {useCart} from "../context/CartContext";
 import {useCustomer} from "../context/CustomerContext";
 
 export const Home = () => {
-    const {isOpen} = useCart();
     const {isAdmin} = useCustomer();
     return (
         <Grid
             templateAreas={`"nav main aside"`}
             gridTemplateRows={'1fr'}
-            gridTemplateColumns={`260px minmax(350px, 1fr) ${isOpen && !isAdmin ? '450px' : 0}`}
+            gridTemplateColumns={`260px minmax(350px, 1fr) ${!isAdmin ? '450px' : 0}`}
             h='100%'
             color='blackAlpha.800'
             bg='gray.50'
@@ -28,7 +27,7 @@ export const Home = () => {
                 <ProductList/>
             </GridItem>
             <GridItem area={'aside'}>
-                {isOpen && !isAdmin && <CartSidebar/>}
+                {!isAdmin && <CartSidebar/>}
             </GridItem>
         </Grid>
     );

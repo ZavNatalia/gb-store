@@ -8,7 +8,7 @@ interface FavouriteSwitcherProps {
 }
 
 export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
-    const {isAdmin} = useCustomer();
+    const {isAdmin, isAuth} = useCustomer();
     const onAddFavourite = () => {}
     const onDeleteFavourite = () => {}
     return (
@@ -21,7 +21,7 @@ export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
                     fontSize='x-large'
                     _hover={{color: isFav ? 'gray.500' : 'red'}}
                     _focus={{boxShadow: 'none'}}
-                    isDisabled={isAdmin}
+                    isDisabled={isAdmin || !isAuth}
                     onClick={() => isFav ? onDeleteFavourite() : onAddFavourite()}
         />
     );

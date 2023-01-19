@@ -27,12 +27,27 @@ import Counter from "../UI/Counter";
 import {useCategory} from '../context/CategoryContext';
 import MainBlockLayout from '../UI/MainBlockLayout';
 import {OrderForm} from '../components/cart/OrderForm';
+import {removeCartId} from "../utilities/local-storage-handling";
+import {useCustomer} from "../context/CustomerContext";
+import {ToastError} from "../utilities/error-handling";
 
 export const Cart = () => {
-    const {cartItems, getTotalCost, getGoodsCost, getDeliveryCost, getTotalQuantity} = useCart();
+    const {cart, getTotalCost, getItemsCost, getDeliveryCost, getTotalQuantity, onRemoveCart} = useCart();
     const {currentCategory} = useCategory();
+    const {customer} = useCustomer();
 
-    // TODO: получить содержимое корзины пользователя /cart/:userID
+    const handleFormSubmit = async () => {
+        try {
+            // TODO: send the order
+            onRemoveCart();
+            removeCartId();
+        } catch (e: any) {
+            ToastError(e?.message);
+        } finally {
+            // создать корзину снова
+            // onOpenCart(customer.id);
+        }
+    }
 
     const TotalCostTable = () => (
         <TableContainer mx={-5} mt={2} mb={4}>
@@ -41,7 +56,7 @@ export const Cart = () => {
                     <Tr>
                         <Td>Товары</Td>
                         <Td fontWeight='bold'>
-                            {toCurrency(getGoodsCost())}
+                            {toCurrency(getItemsCost())}
                         </Td>
                     </Tr>
                     <Tr>
@@ -85,11 +100,10 @@ export const Cart = () => {
     const OrderList = () => (
         <Flex flex={1} overflow='hidden' height='calc(100vh - 300px)' flexDirection='column'>
             <List overflow='auto'>
-                {cartItems.map(({product, quantity}) => (
-                    <ListItem key={product.id} pr={2}>
+                {cart?.items.map(({item, quantity}) => (
+                    <ListItem key={item.id} pr={2}>
                         <HStack spacing={3}>
-                            <Link to={`/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}
-                                  target='_blank'
+                            <Link to={`/${item.category?.name?.toLowerCase()}/${item.id}/${item.title}`}
                                   style={{display: "flex", alignItems: 'center'}}>
                                 <Flex maxH='110px'
                                       maxW='110px'
@@ -101,17 +115,17 @@ export const Cart = () => {
                                         minH='110px'
                                         minW='110px'
                                         objectFit={'contain'}
-                                        src={product.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                        src={item.image[0] ?? '/imgs/placeholder-image.jpg'}
                                     />
                                 </Flex>
                                 <Flex flexGrow={1} flexDirection='column' px={4}>
-                                    <Text fontSize='sm'>{product.title}</Text>
+                                    <Text fontSize='sm'>{item.title}</Text>
                                     <Text fontSize='sm'
-                                          color='gray.500'>{toCurrency(product.price)}</Text>
+                                          color='gray.500'>{toCurrency(item.price)}</Text>
                                 </Flex>
                             </Link>
                             <Spacer/>
-                            <Counter product={product} quantity={quantity}/>
+                            <Counter product={item} quantity={quantity}/>
                         </HStack>
                     </ListItem>
                 ))}
@@ -124,7 +138,7 @@ export const Cart = () => {
 
     return (
         <MainBlockLayout title={'Корзина'}>
-            {cartItems.length > 0 ? (
+            {cart?.items?.length > 0 ? (
                 <Flex gap={10} borderTop='1px solid' borderColor='gray.200' pt={2}>
                     <OrderList/>
                     <Box flex={1} overflow={"auto"}>
@@ -132,7 +146,7 @@ export const Cart = () => {
                         <Text color='gray'>Доставка 15–30 мин. Оплата при получении картой или наличными.</Text>
                         <TotalCostTable/>
                         <Heading fontSize='x-large' mb={4}>Адрес доставки</Heading>
-                        <OrderForm/>
+                        <OrderForm handleFormSubmit={handleFormSubmit}/>
                     </Box>
                 </Flex>
             ) : (

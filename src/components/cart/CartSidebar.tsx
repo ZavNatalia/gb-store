@@ -7,18 +7,17 @@ import Counter from "../../UI/Counter";
 import {BsBag} from "react-icons/bs";
 
 const CartSidebar = () => {
-    const {cartItems, getTotalCost, getDeliveryCost} = useCart();
+    const {cart, getTotalCost, getDeliveryCost} = useCart();
 
     const CartList = () => (
         <>
-            {cartItems.length > 0
+            {cart?.items?.length > 0
                 ? <List flexGrow={1} spacing={1} overflowY='auto' py={5} pr={1}>
-                    {cartItems.map(({product, quantity}) => (
-                        <ListItem key={product.id}>
+                    {cart?.items.map(({item, quantity}) => (
+                        <ListItem key={item?.id}>
                             <HStack spacing={3}>
-                                <Link to={`/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}
-                                      target='_blank'
-                                      style={{display: "flex", alignItems: 'center', flex: 1}}>
+                                <Link to={`/${item.category?.name?.toLowerCase()}/${item?.id}/${item?.title}`}
+                                      style={{display: 'flex', alignItems: 'center', flex: 1}}>
                                     <Flex maxH='100px'
                                           maxW='100px'
                                           justifyContent='center'
@@ -31,16 +30,16 @@ const CartSidebar = () => {
                                             minH='100px'
                                             minW='100px'
                                             objectFit={'contain'}
-                                            src={product.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                            src={item?.image[0] ?? '/imgs/placeholder-image.jpg'}
                                         />
                                     </Flex>
                                     <Flex gap={2} flexDirection='column'>
-                                        <Text fontSize='sm' noOfLines={3}>{product.title}</Text>
+                                        <Text fontSize='sm' noOfLines={3}>{item?.title}</Text>
                                         <Text fontSize='sm'
-                                              color='gray.500'>{toCurrency(product.price)}</Text>
+                                              color='gray.500'>{toCurrency(item?.price)}</Text>
                                     </Flex>
                                 </Link>
-                                <Counter product={product} quantity={quantity}/>
+                                <Counter product={item} quantity={quantity}/>
                             </HStack>
                         </ListItem>
                     ))}
@@ -57,7 +56,7 @@ const CartSidebar = () => {
 
     const CartLink = () => (
         <>
-            {cartItems.length > 0 &&
+            {cart?.items?.length > 0 &&
                 <Link to={'/cart'}>
                     <Button
                         fontWeight='normal'
@@ -93,7 +92,7 @@ const CartSidebar = () => {
         >
             <Heading fontSize='x-large'>Корзина</Heading>
             <CartList/>
-            {cartItems.length > 0 &&
+            {cart?.items?.length > 0 &&
                 <Box borderTop='1px solid' borderColor='gray.300' pt={3} pr={3} color='gray' fontSize='sm'
                      textAlign='right'>
                     <Text>Доставка 15–30 мин </Text>

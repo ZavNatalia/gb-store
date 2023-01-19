@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Flex, HStack, Skeleton, SkeletonText, Text, useDisclosure, VStack} from "@chakra-ui/react";
+import {Box, Button, Divider, Flex, Heading, HStack, Skeleton, SkeletonText, Text, useDisclosure, VStack} from "@chakra-ui/react";
 import {useNavigate, useParams} from 'react-router-dom';
 import {IProduct} from "../models/IProduct";
 import {toCurrency} from "../utilities/formatCurrency";
@@ -31,8 +31,6 @@ export const Product = () => {
     const removeDisclosure = useDisclosure();
     const {onChangeCategories, currentCategory} = useCategory();
     const navigate = useNavigate();
-
-    const quantity = getItemQuantity(productId);
 
     const getProduct = async () => {
         if (productId) {
@@ -127,6 +125,9 @@ export const Product = () => {
                             товар</Button>
 
                     </HStack>}
+                    <Flex alignItems='flex-start' mt='30px'>
+                        <Text fontSize='xx-large' noOfLines={3} mr={4}>{product.title}</Text>
+                    </Flex>
                     <Flex gap={10} pt={6}>
                         <Flex maxH='600px'
                               maxW='600px'
@@ -137,21 +138,23 @@ export const Product = () => {
                         >
                             <Carousel images={product.image}/>
                         </Flex>
-                        <VStack spacing={8} flex={1} alignItems='start' justifyContent='center' mt='-100px'>
+                        <VStack spacing={8} flex={1} alignItems='start' justifyContent='center' mt='-120px'>
                             <Flex
                                 border='1px solid' borderColor='gray.200' borderRadius='2xl' p={4}
-                                justifyContent='space-between' alignItems='center' minW='320px' maxW='400px' gap={3}>
+                                justifyContent='space-between' alignItems='center' minW='390px' maxW='400px' gap={3}>
                                 <Text flex={1} color='red.600'
                                       fontSize='x-large'>{toCurrency(product.price)}</Text>
-                                <Box flex={1} textAlign='right'>
-                                    <Counter product={product} quantity={quantity} buttonColor='yellow.400'/>
-                                </Box>
+                                <Flex flex={1} gap={3} textAlign='right' alignItems='center'>
+                                    <Counter product={product} quantity={getItemQuantity(product.id)} buttonColor='yellow.400'/>
+                                    <FavouriteSwitcher isFav={isFav}/>
+                                </Flex>
                             </Flex>
-                            <HStack alignItems='flex-start'>
-                                <Text fontSize='xx-large' noOfLines={3}>{product.title}</Text>
-                                <FavouriteSwitcher isFav={isFav}/>
-                            </HStack>
-                            <Text>{product.description}</Text>
+                            <Box width='100%'>
+                                <Heading fontSize='md'>О товаре</Heading>
+                                <Divider my={3}/>
+                                <Text>{product.description}</Text>
+                            </Box>
+
                         </VStack>
                     </Flex>
 

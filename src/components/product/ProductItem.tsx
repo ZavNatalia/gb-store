@@ -17,8 +17,7 @@ export const isFav = false;
 export const ProductItem: FC<ProductItemProps> = ({product}) => {
     const {id, image, price, title} = product;
     const {getItemQuantity} = useCart();
-    const {isAdmin} = useCustomer();
-    const quantity = getItemQuantity(id);
+    const {isAdmin, isAuth} = useCustomer();
 
     return (
         <Flex
@@ -35,11 +34,11 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             justifyContent='space-between'
             position='relative'
         >
-            <Box position='absolute'
-                 right={2}
-                 top={2}>
+            {isAuth && <Box position='absolute'
+                  right={2}
+                  top={2}>
                 <FavouriteSwitcher isFav={isFav}/>
-            </Box>
+            </Box>}
             <Box py={4}>
                 <Link
                     to={isAdmin ? `/edit/${id}/${title}` : `/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}>
@@ -62,7 +61,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
                     </Stack>
                 </Link>
                 <Box px={4}>
-                    <Counter product={product} quantity={quantity}/>
+                    <Counter product={product} quantity={getItemQuantity(product.id)}/>
                 </Box>
             </Box>
         </Flex>
