@@ -27,20 +27,16 @@ import Counter from "../UI/Counter";
 import {useCategory} from '../context/CategoryContext';
 import MainBlockLayout from '../UI/MainBlockLayout';
 import {OrderForm} from '../components/cart/OrderForm';
-import {removeCartId} from "../utilities/local-storage-handling";
-import {useCustomer} from "../context/CustomerContext";
 import {ToastError} from "../utilities/error-handling";
 
 export const Cart = () => {
     const {cart, getTotalCost, getItemsCost, getDeliveryCost, getTotalQuantity, onRemoveCart} = useCart();
     const {currentCategory} = useCategory();
-    const {customer} = useCustomer();
 
     const handleFormSubmit = async () => {
         try {
             // TODO: send the order
             onRemoveCart();
-            removeCartId();
         } catch (e: any) {
             ToastError(e?.message);
         } finally {

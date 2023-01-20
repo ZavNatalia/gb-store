@@ -25,7 +25,7 @@ import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
-import {getToken, removeCartId, removeToken, setToken} from "../utilities/local-storage-handling";
+import {getToken, removeToken, setToken} from "../utilities/local-storage-handling";
 import {useCustomer} from "../context/CustomerContext";
 import {useCart} from "../context/CartContext";
 
@@ -35,7 +35,7 @@ export const Header = () => {
     const signUpDisclosure = useDisclosure();
     const logOutDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
-    const {onOpenCart, onEmptyCart} = useCart();
+    const {onOpenCart, onEmptyCartContext} = useCart();
     const {onChangeCurrentCategory} = useCategory();
     const {customer, onChangeCustomer, onChangeAdmin, isAdmin, isAuth, onChangeAuth} = useCustomer();
 
@@ -110,9 +110,8 @@ export const Header = () => {
                 onChangeCustomer({} as ICustomer);
                 onChangeAuth(false);
                 onChangeAdmin(false);
-                onEmptyCart();
+                onEmptyCartContext();
                 removeToken();
-                removeCartId();
                 ToastSuccess('Вы вышли из аккаунта');
             })
             .catch(error => {

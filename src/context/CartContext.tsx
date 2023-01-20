@@ -2,7 +2,6 @@ import React, {ReactNode, useContext, useState} from "react";
 import {IProduct} from "../models/IProduct";
 import CartService from "../api/CartService";
 import {ToastError, ToastInfo} from "../utilities/error-handling";
-import {getCartId, removeCartId, setCartId} from "../utilities/local-storage-handling";
 import {ICart} from "../models/ICart";
 
 type CartProviderProps = {
@@ -23,7 +22,7 @@ type CartContextProps = {
     onAddItemToCart: (id: string) => void
     onDeleteItemFromCart: (id: string) => void
     onRemoveCart: () => void
-    onEmptyCart: () => void
+    onEmptyCartContext: () => void
     onFetchCart: (id: string) => void
     getCartQuantity: () => number
     cart: ICart,
@@ -40,8 +39,7 @@ export const useCart = () => {
 
 export const CartProvider = ({children}: CartProviderProps) => {
     const [cart, setCart] = useState<ICart>({} as ICart);
-
-    const cartId = getCartId();
+    const [cartId, setCartId] = useState('');
 
     const getCartQuantity = () => {
         return cart?.items?.reduce((quantity, item) => item.quantity + quantity, 0);
@@ -76,12 +74,28 @@ export const CartProvider = ({children}: CartProviderProps) => {
             try {
                 const {data} = await CartService.createCart(userId);
                 setCartId(data.id);
-                onFetchCart(data.id);
             } catch (e: any) {
                 ToastError(e?.message);
             }
         }
     };
+
+    const onOpenCart = async (userId: string) => {
+        try {
+            const {data} = await CartService.getCartByUserId(userId);
+            if (data) {
+                setCartId(data.id);
+                setCart(data);
+            }
+        } catch (e: any) {
+            if (e.response.status === 404 || e.response.status === 500) {
+                onCreateCart(userId);
+            } else {
+                ToastError(e?.message);
+            }
+        }
+    }
+
     const onFetchCart = async (cartID: string) => {
         try {
             const {data} = await CartService.getCart(cartID);
@@ -95,21 +109,12 @@ export const CartProvider = ({children}: CartProviderProps) => {
         if (cartId) {
             try {
                 await CartService.deleteCart(cartId);
-                onEmptyCart();
-                removeCartId();
+                onEmptyCartContext();
             } catch (e: any) {
                 ToastError(e?.message);
             }
         }
     };
-
-    const onOpenCart = (userId: string) => {
-        if (!cartId) {
-            onCreateCart(userId);
-        } else {
-            onFetchCart(cartId);
-        }
-    }
 
     const onAddItemToCart = async (id: string) => {
         if (cartId && id) {
@@ -133,8 +138,9 @@ export const CartProvider = ({children}: CartProviderProps) => {
         }
     }
 
-    const onEmptyCart = () => {
-        setCart({} as ICart)
+    const onEmptyCartContext = () => {
+        setCart({} as ICart);
+        setCartId('');
     }
 
     return (
@@ -152,7 +158,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
                 cart,
                 onOpenCart,
                 onRemoveCart,
-                onEmptyCart
+                onEmptyCartContext
             }}>
             {children}
         </CartContext.Provider>
