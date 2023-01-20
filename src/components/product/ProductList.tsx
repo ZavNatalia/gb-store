@@ -63,7 +63,7 @@ const ProductList = () => {
         try {
             const {data} = await ProductService.getQuantity(currentCategory.name);
             setQuantity(data.quantity);
-            setIsLoading(true)
+            setIsLoading(true);
 
         } catch (e: any) {
             ToastError(e?.message);

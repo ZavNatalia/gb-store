@@ -23,7 +23,7 @@ export default class ProductService {
     }
     static async getQuantity(categoryName?: string): Promise<AxiosResponse> {
         if (!!categoryName) {
-            return axios.get<number>(`${rootURL}/items/quantity?categoryName=${categoryName}`)
+            return axios.get<number>(`${rootURL}/items/quantityCat/${categoryName}`)
         }
         return axios.get<number>(`${rootURL}/items/quantity`)
     }
