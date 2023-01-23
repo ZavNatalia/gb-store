@@ -12,6 +12,7 @@ import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
 import ProductService from "../../api/ProductService";
 import {useCustomer} from "../../context/CustomerContext";
+import {getToken} from "../../utilities/local-storage-handling";
 
 const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -114,7 +115,10 @@ const ProductList = () => {
             "vendor": values.vendor
         };
         try {
-            await ProductService.createProduct(result);
+            const config = {
+                headers: {Authorization: `Bearer ${getToken()}`}
+            };
+            await ProductService.createProduct(result, config);
             if (currentCategory.id !== values.category.id) {
                 onChangeCategory(values.category.id);
             } else {

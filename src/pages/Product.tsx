@@ -29,6 +29,7 @@ import ProductService from "../api/ProductService";
 import {AiOutlineReload} from 'react-icons/ai';
 import {isFav} from "../components/product/ProductItem";
 import {useCustomer} from "../context/CustomerContext";
+import {getToken} from "../utilities/local-storage-handling";
 
 export const Product = () => {
     const {productId} = useParams();
@@ -76,6 +77,9 @@ export const Product = () => {
     const onEditProduct = async (result: IProduct) => {
         if (productId) {
             try {
+                const config = {
+                    headers: {Authorization: `Bearer ${getToken()}`}
+                };
                 await ProductService.updateProduct(
                     {
                         ...product,
@@ -85,7 +89,7 @@ export const Product = () => {
                         description: result.description,
                         image: result.image,
                         vendor: result.vendor
-                    });
+                    }, config);
                 ToastSuccess('The product has been updated successfully');
                 editDisclosure.onClose();
             } catch (e: any) {
@@ -99,7 +103,10 @@ export const Product = () => {
     const onRemoveProduct = async () => {
         if (productId) {
             try {
-                await ProductService.deleteProduct(productId);
+                const config = {
+                    headers: {Authorization: `Bearer ${getToken()}`}
+                };
+                await ProductService.deleteProduct(productId, config);
                 ToastSuccess('The product has been removed successfully');
                 navigate(`/${currentCategory?.name?.toLowerCase() ?? ''}`)
             } catch (e: any) {

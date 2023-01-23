@@ -3,6 +3,7 @@ import {IProduct} from "../models/IProduct";
 import CartService from "../api/CartService";
 import {ToastError, ToastInfo} from "../utilities/error-handling";
 import {ICart} from "../models/ICart";
+import {getToken} from "../utilities/local-storage-handling";
 
 type CartProviderProps = {
     children: ReactNode
@@ -72,7 +73,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
     const onCreateCart = async (userId: string) => {
         if (userId) {
             try {
-                const {data} = await CartService.createCart(userId);
+                const config = {
+                    headers: { Authorization: `Bearer ${getToken()}` }
+                };
+                const {data} = await CartService.createCart(userId, config);
                 setCartId(data.id);
             } catch (e: any) {
                 ToastError(e?.message);
@@ -82,7 +86,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const onOpenCart = async (userId: string) => {
         try {
-            const {data} = await CartService.getCartByUserId(userId);
+            const config = {
+                headers: { Authorization: `Bearer ${getToken()}` }
+            };
+            const {data} = await CartService.getCartByUserId(userId, config);
             if (data) {
                 setCartId(data.id);
                 setCart(data);
@@ -98,7 +105,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const onFetchCart = async (cartID: string) => {
         try {
-            const {data} = await CartService.getCart(cartID);
+            const config = {
+                headers: { Authorization: `Bearer ${getToken()}` }
+            };
+            const {data} = await CartService.getCart(cartID, config);
             setCart(data);
         } catch (e: any) {
             ToastError(e?.message);
@@ -108,7 +118,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
     const onRemoveCart = async () => {
         if (cartId) {
             try {
-                await CartService.deleteCart(cartId);
+                const config = {
+                    headers: { Authorization: `Bearer ${getToken()}` }
+                };
+                await CartService.deleteCart(cartId, config);
                 onEmptyCartContext();
             } catch (e: any) {
                 ToastError(e?.message);
@@ -119,7 +132,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
     const onAddItemToCart = async (id: string) => {
         if (cartId && id) {
             try {
-                await CartService.addItemToCart(cartId, id);
+                const config = {
+                    headers: { Authorization: `Bearer ${getToken()}` }
+                };
+                await CartService.addItemToCart(cartId, id, config);
                 onFetchCart(cartId);
             } catch (e: any) {
                 ToastInfo(e?.message);
@@ -130,7 +146,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
     const onDeleteItemFromCart = async (id: string) => {
         if (cartId) {
             try {
-                await CartService.deleteItemFromCart(cartId, id);
+                const config = {
+                    headers: { Authorization: `Bearer ${getToken()}` }
+                };
+                await CartService.deleteItemFromCart(cartId, id, config);
                 onFetchCart(cartId);
             } catch (e: any) {
                 ToastInfo(e?.message);
