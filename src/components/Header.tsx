@@ -28,13 +28,17 @@ import LogOut from '../modals/LogOut';
 import {getToken, removeToken, setToken} from "../utilities/local-storage-handling";
 import {useCustomer} from "../context/CustomerContext";
 import {useCart} from "../context/CartContext";
+import SettingsModal from "../modals/SettingsModal";
+import {IRole} from "../models/IRole";
 
 export const Header = () => {
     const [isLoading, setIsLoading] = useState(false);
+    const [roles, setRoles] = useState<IRole[]>([]);
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
     const logOutDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
+    const settingsDisclosure = useDisclosure();
     const {onOpenCart, onEmptyCartContext} = useCart();
     const {onChangeCurrentCategory} = useCategory();
     const {customer, onChangeCustomer, onChangeAdmin, isAdmin, isAuth, onChangeAuth} = useCustomer();
@@ -124,30 +128,30 @@ export const Header = () => {
 
     const getUserWithSession = async () => {
         const config = {
-            headers: { Authorization: `Bearer ${getToken()}` }
+            headers: {Authorization: `Bearer ${getToken()}`}
         };
-      await axios.get(`${rootURL}/user/profile`, config)
-          .then(({data}) => {
-              onChangeCustomer(data);
-              if (data.rights?.name?.toLowerCase() === 'admin') {
-                  onChangeAdmin(true);
-              }
-              onChangeAuth(true);
-              onOpenCart(data.id);
-          })
-          .catch(error => {
-              ToastError(error.message);
-              removeToken();
-              onChangeAuth(false);
-          })
-          .finally(() => {
-              setIsLoading(false);
-          })
+        await axios.get(`${rootURL}/user/profile`, config)
+            .then(({data}) => {
+                onChangeCustomer(data);
+                if (data.rights?.name?.toLowerCase() === 'admin') {
+                    onChangeAdmin(true);
+                }
+                onChangeAuth(true);
+                onOpenCart(data.id);
+            })
+            .catch(error => {
+                ToastError(error.message);
+                removeToken();
+                onChangeAuth(false);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
     const onEditProfile = async (values: ICustomer) => {
         const config = {
-            headers: { Authorization: `Bearer ${getToken()}` }
+            headers: {Authorization: `Bearer ${getToken()}`}
         };
         await axios.put(
             `${rootURL}/user/profile/edit`, values, config
@@ -161,6 +165,36 @@ export const Header = () => {
             })
             .finally(() => {
                 editProfileDisclosure.onClose();
+            })
+    }
+
+    const onOpenSettingsModal = async () => {
+        const config = {
+            headers: {Authorization: `Bearer ${getToken()}`}
+        };
+        await axios.get(
+            `${rootURL}/user/rights/list`, config
+        ).then(({data}) => {
+            setRoles(data);
+            settingsDisclosure.onOpen();
+        })
+    }
+
+    const onEditUserRole = async (values: any) => {
+        const config = {
+            headers: {Authorization: `Bearer ${getToken()}`}
+        };
+        await axios.put(
+            `${rootURL}/user/role/update`, values, config
+        )
+            .then(() => {
+                ToastSuccess('Роль пользователя была успешно изменена');
+            })
+            .catch(error => {
+                ToastError(error.message);
+            })
+            .finally(() => {
+                settingsDisclosure.onClose();
             })
     }
 
@@ -200,9 +234,9 @@ export const Header = () => {
                         spacing={2}
                         marginX={6}
                         fontSize='25px'>
-                        {isAdmin &&  <Text ml={2} fontSize='2xl' fontWeight='thin' color='gray'>
+                        {isAdmin && <Text ml={2} fontSize='2xl' fontWeight='thin' color='gray'>
                             Панель администратора
-                            </Text>}
+                        </Text>}
                         {!isAdmin && Links.map(({title, icon, path}) => (
                             <Link to={path} key={title}>
                                 {icon}
@@ -224,12 +258,14 @@ export const Header = () => {
                             />
                         </MenuButton>
                         <MenuList>
-                            <MenuItem onClick={editProfileDisclosure.onOpen} >Профиль</MenuItem>
+                            <MenuItem onClick={editProfileDisclosure.onOpen}>Профиль</MenuItem>
+                            {isAdmin && <MenuItem onClick={onOpenSettingsModal}>Настройки</MenuItem>}
                             {!isAdmin &&
                                 <Link to={'/orders'}>
                                     <MenuItem>Мои заказы</MenuItem>
                                 </Link>
-                            }                            <MenuDivider/>
+                            }
+                            <MenuDivider/>
                             <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
                         </MenuList>
                     </Menu>
@@ -240,6 +276,10 @@ export const Header = () => {
                               isOpen={editProfileDisclosure.isOpen}
                               onClose={editProfileDisclosure.onClose}
                               onEditProfile={onEditProfile}/>
+            <SettingsModal roles={roles}
+                           isOpen={settingsDisclosure.isOpen}
+                           onClose={settingsDisclosure.onClose}
+                           onEditUserRole={onEditUserRole}/>
 
             <SignIn isOpen={signInDisclosure.isOpen}
                     isLoading={isLoading}
