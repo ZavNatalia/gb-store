@@ -19,7 +19,7 @@ export const Favourites = () => {
             <Heading fontSize='xx-large' my={2}>В избранном ничего нет</Heading>
             <Text color='gray' textAlign='center'>Здесь пока ничего нет, но вы можете
                 <br/>добавить товар в избранное, кликнув на <Icon as={MdFavorite}/></Text>
-            <Link to={`/${currentCategory?.name?.toLowerCase() ?? '/'}`}>
+            <Link to={`/${currentCategory?.name?.toLowerCase() ?? ''}`}>
                 <Button colorScheme='yellow' px={10} mt={6}>
                     В каталог
                 </Button>
