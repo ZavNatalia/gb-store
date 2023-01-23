@@ -25,7 +25,7 @@ const Carousel = ({images}: CarouselProps) => {
     return (
         <Box
             position='relative'
-            height='600px'
+            height='auto'
             width='full'
             overflow='hidden'>
             <IconButton
@@ -66,7 +66,7 @@ const Carousel = ({images}: CarouselProps) => {
                         key={index}
                         maxH='500px'
                         maxW='100%'
-                        minH='500px'
+                        minH='auto'
                         minW='500px'
                         objectFit={'contain'}
                         src={url}

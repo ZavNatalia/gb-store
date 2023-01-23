@@ -1,6 +1,11 @@
 import axios, {AxiosResponse} from "axios";
 import {rootURL} from "../constants/URLs";
 import {IProduct} from "../models/IProduct";
+import {getToken} from "../utilities/local-storage-handling";
+
+const config = {
+    headers: {Authorization: `Bearer ${getToken()}`}
+};
 
 export default class ProductService {
     static async getPaginatedProducts(offset: number, limit: number): Promise<AxiosResponse<IProduct[]>> {
@@ -16,10 +21,10 @@ export default class ProductService {
         return axios.get<IProduct[]>(`${rootURL}/items/search/?param=${searchQuery}&offset=${offset}&limit=${limit}`)
     }
     static async createProduct(product: any): Promise<AxiosResponse> {
-        return axios.post<IProduct>(`${rootURL}/items/create`, product)
+        return axios.post<IProduct>(`${rootURL}/items/create`, product, config)
     }
     static async updateProduct(product: any): Promise<AxiosResponse> {
-        return axios.put<IProduct>(`${rootURL}/items/update`, product)
+        return axios.put<IProduct>(`${rootURL}/items/update`, product, config)
     }
     static async getQuantity(categoryName?: string): Promise<AxiosResponse> {
         if (!!categoryName) {
@@ -28,6 +33,6 @@ export default class ProductService {
         return axios.get<number>(`${rootURL}/items/quantity`)
     }
     static async deleteProduct(id: string): Promise<AxiosResponse> {
-        return axios.delete<IProduct>(`${rootURL}/items/delete/${id}`)
+        return axios.delete<IProduct>(`${rootURL}/items/delete/${id}`, config)
     }
 }

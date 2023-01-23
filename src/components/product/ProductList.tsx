@@ -92,7 +92,7 @@ const ProductList = () => {
         const scrollHeight = e.target.documentElement.scrollHeight;
         const scrollTop = e.target.documentElement.scrollTop;
         const innerHeight = window.innerHeight;
-        if (scrollHeight - (scrollTop + innerHeight) < 50 && quantity > 0 && offset < quantity) {
+        if (scrollHeight - (scrollTop + innerHeight) < 150 && quantity > 0 && offset < quantity) {
             setIsLoading(true)
         }
     }

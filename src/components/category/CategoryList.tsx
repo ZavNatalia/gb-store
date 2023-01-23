@@ -90,12 +90,10 @@ export const CategoryList = () => {
                 borderRight='1px'
                 position='sticky'
                 top='80px'
-                py={4}
+                pb={4}
                 height='calc(100vh - 80px)'
-                borderRightColor='gray.200'
-                overflowY='auto'>
+                borderRightColor='gray.200'>
                 <ErrorMessage message={'Не удалось получить список категорий'}/>
-
                 <Button
                     m={5}
                     leftIcon={<AiOutlineReload/>}
