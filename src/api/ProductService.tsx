@@ -30,4 +30,13 @@ export default class ProductService {
     static async deleteProduct(id: string, config: any): Promise<AxiosResponse> {
         return axios.delete<IProduct>(`${rootURL}/items/delete/${id}`, config)
     }
+    static async getFavouriteProducts(): Promise<AxiosResponse<IProduct[]>> {
+        return axios.get<IProduct[]>(`${rootURL}/items/fav`)
+    }
+    static async addFavouriteProduct(userId: string, itemId: string, config: any): Promise<AxiosResponse> {
+        return axios.post(`${rootURL}/items/addFav/${userId}/${itemId}`, config)
+    }
+    static async deleteFavouriteProduct(userId: string, itemId: string, config: any): Promise<AxiosResponse> {
+        return axios.delete(`${rootURL}/items/deleteFav/${userId}/${itemId}`, config)
+    }
 }

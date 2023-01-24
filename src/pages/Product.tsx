@@ -90,7 +90,7 @@ export const Product = () => {
                         image: result.image,
                         vendor: result.vendor
                     }, config);
-                ToastSuccess('The product has been updated successfully');
+                ToastSuccess('Товар был успешно отредактирован');
                 editDisclosure.onClose();
             } catch (e: any) {
                 ToastError(e?.message);
@@ -107,7 +107,7 @@ export const Product = () => {
                     headers: {Authorization: `Bearer ${getToken()}`}
                 };
                 await ProductService.deleteProduct(productId, config);
-                ToastSuccess('The product has been removed successfully');
+                ToastSuccess('Товар был удалён');
                 navigate(`/${currentCategory?.name?.toLowerCase() ?? ''}`)
             } catch (e: any) {
                 ToastError(e?.message);

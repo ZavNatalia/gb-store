@@ -31,7 +31,7 @@ export const CategoryList = () => {
             onChangeCategories(data);
             setIsLoading(false);
         } catch (error: any) {
-            setError(error?.message);
+            setError('Не удалось загрузить список категорий');
         }
     };
 
@@ -43,7 +43,7 @@ export const CategoryList = () => {
         try {
             await CategoryService.deleteCategory(id);
             fetchCategories();
-            ToastSuccess('The category has been removed successfully');
+            ToastSuccess('Категория была удалена');
             removeDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -54,7 +54,7 @@ export const CategoryList = () => {
         try {
             await CategoryService.updateCategory(category.id, category);
             fetchCategories();
-            ToastSuccess('The category has been updated successfully');
+            ToastSuccess('Категория была отредактирована');
             editDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -71,7 +71,7 @@ export const CategoryList = () => {
                 'image': ''
             });
             fetchCategories();
-            ToastSuccess('The category has been created successfully');
+            ToastSuccess('Категория была успешно создана');
             createDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);

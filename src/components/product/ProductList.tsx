@@ -47,9 +47,9 @@ const ProductList = () => {
                 setOffset(prevState => prevState + limit);
             } catch (e: any) {
                 if (products?.length > 0) {
-                    ToastError(e?.message);
+                    ToastError('Не удалось загрузить список товаров');
                 } else {
-                    setError(e?.message);
+                    setError('Не удалось загрузить список товаров. Повторите попытку позже.');
                 }
             } finally {
                 setIsLoading(false);
@@ -67,7 +67,11 @@ const ProductList = () => {
             setIsLoading(true);
 
         } catch (e: any) {
-            ToastError(e?.message);
+            if (products?.length > 0) {
+                ToastError('Не удалось загрузить список товаров');
+            } else {
+                setError('Не удалось загрузить список товаров. Повторите попытку позже.');
+            }
         }
     };
 
