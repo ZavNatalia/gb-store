@@ -24,6 +24,7 @@ const SignUpForm = ({signUpHandler, isLoading}: SignUpFormProps) => {
         password: Yup.string()
             .min(8, 'Пароль должен содержать минимум 8 символов')
             .max(16, 'Пароль может содержать максимум 16 символов')
+            .matches(/^[A-Za-z\d]*$/, 'Пароль может содержать только латинские буквы и цифры')
             .required('Пожалуйста, введите ваш пароль')
     });
 
