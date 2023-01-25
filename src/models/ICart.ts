@@ -3,7 +3,7 @@ import { IProduct } from "./IProduct";
 export type ICart = {
     id: string,
     items: ICartItem[],
-    user_id: string
+    userId: string
 }
 
 export type ICartItem = {

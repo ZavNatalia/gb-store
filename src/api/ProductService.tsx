@@ -27,16 +27,19 @@ export default class ProductService {
         }
         return axios.get<number>(`${rootURL}/items/quantity`)
     }
+    static async getFavListQuantity(userID?: string): Promise<AxiosResponse> {
+        return axios.get<number>(`${rootURL}/items/quantityFav/${userID}`)
+    }
     static async deleteProduct(id: string, config: any): Promise<AxiosResponse> {
         return axios.delete<IProduct>(`${rootURL}/items/delete/${id}`, config)
     }
-    static async getFavouriteProducts(): Promise<AxiosResponse<IProduct[]>> {
-        return axios.get<IProduct[]>(`${rootURL}/items/fav`)
+    static async getFavoriteProducts(limit: number, offset: number): Promise<AxiosResponse> {
+        return axios.get(`${rootURL}/items/favList?limit=${limit}&offset=${offset}`)
     }
-    static async addFavouriteProduct(userId: string, itemId: string, config: any): Promise<AxiosResponse> {
+    static async addFavoriteProduct(userId: string, itemId: string, config: any): Promise<AxiosResponse> {
         return axios.post(`${rootURL}/items/addFav/${userId}/${itemId}`, config)
     }
-    static async deleteFavouriteProduct(userId: string, itemId: string, config: any): Promise<AxiosResponse> {
+    static async deleteFavoriteProduct(userId: string, itemId: string, config: any): Promise<AxiosResponse> {
         return axios.delete(`${rootURL}/items/deleteFav/${userId}/${itemId}`, config)
     }
 }

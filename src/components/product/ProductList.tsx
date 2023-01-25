@@ -65,7 +65,6 @@ const ProductList = () => {
             const {data} = await ProductService.getQuantity(currentCategory.name);
             setQuantity(data.quantity);
             setIsLoading(true);
-
         } catch (e: any) {
             if (products?.length > 0) {
                 ToastError('Не удалось загрузить список товаров');
@@ -74,7 +73,6 @@ const ProductList = () => {
             }
         }
     };
-
 
     const updateList = () => {
         window.scroll({

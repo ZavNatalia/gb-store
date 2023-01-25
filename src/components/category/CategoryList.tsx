@@ -29,9 +29,10 @@ export const CategoryList = () => {
             setIsLoading(true);
             const {data} = await CategoryService.getCategories();
             onChangeCategories(data);
-            setIsLoading(false);
         } catch (error: any) {
             setError('Не удалось загрузить список категорий');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -78,11 +79,6 @@ export const CategoryList = () => {
         }
     }
 
-    const updateList = () => {
-        setError('');
-        fetchCategories();
-    }
-
     if (error) {
         return (
             <Box
@@ -94,12 +90,6 @@ export const CategoryList = () => {
                 height='calc(100vh - 80px)'
                 borderRightColor='gray.200'>
                 <ErrorMessage message={'Не удалось получить список категорий'}/>
-                <Button
-                    m={5}
-                    leftIcon={<AiOutlineReload/>}
-                    onClick={() => updateList()}>
-                    Повторить запрос
-                </Button>
             </Box>
         )
     }
