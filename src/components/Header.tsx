@@ -25,7 +25,7 @@ import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
-import {getToken, removeToken, setToken} from "../utilities/local-storage-handling";
+import {getToken, removeToken, removeUserId, setToken, setUserId} from "../utilities/local-storage-handling";
 import {useCustomer} from "../context/CustomerContext";
 import {useCart} from "../context/CartContext";
 import SettingsModal from "../modals/SettingsModal";
@@ -116,6 +116,7 @@ export const Header = () => {
                 onChangeAdmin(false);
                 onEmptyCartContext();
                 removeToken();
+                removeUserId();
                 ToastSuccess('Вы вышли из аккаунта');
             })
             .catch(error => {
@@ -133,6 +134,7 @@ export const Header = () => {
         await axios.get(`${rootURL}/user/profile`, config)
             .then(({data}) => {
                 onChangeCustomer(data);
+                setUserId(data.id);
                 if (data.rights?.name?.toLowerCase() === 'admin') {
                     onChangeAdmin(true);
                 }
@@ -142,6 +144,7 @@ export const Header = () => {
             .catch(error => {
                 ToastError(error.message);
                 removeToken();
+                removeUserId();
                 onChangeAuth(false);
             })
             .finally(() => {
@@ -158,6 +161,7 @@ export const Header = () => {
         )
             .then(({data}) => {
                 onChangeCustomer(data);
+                setUserId(data.id);
                 ToastSuccess('Ваши данные были успешно изменены');
             })
             .catch(error => {

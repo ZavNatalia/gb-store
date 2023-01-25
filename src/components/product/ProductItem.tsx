@@ -7,6 +7,10 @@ import {toCurrency} from "../../utilities/formatCurrency";
 import Counter from "../../UI/Counter";
 import {FavouriteSwitcher} from "../../UI/FavouriteSwitcher";
 import {useCustomer} from "../../context/CustomerContext";
+import {getToken} from "../../utilities/local-storage-handling";
+import ProductService from "../../api/ProductService";
+import {ToastError} from "../../utilities/error-handling";
+import {slashEscape} from "../../utilities/RegExpURL";
 
 interface ProductItemProps {
     product: IProduct
@@ -41,7 +45,9 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             </Box>}
             <Box py={4}>
                 <Link
-                    to={isAdmin ? `/edit/${id}/${title}` : `/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}>
+                    to={isAdmin
+                        ? `/edit/${id}/${slashEscape(title)}`
+                        : `/${slashEscape(product.category?.name)?.toLowerCase()}/${product.id}/${slashEscape(product.title)}`}>
                     <Flex height='250px' width='100%' justifyContent='center'>
                         {image && <Image
                             maxH='100%'

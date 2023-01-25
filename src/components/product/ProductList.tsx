@@ -150,10 +150,12 @@ const ProductList = () => {
         )
     }
 
-    if (error) {
-        return <Box py='40px'>
-            <ErrorMessage message={error}/>
-        </Box>
+    if (error && products?.length === 0) {
+        return <Center h='50vh'>
+            <Box py='40px' textAlign='center'>
+                <ErrorMessage message={error} borderRadius='2xl'/>
+            </Box>
+        </Center>
     }
 
     return (
@@ -186,9 +188,10 @@ const ProductList = () => {
                     }
                 </Flex>
                 <SimpleGrid minChildWidth='250px' width='100%' spacing='10' placeItems='center'>
-                    {memoizedList}
+                    {isLoading && quantity === 0 && products.length === 0 && <SkeletonList amount={8}/>}
+                    {!isLoading && memoizedList}
                 </SimpleGrid>
-                {isLoading && products.length > 0 && (
+                {isLoading && products?.length > 0 && (
                     <Center mt={10}>
                         <Loader/>
                     </Center>

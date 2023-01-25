@@ -13,6 +13,7 @@ import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategoryModal';
 import CategoryService from "../../api/CategoryService";
 import {useCustomer} from "../../context/CustomerContext";
+import {getToken} from "../../utilities/local-storage-handling";
 
 export const CategoryList = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +43,10 @@ export const CategoryList = () => {
 
     const onRemoveCategory = async (id: number) => {
         try {
-            await CategoryService.deleteCategory(id);
+            const config = {
+                headers: {Authorization: `Bearer ${getToken()}`}
+            };
+            await CategoryService.deleteCategory(id, config);
             fetchCategories();
             ToastSuccess('Категория была удалена');
             removeDisclosure.onClose();
@@ -53,7 +57,10 @@ export const CategoryList = () => {
 
     const onEditCategory = async (category: ICategory) => {
         try {
-            await CategoryService.updateCategory(category.id, category);
+            const config = {
+                headers: {Authorization: `Bearer ${getToken()}`}
+            };
+            await CategoryService.updateCategory(category.id, category, config);
             fetchCategories();
             ToastSuccess('Категория была отредактирована');
             editDisclosure.onClose();
@@ -66,11 +73,14 @@ export const CategoryList = () => {
 
     const onCreateCategory = async (category: ICategory) => {
         try {
+            const config = {
+                headers: {Authorization: `Bearer ${getToken()}`}
+            };
             await CategoryService.createCategory({
                 'name': category.name,
                 'description': category.description,
                 'image': ''
-            });
+            }, config);
             fetchCategories();
             ToastSuccess('Категория была успешно создана');
             createDisclosure.onClose();

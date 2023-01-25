@@ -5,6 +5,7 @@ import {toCurrency} from "../../utilities/formatCurrency";
 import {Link} from "react-router-dom";
 import Counter from "../../UI/Counter";
 import {BsBag} from "react-icons/bs";
+import {slashEscape} from "../../utilities/RegExpURL";
 
 const CartSidebar = () => {
     const {cart, getTotalCost, getDeliveryCost} = useCart();
@@ -16,7 +17,7 @@ const CartSidebar = () => {
                     {cart?.items.map(({item, quantity}) => (
                         <ListItem key={item?.id}>
                             <HStack spacing={3}>
-                                <Link to={`/${item.category?.name?.toLowerCase()}/${item?.id}/${item?.title}`}
+                                <Link to={`/${slashEscape(item.category?.name)}/${item?.id}/${slashEscape(item?.title)}`}
                                       style={{display: 'flex', alignItems: 'center', flex: 1}}>
                                     <Flex maxH='100px'
                                           maxW='100px'

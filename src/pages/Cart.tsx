@@ -28,6 +28,7 @@ import {useCategory} from '../context/CategoryContext';
 import MainBlockLayout from '../UI/MainBlockLayout';
 import {OrderForm} from '../components/cart/OrderForm';
 import {ToastError} from "../utilities/error-handling";
+import {slashEscape} from "../utilities/RegExpURL";
 
 export const Cart = () => {
     const {cart, getTotalCost, getItemsCost, getDeliveryCost, getTotalQuantity, onRemoveCart} = useCart();
@@ -78,7 +79,7 @@ export const Cart = () => {
             <Heading fontSize='xx-large' my={2}>В вашей корзине пока пусто</Heading>
             <Text color='gray'>Тут появятся товары, которые вы закажете.</Text>
             <HStack mt={10}>
-                <Link to={`/${currentCategory?.name?.toLowerCase() ?? ''}`}>
+                <Link to={`/${slashEscape(currentCategory?.name) ?? ''}`}>
                     <Button colorScheme='blackAlpha' px={10}>
                         В каталог
                     </Button>
@@ -99,7 +100,7 @@ export const Cart = () => {
                 {cart?.items.map(({item, quantity}) => (
                     <ListItem key={item.id} pr={2}>
                         <HStack spacing={3}>
-                            <Link to={`/${item.category?.name?.toLowerCase()}/${item.id}/${item.title}`}
+                            <Link to={`/${slashEscape(item.category?.name)}/${item.id}/${slashEscape(item.title)}`}
                                   style={{display: "flex", alignItems: 'center'}}>
                                 <Flex maxH='110px'
                                       maxW='110px'
