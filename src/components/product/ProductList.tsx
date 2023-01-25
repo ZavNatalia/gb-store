@@ -64,7 +64,9 @@ const ProductList = () => {
         try {
             const {data} = await ProductService.getQuantity(currentCategory.name);
             setQuantity(data.quantity);
-            setIsLoading(true);
+            if (data.quantity > 0) {
+                setIsLoading(true);
+            }
         } catch (e: any) {
             if (products?.length > 0) {
                 ToastError('Не удалось загрузить список товаров');
@@ -150,12 +152,24 @@ const ProductList = () => {
         )
     }
 
-    if (error && products?.length === 0) {
-        return <Center h='50vh'>
-            <Box py='40px' textAlign='center'>
-                <ErrorMessage message={error} borderRadius='2xl'/>
-            </Box>
-        </Center>
+    const getErrorMessage = () => {
+        if (products?.length === 0) {
+            return <Center h='50vh'>
+                <Box py='40px' textAlign='center'>
+                    <ErrorMessage message={error} borderRadius='2xl'/>
+                </Box>
+            </Center>
+        }
+    }
+
+    const getLoader = () => {
+        if (products.length > 0) {
+            return (
+                <Center mt={10}>
+                    <Loader/>
+                </Center>
+            )
+        }
     }
 
     return (
@@ -188,16 +202,11 @@ const ProductList = () => {
                     }
                 </Flex>
                 <SimpleGrid minChildWidth='250px' width='100%' spacing='10' placeItems='center'>
-                    {isLoading && quantity === 0 && products.length === 0 && <SkeletonList amount={8}/>}
-                    {!isLoading && memoizedList}
+                    {!error && products.length === 0 && <NoContent/>}
+                    {memoizedList}
                 </SimpleGrid>
-                {isLoading && products?.length > 0 && (
-                    <Center mt={10}>
-                        <Loader/>
-                    </Center>
-                )}
-                {!isLoading && quantity === 0 && <NoContent/>}
-
+                {isLoading && getLoader()}
+                {error && getErrorMessage()}
             </>
             <AddEditProductDrawer isEdit={false} isOpen={isOpen} onClose={onClose} onSubmit={onAddNewProduct}/>
         </Box>
