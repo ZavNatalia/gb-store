@@ -101,8 +101,7 @@ export const Header = () => {
                 firstname, email, password
             }
         )
-            .then(({data}) => {
-                onChangeCustomer(data);
+            .then(() => {
                 ToastSuccess('Вы успешно зарегистрировались');
             })
             .catch(error => {
