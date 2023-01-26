@@ -39,7 +39,7 @@ export const Header = () => {
     const logOutDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
     const settingsDisclosure = useDisclosure();
-    const {onFetchCartByUserId, onEmptyCartContext} = useCart();
+    const {onFetchCart, onEmptyCartContext} = useCart();
     const {onChangeCurrentCategory} = useCategory();
     const {customer, onChangeCustomer, onChangeAdmin, isAdmin, isAuth, onChangeAuth} = useCustomer();
 
@@ -55,7 +55,8 @@ export const Header = () => {
         )
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
-                setToken(data.access_token);
+                setToken(data.token.access_token);
+                onFetchCart(data.cartId.id);
                 onChangeAuth(true);
             })
             .catch(error => {
@@ -75,7 +76,8 @@ export const Header = () => {
         )
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
-                setToken(data.access_token);
+                setToken(data.token.access_token);
+                onFetchCart(data.cartId.id);
                 onChangeAuth(true);
             })
             .catch(error => {
@@ -143,7 +145,6 @@ export const Header = () => {
                     onChangeAdmin(true);
                 }
                 onChangeAuth(true);
-                onFetchCartByUserId(data.id);
             })
             .catch(error => {
                 ToastError(error.message);
@@ -240,7 +241,7 @@ export const Header = () => {
                     <HStack
                         as={'nav'}
                         spacing={2}
-                        marginX={6}
+                        mx={2}
                         fontSize='25px'>
                         {isAdmin && <Text ml={2} fontSize='2xl' fontWeight='thin' color='gray'>
                             Панель администратора

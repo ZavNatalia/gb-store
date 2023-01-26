@@ -89,19 +89,6 @@ export const CartProvider = ({children}: CartProviderProps) => {
         return getTotalQuantity() < 6 ? DELIVERY_COST_BASE : DELIVERY_COST_BASE * 3
     }
 
-    const onCreateCart = async (userId: string) => {
-        if (userId) {
-            try {
-                const config = {
-                    headers: { Authorization: `Bearer ${getToken()}` }
-                };
-                const {data} = await CartService.createCart(userId, config);
-                setCartId(data.id);
-            } catch (e: any) {
-                ToastError(e?.message);
-            }
-        }
-    };
 
     const onFetchCartByUserId = async (userId: string) => {
         try {
@@ -115,11 +102,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
                 setIsOpen(true);
             }
         } catch (e: any) {
-            if (e.response.status === 404 || e.response.status === 500) {
-                onCreateCart(userId);
-            } else {
-                ToastError(e?.message);
-            }
+            ToastError(e?.message);
         }
     }
 
