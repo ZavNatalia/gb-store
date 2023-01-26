@@ -56,8 +56,8 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setToken(data.token.access_token);
-                onFetchCart(data.cartId.id);
-                setCartId(data.cart.id);
+                onFetchCart(data.cartId);
+                setCartId(data.cartId);
                 onChangeAuth(true);
             })
             .catch(error => {
@@ -78,8 +78,8 @@ export const Header = () => {
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
                 setToken(data.token.access_token);
-                onFetchCart(data.cartId.id);
-                setCartId(data.cart.id);
+                onFetchCart(data.cartId);
+                setCartId(data.cartId);
                 onChangeAuth(true);
             })
             .catch(error => {
