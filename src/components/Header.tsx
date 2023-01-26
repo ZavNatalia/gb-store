@@ -79,7 +79,11 @@ export const Header = () => {
                 onChangeAuth(true);
             })
             .catch(error => {
-                ToastError(error.message);
+                if (error.response.data?.error?.includes('can\'t get user from database')) {
+                    ToastError('Пользователь с такми email не найден');
+                } else {
+                    ToastError(error.message);
+                }
             })
             .finally(() => {
                 signInDisclosure.onClose();

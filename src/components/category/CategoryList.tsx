@@ -6,7 +6,6 @@ import {ICategory} from '../../models/ICategory';
 import {isEmpty} from '../../utilities/isEmpty';
 import {DeleteIcon, EditIcon} from '@chakra-ui/icons';
 import ErrorMessage from '../../UI/ErrorMessage';
-import {AiOutlineReload} from 'react-icons/ai';
 import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
 import EditCategoryModal from '../../modals/EditCategoryModal';
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';

@@ -182,7 +182,9 @@ const EditProfileModal = ({
                                                     <Input type='email'
                                                            placeholder='E-mail'
                                                            mb={2}
-                                                           isInvalid={meta.touched ? meta.error : false} {...field} />
+                                                           isInvalid={meta.touched ? meta.error : false}
+                                                           isDisabled
+                                                           {...field}/>
                                                     {meta.touched && meta.error && (
                                                         <Text color='red.400' fontSize='md'>{meta.error}</Text>
                                                     )}
