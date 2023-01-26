@@ -102,7 +102,7 @@ export const Header = () => {
             .then(({data}) => {
                 onChangeCustomer(data);
                 ToastSuccess('Вы успешно зарегистрировались');
-                setToken(data.access_token);
+                setToken(data.token.access_token);
             })
             .catch(error => {
                 ToastError(error.message);
