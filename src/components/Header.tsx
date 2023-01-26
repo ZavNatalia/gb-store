@@ -25,7 +25,7 @@ import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
-import {getToken, removeToken, removeUserId, setToken, setUserId} from "../utilities/local-storage-handling";
+import {getToken, removeToken, removeUserId, setCartId, setToken, setUserId} from "../utilities/local-storage-handling";
 import {useCustomer} from "../context/CustomerContext";
 import {useCart} from "../context/CartContext";
 import SettingsModal from "../modals/SettingsModal";
@@ -57,6 +57,7 @@ export const Header = () => {
                 ToastSuccess('Вы успешно авторизовались');
                 setToken(data.token.access_token);
                 onFetchCart(data.cartId.id);
+                setCartId(data.cart.id);
                 onChangeAuth(true);
             })
             .catch(error => {
@@ -78,6 +79,7 @@ export const Header = () => {
                 ToastSuccess('Вы успешно авторизовались');
                 setToken(data.token.access_token);
                 onFetchCart(data.cartId.id);
+                setCartId(data.cart.id);
                 onChangeAuth(true);
             })
             .catch(error => {

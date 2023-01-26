@@ -3,7 +3,7 @@ import {IProduct} from "../models/IProduct";
 import CartService from "../api/CartService";
 import {ToastError, ToastInfo} from "../utilities/error-handling";
 import {ICart} from "../models/ICart";
-import {getToken} from "../utilities/local-storage-handling";
+import {getCartId, getToken, removeCartId} from "../utilities/local-storage-handling";
 
 type CartProviderProps = {
     children: ReactNode
@@ -18,7 +18,6 @@ type CartContextProps = {
     openCart: () => void
     closeCart: () => void
     isOpen: boolean
-    onFetchCartByUserId: (userId: string) => void
     getTotalQuantity: () => number
     getTotalCost: () => number
     getItemsCost: () => number
@@ -44,7 +43,7 @@ export const useCart = () => {
 export const CartProvider = ({children}: CartProviderProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [cart, setCart] = useState<ICart>({} as ICart);
-    const [cartId, setCartId] = useState('');
+    const cartId = getCartId();
 
     useEffect(() => {
         if (getCartQuantity() > 0) {
@@ -87,23 +86,6 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const getDeliveryCost = () => {
         return getTotalQuantity() < 6 ? DELIVERY_COST_BASE : DELIVERY_COST_BASE * 3
-    }
-
-
-    const onFetchCartByUserId = async (userId: string) => {
-        try {
-            const config = {
-                headers: { Authorization: `Bearer ${getToken()}` }
-            };
-            const {data} = await CartService.getCartByUserId(userId, config);
-            if (data) {
-                setCartId(data.id);
-                setCart(data);
-                setIsOpen(true);
-            }
-        } catch (e: any) {
-            ToastError(e?.message);
-        }
     }
 
     const onFetchCart = async (cartID: string) => {
@@ -162,7 +144,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const onEmptyCartContext = () => {
         setCart({} as ICart);
-        setCartId('');
+        removeCartId();
     }
 
     return (
@@ -178,7 +160,6 @@ export const CartProvider = ({children}: CartProviderProps) => {
                 onFetchCart,
                 getCartQuantity,
                 cart,
-                onFetchCartByUserId,
                 onRemoveCart,
                 onEmptyCartContext,
                 openCart,

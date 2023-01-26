@@ -55,7 +55,7 @@ const ProductList = () => {
                 setIsLoading(false);
             }
         } else {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     };
 
