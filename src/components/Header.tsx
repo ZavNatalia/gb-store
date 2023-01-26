@@ -81,17 +81,17 @@ export const Header = () => {
                 onFetchCart(data.cartId);
                 setCartId(data.cartId);
                 onChangeAuth(true);
+                getUserWithSession();
             })
             .catch(error => {
                 if (error.response.data?.error?.includes('can\'t get user from database')) {
                     ToastError('Пользователь с такми email не найден');
                 } else {
-                    ToastError(error.message);
+                    ToastError('Сервис временно недоступен');
                 }
             })
             .finally(() => {
                 signInDisclosure.onClose();
-                getUserWithSession();
             })
     }
 
@@ -126,7 +126,7 @@ export const Header = () => {
                 ToastSuccess('Вы вышли из аккаунта');
             })
             .catch(error => {
-                ToastError(error.message);
+                ToastError('Сервис временно недоступен');
             })
             .finally(() => {
                 logOutDisclosure.onClose();
@@ -147,7 +147,7 @@ export const Header = () => {
                 onChangeAuth(true);
             })
             .catch(error => {
-                ToastError(error.message);
+                ToastError('Сервис временно недоступен');
                 removeToken();
                 removeUserId();
                 onChangeAuth(false);
