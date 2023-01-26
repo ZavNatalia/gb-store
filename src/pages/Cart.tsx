@@ -42,7 +42,7 @@ export const Cart = () => {
             ToastError(e?.message);
         } finally {
             // создать корзину снова
-            // onOpenCart(customer.id);
+            // onFetchCartByUserId(customer.id);
         }
     }
 

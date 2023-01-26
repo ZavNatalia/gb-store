@@ -11,11 +11,13 @@ import {useCustomer} from "../context/CustomerContext";
 
 export const Home = () => {
     const {isAdmin} = useCustomer();
+    const {isOpen} = useCart();
+
     return (
         <Grid
             templateAreas={`"nav main aside"`}
             gridTemplateRows={'1fr'}
-            gridTemplateColumns={`260px minmax(350px, 1fr) ${!isAdmin ? '450px' : 0}`}
+            gridTemplateColumns={`260px minmax(350px, 1fr) ${!isAdmin && isOpen ? '450px' : 0}`}
             h='100%'
             color='blackAlpha.800'
             bg='gray.50'
@@ -27,7 +29,7 @@ export const Home = () => {
                 <ProductList/>
             </GridItem>
             <GridItem area={'aside'}>
-                {!isAdmin && <CartSidebar/>}
+                {!isAdmin && isOpen && <CartSidebar/>}
             </GridItem>
         </Grid>
     );

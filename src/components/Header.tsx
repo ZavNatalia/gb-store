@@ -39,7 +39,7 @@ export const Header = () => {
     const logOutDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
     const settingsDisclosure = useDisclosure();
-    const {onOpenCart, onEmptyCartContext} = useCart();
+    const {onFetchCartByUserId, onEmptyCartContext} = useCart();
     const {onChangeCurrentCategory} = useCategory();
     const {customer, onChangeCustomer, onChangeAdmin, isAdmin, isAuth, onChangeAuth} = useCustomer();
 
@@ -143,7 +143,7 @@ export const Header = () => {
                     onChangeAdmin(true);
                 }
                 onChangeAuth(true);
-                onOpenCart(data.id);
+                onFetchCartByUserId(data.id);
             })
             .catch(error => {
                 ToastError(error.message);

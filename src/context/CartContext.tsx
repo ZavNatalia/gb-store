@@ -1,4 +1,4 @@
-import React, {ReactNode, useContext, useState} from "react";
+import React, {ReactNode, useContext, useEffect, useState} from "react";
 import {IProduct} from "../models/IProduct";
 import CartService from "../api/CartService";
 import {ToastError, ToastInfo} from "../utilities/error-handling";
@@ -15,7 +15,10 @@ export type CartItem = {
 }
 
 type CartContextProps = {
-    onOpenCart: (userId: string) => void
+    openCart: () => void
+    closeCart: () => void
+    isOpen: boolean
+    onFetchCartByUserId: (userId: string) => void
     getTotalQuantity: () => number
     getTotalCost: () => number
     getItemsCost: () => number
@@ -39,8 +42,24 @@ export const useCart = () => {
 }
 
 export const CartProvider = ({children}: CartProviderProps) => {
+    const [isOpen, setIsOpen] = useState(false);
     const [cart, setCart] = useState<ICart>({} as ICart);
     const [cartId, setCartId] = useState('');
+
+    useEffect(() => {
+        if (getCartQuantity() > 0) {
+            openCart();
+        } else {
+            closeCart();
+        }
+    }, [cart])
+
+    const openCart = () => {
+        setIsOpen(true);
+    }
+    const closeCart = () => {
+        setIsOpen(false);
+    }
 
     const getCartQuantity = () => {
         return cart?.items?.reduce((quantity, item) => item.quantity + quantity, 0);
@@ -84,7 +103,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
         }
     };
 
-    const onOpenCart = async (userId: string) => {
+    const onFetchCartByUserId = async (userId: string) => {
         try {
             const config = {
                 headers: { Authorization: `Bearer ${getToken()}` }
@@ -93,6 +112,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
             if (data) {
                 setCartId(data.id);
                 setCart(data);
+                setIsOpen(true);
             }
         } catch (e: any) {
             if (e.response.status === 404 || e.response.status === 500) {
@@ -175,9 +195,12 @@ export const CartProvider = ({children}: CartProviderProps) => {
                 onFetchCart,
                 getCartQuantity,
                 cart,
-                onOpenCart,
+                onFetchCartByUserId,
                 onRemoveCart,
-                onEmptyCartContext
+                onEmptyCartContext,
+                openCart,
+                closeCart,
+                isOpen
             }}>
             {children}
         </CartContext.Provider>
