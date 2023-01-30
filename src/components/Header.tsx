@@ -84,8 +84,8 @@ export const Header = () => {
                 getUserWithSession();
             })
             .catch(error => {
-                if (error.response.data?.error?.includes('can\'t get user from database')) {
-                    ToastError('Пользователь с такми email не найден');
+                if (error.response.data?.message?.includes('incorrect email or password')) {
+                    ToastError('Неверный логин или пароль');
                 } else {
                     ToastError('Сервис временно недоступен');
                 }
