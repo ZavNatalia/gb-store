@@ -7,10 +7,10 @@ import {toCurrency} from "../../utilities/formatCurrency";
 import Counter from "../../UI/Counter";
 import {FavoriteSwitcher} from "../../UI/FavoriteSwitcher";
 import {useCustomer} from "../../context/CustomerContext";
-import {getToken} from "../../utilities/local-storage-handling";
 import ProductService from "../../api/ProductService";
 import {ToastError} from "../../utilities/error-handling";
 import {slashEscape} from "../../utilities/RegExpURL";
+import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 
 interface ProductItemProps {
     product: IProduct
@@ -23,9 +23,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
 
     const onAddFavorite = async () => {
         try {
-            const config = {
-                headers: {Authorization: `Bearer ${getToken()}`}
-            };
+            const config = getHeaderConfig();
             await ProductService.addFavoriteProduct(customer.id, id, config);
         } catch (e: any) {
             ToastError(e?.message);
@@ -34,9 +32,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
     const onDeleteFavorite = async () => {
 
         try {
-            const config = {
-                headers: {Authorization: `Bearer ${getToken()}`}
-            };
+            const config = getHeaderConfig();
             await ProductService.deleteFavoriteProduct(customer.id, id, config);
         } catch (e: any) {
             ToastError(e?.message);

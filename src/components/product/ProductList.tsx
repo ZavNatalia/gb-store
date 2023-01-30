@@ -24,9 +24,9 @@ import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import SkeletonList from '../../UI/SkeletonList';
 import ProductService from "../../api/ProductService";
 import {useCustomer} from "../../context/CustomerContext";
-import {getToken} from "../../utilities/local-storage-handling";
 import {ICategory} from "../../models/ICategory";
 import {MdClose} from 'react-icons/md';
+import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 
 
 const ProductList = () => {
@@ -56,13 +56,14 @@ const ProductList = () => {
         setError('');
         if (products.length < quantity) {
             try {
+                const config = getHeaderConfig();
                 let res;
                 if (searchQuery) {
-                    res = await ProductService.getProductsBySearchQuery(searchQuery, offset, limit)
+                    res = await ProductService.getProductsBySearchQuery(searchQuery, offset, limit, config)
                 } else {
                     res = isEmpty(currentCategory)
-                        ? await ProductService.getPaginatedProducts(offset, limit)
-                        : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit);
+                        ? await ProductService.getPaginatedProducts(offset, limit, config)
+                        : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit, config);
                 }
                 setProducts([...products, ...res.data]);
                 setOffset(prevState => prevState + limit);
@@ -140,9 +141,7 @@ const ProductList = () => {
             "vendor": values.vendor
         };
         try {
-            const config = {
-                headers: {Authorization: `Bearer ${getToken()}`}
-            };
+            const config = getHeaderConfig();
             await ProductService.createProduct(result, config);
             if (currentCategory.id !== values.category.id) {
                 onChangeCategory(values.category.id);

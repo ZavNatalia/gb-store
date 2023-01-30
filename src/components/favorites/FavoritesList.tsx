@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {IProduct} from "../../models/IProduct";
 import {useCategory} from "../../context/CategoryContext";
-import {getToken, getUserId} from "../../utilities/local-storage-handling";
+import {getUserId} from "../../utilities/local-storage-handling";
 import ProductService from "../../api/ProductService";
 import {ToastError} from "../../utilities/error-handling";
 import {Box, Button, Center, Flex, Heading, Icon, SimpleGrid, Text} from "@chakra-ui/react";
@@ -9,9 +9,10 @@ import {IoIosHeartEmpty} from "react-icons/io";
 import {MdFavorite} from "react-icons/md";
 import {Link} from "react-router-dom";
 import SkeletonList from "../../UI/SkeletonList";
-import { ProductItem } from '../product/ProductItem';
+import {ProductItem} from '../product/ProductItem';
 import ErrorMessage from '../../UI/ErrorMessage';
 import {slashEscape} from "../../utilities/RegExpURL";
+import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 
 const FavoritesList = () => {
     const [list, setList] = useState([] as IProduct[]);
@@ -39,9 +40,7 @@ const FavoritesList = () => {
         setError('');
         if (list.length < favListQuantity) {
             try {
-                const config = {
-                    headers: {Authorization: `Bearer ${getToken()}`}
-                };
+                const config = getHeaderConfig();
                 const userId = getUserId();
                 if (userId) {
                     const {data} = await ProductService.getFavoriteProducts(userId, limit, offset, config)
@@ -68,7 +67,8 @@ const FavoritesList = () => {
         try {
             const userId = getUserId();
             if (userId) {
-                const {data} = await ProductService.getFavListQuantity(userId);
+                const config = getHeaderConfig();
+                const {data} = await ProductService.getFavListQuantity(userId, config);
                 setFavListQuantity(data.quantity);
                 if (data.quantity > 0) {
                     setIsLoading(true);
@@ -143,7 +143,7 @@ const FavoritesList = () => {
 
     return (
         <>
-             <Box
+            <Box
                 textAlign='left'
                 py='40px'
                 px='50px'
@@ -152,11 +152,11 @@ const FavoritesList = () => {
                 bg='gray.50'
                 overflowY='auto'
             >
-                 <SimpleGrid minChildWidth='210px' width='100%' spacing='6'>
-                     {isLoading && list?.length === 0 && <SkeletonList amount={8}/>}
-                     {memoizedList}
-                 </SimpleGrid>
-                 {!isLoading && list?.length === 0 && <EmptyList/>}
+                <SimpleGrid minChildWidth='210px' width='100%' spacing='6'>
+                    {isLoading && list?.length === 0 && <SkeletonList amount={8}/>}
+                    {memoizedList}
+                </SimpleGrid>
+                {!isLoading && list?.length === 0 && <EmptyList/>}
             </Box>
 
         </>

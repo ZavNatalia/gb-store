@@ -12,7 +12,7 @@ import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategoryModal';
 import CategoryService from "../../api/CategoryService";
 import {useCustomer} from "../../context/CustomerContext";
-import {getToken} from "../../utilities/local-storage-handling";
+import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 
 export const CategoryList = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -42,9 +42,7 @@ export const CategoryList = () => {
 
     const onRemoveCategory = async (id: number) => {
         try {
-            const config = {
-                headers: {Authorization: `Bearer ${getToken()}`}
-            };
+            const config = getHeaderConfig();
             await CategoryService.deleteCategory(id, config);
             fetchCategories();
             ToastSuccess('Категория была удалена');
@@ -56,9 +54,7 @@ export const CategoryList = () => {
 
     const onEditCategory = async (category: ICategory) => {
         try {
-            const config = {
-                headers: {Authorization: `Bearer ${getToken()}`}
-            };
+            const config = getHeaderConfig();
             await CategoryService.updateCategory(category.id, category, config);
             fetchCategories();
             ToastSuccess('Категория была отредактирована');
@@ -72,9 +68,7 @@ export const CategoryList = () => {
 
     const onCreateCategory = async (category: ICategory) => {
         try {
-            const config = {
-                headers: {Authorization: `Bearer ${getToken()}`}
-            };
+            const config = getHeaderConfig();
             await CategoryService.createCategory({
                 'name': category.name,
                 'description': category.description,

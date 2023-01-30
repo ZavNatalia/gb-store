@@ -3,17 +3,17 @@ import {rootURL} from "../constants/URLs";
 import {IProduct} from "../models/IProduct";
 
 export default class ProductService {
-    static async getPaginatedProducts(offset: number, limit: number): Promise<AxiosResponse<IProduct[]>> {
-        return axios.get<IProduct[]>(`${rootURL}/items/list?offset=${offset}&limit=${limit}`)
+    static async getPaginatedProducts(offset: number, limit: number, config: any): Promise<AxiosResponse<IProduct[]>> {
+        return axios.get<IProduct[]>(`${rootURL}/items/list?offset=${offset}&limit=${limit}`, config)
     }
     static async getProduct(id: string): Promise<AxiosResponse<IProduct>> {
         return axios.get<IProduct>(`${rootURL}/items/${id}`)
     }
-    static async getAllProductsByCategory(name: string, offset: number, limit: number): Promise<AxiosResponse<IProduct[]>> {
-        return axios.get<IProduct[]>(`${rootURL}/items/?param=${name}&offset=${offset}&limit=${limit}`)
+    static async getAllProductsByCategory(name: string, offset: number, limit: number, config: any): Promise<AxiosResponse<IProduct[]>> {
+        return axios.get<IProduct[]>(`${rootURL}/items/?param=${name}&offset=${offset}&limit=${limit}`, config)
     }
-    static async getProductsBySearchQuery(searchQuery: string, offset: number, limit: number): Promise<AxiosResponse<IProduct[]>> {
-        return axios.get<IProduct[]>(`${rootURL}/items/search/?param=${searchQuery}&offset=${offset}&limit=${limit}`)
+    static async getProductsBySearchQuery(searchQuery: string, offset: number, limit: number, config: any): Promise<AxiosResponse<IProduct[]>> {
+        return axios.get<IProduct[]>(`${rootURL}/items/search/?param=${searchQuery}&offset=${offset}&limit=${limit}`, config)
     }
     static async createProduct(product: any, config: any): Promise<AxiosResponse> {
         return axios.post<IProduct>(`${rootURL}/items/create`, product, config)
@@ -30,8 +30,8 @@ export default class ProductService {
         }
         return axios.get<number>(`${rootURL}/items/quantity`)
     }
-    static async getFavListQuantity(userID?: string): Promise<AxiosResponse> {
-        return axios.get<number>(`${rootURL}/items/quantityFav/${userID}`)
+    static async getFavListQuantity(userID: string, config: any): Promise<AxiosResponse> {
+        return axios.get(`${rootURL}/items/quantityFav/${userID}`, config)
     }
     static async deleteProduct(id: string, config: any): Promise<AxiosResponse> {
         return axios.delete<IProduct>(`${rootURL}/items/delete/${id}`, config)
