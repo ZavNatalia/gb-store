@@ -7,5 +7,6 @@ export type IProduct = {
     category: ICategory,
     description: string,
     image: string[],
-    vendor: string
+    vendor: string,
+    isFavourite: boolean
 }

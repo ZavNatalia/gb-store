@@ -15,7 +15,7 @@ import {IProduct} from "../models/IProduct";
 import {toCurrency} from "../utilities/formatCurrency";
 import Counter from "../UI/Counter";
 import {useCart} from "../context/CartContext";
-import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
+import {FavoriteSwitcher} from "../UI/FavoriteSwitcher";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
 import AddEditProductDrawer from "../modals/AddEditProductDrawer";
@@ -27,7 +27,6 @@ import ErrorMessage from "../UI/ErrorMessage";
 import CategoryService from "../api/CategoryService";
 import ProductService from "../api/ProductService";
 import {AiOutlineReload} from 'react-icons/ai';
-import {isFav} from "../components/product/ProductItem";
 import {useCustomer} from "../context/CustomerContext";
 import {getToken} from "../utilities/local-storage-handling";
 
@@ -109,6 +108,31 @@ export const Product = () => {
                 await ProductService.deleteProduct(productId, config);
                 ToastSuccess('Товар был удалён');
                 navigate(`/${currentCategory?.name?.toLowerCase() ?? ''}`)
+            } catch (e: any) {
+                ToastError(e?.message);
+            }
+        }
+    }
+
+    const onAddFavorite = async () => {
+        if (productId) {
+            try {
+                const config = {
+                    headers: {Authorization: `Bearer ${getToken()}`}
+                };
+                await ProductService.addFavoriteProduct(customer.id, productId, config);
+            } catch (e: any) {
+                ToastError(e?.message);
+            }
+        }
+    }
+    const onDeleteFavorite = async () => {
+        if (productId) {
+            try {
+                const config = {
+                    headers: {Authorization: `Bearer ${getToken()}`}
+                };
+                await ProductService.deleteFavoriteProduct(customer.id, productId, config);
             } catch (e: any) {
                 ToastError(e?.message);
             }

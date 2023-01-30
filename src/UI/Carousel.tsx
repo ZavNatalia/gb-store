@@ -37,7 +37,7 @@ const Carousel = ({images}: CarouselProps) => {
                 position="absolute"
                 size='lg'
                 left='10px'
-                top='40%'
+                top='50%'
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
                 hidden={images.length <=1}
@@ -53,7 +53,7 @@ const Carousel = ({images}: CarouselProps) => {
                 position="absolute"
                 size='lg'
                 right='10px'
-                top='40%'
+                top='50%'
                 transform={'translate(0%, -50%)'}
                 zIndex={2}
                 hidden={images.length <=1}

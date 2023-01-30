@@ -3,14 +3,15 @@ import {IconButton} from "@chakra-ui/react";
 import {FaHeart, FaRegHeart} from "react-icons/fa";
 import {useCustomer} from "../context/CustomerContext";
 
-interface FavouriteSwitcherProps {
-    isFav: boolean
+interface FavoriteSwitcherProps {
+    isFav: boolean,
+    onAddFavorite: () => void
+    onDeleteFavorite: () => void
 }
 
-export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
+export const FavoriteSwitcher = ({isFav, onAddFavorite, onDeleteFavorite}: FavoriteSwitcherProps) => {
     const {isAdmin, isAuth} = useCustomer();
-    const onAddFavourite = () => {}
-    const onDeleteFavourite = () => {}
+
     return (
         <IconButton icon={isFav ? <FaHeart/> : <FaRegHeart/>}
                     aria-label='Редактировать'
@@ -22,7 +23,7 @@ export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
                     _hover={{color: isFav ? 'gray.500' : 'red'}}
                     _focus={{boxShadow: 'none'}}
                     isDisabled={isAdmin || !isAuth}
-                    onClick={() => isFav ? onDeleteFavourite() : onAddFavourite()}
+                    onClick={() => isFav ? onDeleteFavorite() : onAddFavorite()}
         />
     );
 };

@@ -5,7 +5,7 @@ import {useCart} from "../../context/CartContext";
 import {IProduct} from '../../models/IProduct';
 import {toCurrency} from "../../utilities/formatCurrency";
 import Counter from "../../UI/Counter";
-import {FavouriteSwitcher} from "../../UI/FavouriteSwitcher";
+import {FavoriteSwitcher} from "../../UI/FavoriteSwitcher";
 import {useCustomer} from "../../context/CustomerContext";
 import {getToken} from "../../utilities/local-storage-handling";
 import ProductService from "../../api/ProductService";
@@ -16,12 +16,33 @@ interface ProductItemProps {
     product: IProduct
 }
 
-export const isFav = false;
-
 export const ProductItem: FC<ProductItemProps> = ({product}) => {
     const {id, image, price, title} = product;
     const {getItemQuantity} = useCart();
-    const {isAdmin, isAuth} = useCustomer();
+    const {isAdmin, isAuth, customer} = useCustomer();
+
+    const onAddFavorite = async () => {
+        try {
+            const config = {
+                headers: {Authorization: `Bearer ${getToken()}`}
+            };
+            await ProductService.addFavoriteProduct(customer.id, id, config);
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
+    }
+    const onDeleteFavorite = async () => {
+
+        try {
+            const config = {
+                headers: {Authorization: `Bearer ${getToken()}`}
+            };
+            await ProductService.deleteFavoriteProduct(customer.id, id, config);
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
+    }
+
 
     return (
         <Flex
@@ -39,9 +60,10 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             position='relative'
         >
             {isAuth && <Box position='absolute'
-                  right={2}
-                  top={2}>
-                <FavouriteSwitcher isFav={isFav}/>
+                            right={2}
+                            top={2}>
+                <FavoriteSwitcher isFav={product.isFavourite} onAddFavorite={onAddFavorite}
+                                  onDeleteFavorite={onDeleteFavorite}/>
             </Box>}
             <Box py={4}>
                 <Link
