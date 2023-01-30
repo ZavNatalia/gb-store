@@ -24,6 +24,10 @@ export const CategoryList = () => {
     const [selectedCategory, setSelectedCategory] = useState({} as ICategory);
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
     const fetchCategories = async () => {
         try {
             setIsLoading(true);
@@ -35,10 +39,6 @@ export const CategoryList = () => {
             setIsLoading(false);
         }
     };
-
-    useEffect(() => {
-        fetchCategories();
-    }, []);
 
     const onRemoveCategory = async (id: number) => {
         try {

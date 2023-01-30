@@ -70,7 +70,9 @@ export const Product = () => {
 
     useEffect(() => {
         getProduct();
-        fetchCategories();
+        if (isAdmin) {
+            fetchCategories();
+        }
     }, []);
 
     const onEditProduct = async (result: IProduct) => {

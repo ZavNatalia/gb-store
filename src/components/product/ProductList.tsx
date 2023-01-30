@@ -43,7 +43,6 @@ const ProductList = () => {
 
     useEffect(() => {
         updateList();
-        fetchQuantity();
     }, [currentCategory, searchQuery, isAuth]);
 
     useEffect(() => {
@@ -54,7 +53,7 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         setError('');
-        if (products.length < quantity) {
+        if (products.length <= quantity) {
             try {
                 const config = getHeaderConfig();
                 let res;
@@ -65,7 +64,8 @@ const ProductList = () => {
                         ? await ProductService.getPaginatedProducts(offset, limit, config)
                         : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit, config);
                 }
-                setProducts([...products, ...res.data]);
+                setProducts([...products, ...res.data.items]);
+                setQuantity(res.data.quantity);
                 setOffset(prevState => prevState + limit);
             } catch (e: any) {
                 if (products?.length > 0) {
@@ -81,23 +81,6 @@ const ProductList = () => {
         }
     };
 
-    const fetchQuantity = async () => {
-        setError('');
-        try {
-            const {data} = await ProductService.getQuantity(currentCategory.name, searchQuery);
-            setQuantity(data.quantity);
-            if (data.quantity > 0) {
-                setIsLoading(true);
-            }
-        } catch (e: any) {
-            if (products?.length > 0) {
-                ToastError('Не удалось загрузить список товаров');
-            } else {
-                setError('Не удалось загрузить список товаров. Повторите попытку позже.');
-            }
-        }
-    };
-
     const updateList = () => {
         window.scroll({
             top: 0,
@@ -105,6 +88,7 @@ const ProductList = () => {
         });
         setProducts([]);
         setOffset(0);
+        setIsLoading(true);
     }
 
     useEffect(() => {
@@ -146,7 +130,6 @@ const ProductList = () => {
                 onChangeCategory(values.category.id);
             } else {
                 updateList();
-                fetchQuantity();
             }
             ToastSuccess('Товар был успешно добавлен');
             onClose();
@@ -234,7 +217,6 @@ const ProductList = () => {
                                             onClick={() => {
                                                 setSearchQuery('');
                                                 updateList();
-                                                fetchQuantity();
                                             }}/>
                             }
                             <Button size='m' px={4} py={1} colorScheme='blackAlpha' onClick={() => {

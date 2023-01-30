@@ -12,13 +12,14 @@ import SkeletonList from "../../UI/SkeletonList";
 import {ProductItem} from '../product/ProductItem';
 import ErrorMessage from '../../UI/ErrorMessage';
 import {slashEscape} from "../../utilities/RegExpURL";
-import { getHeaderConfig } from '../../utilities/getHeaderConfig';
+import {getHeaderConfig} from '../../utilities/getHeaderConfig';
+import {useCustomer} from "../../context/CustomerContext";
 
 const FavoritesList = () => {
     const [list, setList] = useState([] as IProduct[]);
     const [favListQuantity, setFavListQuantity] = useState(0);
     const {currentCategory} = useCategory();
-
+    const {isAuth} = useCustomer();
     const [error, setError] = useState('');
     const [offset, setOffset] = useState(0);
     const [limit] = useState(8);
@@ -27,8 +28,7 @@ const FavoritesList = () => {
 
     useEffect(() => {
         updateList();
-        fetchFavListQuantity();
-    }, [])
+    }, [isAuth])
 
     useEffect(() => {
         if (isLoading) {
@@ -38,50 +38,25 @@ const FavoritesList = () => {
 
     const fetchFavList = async () => {
         setError('');
-        if (list.length < favListQuantity) {
-            try {
+        try {
+            if (list.length <= favListQuantity) {
                 const config = getHeaderConfig();
                 const userId = getUserId();
                 if (userId) {
                     const {data} = await ProductService.getFavoriteProducts(userId, limit, offset, config)
-                    setList([...list, ...data]);
+                    setList([...list, ...data.items]);
                     setOffset(prevState => prevState + limit);
-                }
-
-            } catch (e: any) {
-                if (list?.length > 0) {
-                    ToastError('Не удалось загрузить список избранных товаров');
-                } else {
-                    setError('Не удалось загрузить список избранных товаров. Повторите попытку позже.');
-                }
-            } finally {
-                setIsLoading(false);
-            }
-        } else {
-            setIsLoading(false);
-        }
-    };
-
-    const fetchFavListQuantity = async () => {
-        setError('');
-        try {
-            const userId = getUserId();
-            if (userId) {
-                const config = getHeaderConfig();
-                const {data} = await ProductService.getFavListQuantity(userId, config);
-                setFavListQuantity(data.quantity);
-                if (data.quantity > 0) {
-                    setIsLoading(true);
-                } else {
-                    setIsLoading(false);
+                    setFavListQuantity(data.quantity);
                 }
             }
         } catch (e: any) {
             if (list?.length > 0) {
-                ToastError('Не удалось загрузить список товаров');
+                ToastError('Не удалось загрузить список избранных товаров');
             } else {
-                setError('Не удалось загрузить список товаров. Повторите попытку позже.');
+                setError('Не удалось загрузить список избранных товаров. Повторите попытку позже.');
             }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -92,6 +67,7 @@ const FavoritesList = () => {
         });
         setList([]);
         setOffset(0);
+        setIsLoading(true);
     }
 
     useEffect(() => {
@@ -105,7 +81,7 @@ const FavoritesList = () => {
         const scrollHeight = e.target.documentElement.scrollHeight;
         const scrollTop = e.target.documentElement.scrollTop;
         const innerHeight = window.innerHeight;
-        if (scrollHeight - (scrollTop + innerHeight) < 150 && favListQuantity > 0 && offset < favListQuantity) {
+        if (scrollHeight - (scrollTop + innerHeight) < 100 && favListQuantity > 0 && offset < favListQuantity) {
             setIsLoading(true)
         }
     }
