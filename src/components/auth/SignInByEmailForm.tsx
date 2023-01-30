@@ -6,7 +6,6 @@ import {ICustomer} from "../../models/ICustomer";
 
 interface SignInByEmailFormProps {
     signInByEmail: (data: Partial<ICustomer>) => void,
-    isLoading: boolean
 }
 
 export interface SignInByEmailFormValues {
@@ -14,7 +13,7 @@ export interface SignInByEmailFormValues {
     password: string;
 }
 
-const SignInByEmailForm = ({signInByEmail, isLoading}: SignInByEmailFormProps) => {
+const SignInByEmailForm = ({signInByEmail}: SignInByEmailFormProps) => {
     const ValidationSchema = Yup.object().shape({
         email: Yup.string()
             .email('Пожалуйста, введите корректный  email')
@@ -40,7 +39,7 @@ const SignInByEmailForm = ({signInByEmail, isLoading}: SignInByEmailFormProps) =
                 setSubmitting(false);
             }}
         >
-            {({isValid, dirty}) => (
+            {({isValid, dirty, isSubmitting}) => (
                 <Form>
                     <Stack spacing={4} textAlign='left'>
                         <FormControl>
@@ -75,7 +74,7 @@ const SignInByEmailForm = ({signInByEmail, isLoading}: SignInByEmailFormProps) =
                         </FormControl>
                         <Button type='submit'
                                 colorScheme='yellow'
-                                isLoading={isLoading}
+                                isLoading={isSubmitting}
                                 isDisabled={!isValid || !dirty}>
                             Войти
                         </Button>

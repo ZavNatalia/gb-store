@@ -5,7 +5,6 @@ import * as Yup from "yup";
 
 interface SignUpFormProps {
     signUpHandler: (data: SignUpFormValues) => void;
-    isLoading: boolean
 }
 
 export interface SignUpFormValues {
@@ -14,7 +13,7 @@ export interface SignUpFormValues {
     password: string;
 }
 
-const SignUpForm = ({signUpHandler, isLoading}: SignUpFormProps) => {
+const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
     const ValidationSchema = Yup.object().shape({
         firstname: Yup.string()
             .required('Пожалуйста, введите вашe имя'),
@@ -44,7 +43,7 @@ const SignUpForm = ({signUpHandler, isLoading}: SignUpFormProps) => {
                 setSubmitting(false);
             }}
         >
-            {({isValid, dirty}) => (
+            {({isValid, dirty, isSubmitting}) => (
                 <Form>
                     <Stack spacing={4} textAlign='left'>
                         <FormControl>
@@ -94,7 +93,7 @@ const SignUpForm = ({signUpHandler, isLoading}: SignUpFormProps) => {
                         </FormControl>
                         <Button type='submit'
                                 colorScheme='yellow'
-                                isLoading={isLoading}
+                                isLoading={isSubmitting}
                                 isDisabled={!isValid || !dirty}>
                             Зарегистрироваться
                         </Button>

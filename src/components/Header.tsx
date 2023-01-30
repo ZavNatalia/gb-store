@@ -291,13 +291,11 @@ export const Header = () => {
                            onEditUserRole={onEditUserRole}/>
 
             <SignIn isOpen={signInDisclosure.isOpen}
-                    isLoading={isLoading}
                     onClose={signInDisclosure.onClose}
                     onOpenSignUp={signUpDisclosure.onOpen}
                     signInHandler={signInBySocial}
                     signInByEmail={signInByEmail}/>
             <SignUp isOpen={signUpDisclosure.isOpen}
-                    isLoading={isLoading}
                     onClose={signUpDisclosure.onClose}
                     onOpenSignIn={signInDisclosure.onOpen}
                     signUpHandler={signUpHandler}/>
