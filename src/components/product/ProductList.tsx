@@ -42,12 +42,9 @@ const ProductList = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        if (!!currentCategory.name) {
-            setSearchQuery('');
-        }
         updateList();
         fetchQuantity();
-    }, [currentCategory]);
+    }, [currentCategory, searchQuery]);
 
     useEffect(() => {
         if (isLoading) {
@@ -170,6 +167,9 @@ const ProductList = () => {
 
     const handleSearchQueryChange = (e: any) => {
         setSearchQuery(e.target.value)
+        if (e.target.value.length > 0) {
+            onChangeCurrentCategory({} as ICategory)
+        }
     }
 
     const NoContent = () => {
