@@ -1,4 +1,17 @@
-import {Box, Button, Center, Flex, Heading, SimpleGrid, Text, useDisclosure} from '@chakra-ui/react';
+import {
+    Box,
+    Button,
+    Center,
+    Flex,
+    Heading,
+    IconButton,
+    Input,
+    InputGroup,
+    InputRightElement,
+    SimpleGrid,
+    Text,
+    useDisclosure
+} from '@chakra-ui/react';
 import React, {useEffect, useMemo, useState} from 'react';
 import {ProductItem} from "./ProductItem";
 import {IProduct} from '../../models/IProduct';
@@ -8,11 +21,13 @@ import {GrAdd} from "react-icons/gr";
 import AddEditProductDrawer from '../../modals/AddEditProductDrawer';
 import {isEmpty} from "../../utilities/isEmpty";
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
-import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
 import ProductService from "../../api/ProductService";
 import {useCustomer} from "../../context/CustomerContext";
 import {getToken} from "../../utilities/local-storage-handling";
+import {ICategory} from "../../models/ICategory";
+import {MdClose} from 'react-icons/md';
+
 
 const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
@@ -24,8 +39,12 @@ const ProductList = () => {
     const {isOpen, onOpen, onClose} = useDisclosure()
     const [isLoading, setIsLoading] = useState(false);
     const [quantity, setQuantity] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
+        if (!!currentCategory.name) {
+            setSearchQuery('');
+        }
         updateList();
         fetchQuantity();
     }, [currentCategory]);
@@ -40,10 +59,15 @@ const ProductList = () => {
         setError('');
         if (products.length < quantity) {
             try {
-                const {data} = isEmpty(currentCategory)
-                    ? await ProductService.getPaginatedProducts(offset, limit)
-                    : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit)
-                setProducts([...products, ...data]);
+                let res;
+                if (searchQuery) {
+                    res = await ProductService.getProductsBySearchQuery(searchQuery, offset, limit)
+                } else {
+                    res = isEmpty(currentCategory)
+                        ? await ProductService.getPaginatedProducts(offset, limit)
+                        : await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit);
+                }
+                setProducts([...products, ...res.data]);
                 setOffset(prevState => prevState + limit);
             } catch (e: any) {
                 if (products?.length > 0) {
@@ -62,7 +86,7 @@ const ProductList = () => {
     const fetchQuantity = async () => {
         setError('');
         try {
-            const {data} = await ProductService.getQuantity(currentCategory.name);
+            const {data} = await ProductService.getQuantity(currentCategory.name, searchQuery);
             setQuantity(data.quantity);
             if (data.quantity > 0) {
                 setIsLoading(true);
@@ -105,7 +129,7 @@ const ProductList = () => {
     const onChangeCategory = (id: number) => {
         const selectedCategory = categories.find(c => c.id == id);
         if (selectedCategory) {
-            onChangeCurrentCategory(selectedCategory)
+            onChangeCurrentCategory(selectedCategory);
         }
     }
 
@@ -144,6 +168,10 @@ const ProductList = () => {
         </>
     ), [products]);
 
+    const handleSearchQueryChange = (e: any) => {
+        setSearchQuery(e.target.value)
+    }
+
     const NoContent = () => {
         return isLoading ? <SkeletonList amount={8}/> : (
             <Center h='50vh'>
@@ -159,16 +187,6 @@ const ProductList = () => {
                     <ErrorMessage message={error} borderRadius='2xl'/>
                 </Box>
             </Center>
-        }
-    }
-
-    const getLoader = () => {
-        if (products.length > 0) {
-            return (
-                <Center mt={10}>
-                    <Loader/>
-                </Center>
-            )
         }
     }
 
@@ -201,11 +219,38 @@ const ProductList = () => {
                         </Button>
                     }
                 </Flex>
+                {!error && <Flex my={6}>
+                    <InputGroup size='lg'>
+                        <Input
+                            pr='160px'
+                            type='text'
+                            placeholder='Поиск по товарам...'
+                            value={searchQuery}
+                            focusBorderColor={'yellow.500'}
+                            onChange={handleSearchQueryChange}
+                        />
+                        <InputRightElement width='160px' px={2} justifyContent='flex-end'>
+                            {searchQuery.length > 0 &&
+                                <IconButton size='lg' variant='link'
+                                            aria-label='Clear' icon={<MdClose/>}
+                                            onClick={() => {
+                                                setSearchQuery('');
+                                                updateList();
+                                                fetchQuantity();
+                                            }}/>
+                            }
+                            <Button size='m' px={4} py={1} colorScheme='blackAlpha' onClick={() => {
+                                onChangeCurrentCategory({} as ICategory)
+                            }}>
+                                Поиск
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                </Flex>}
                 <SimpleGrid minChildWidth='250px' width='100%' spacing='10' placeItems='center'>
                     {!error && products.length === 0 && <NoContent/>}
                     {memoizedList}
                 </SimpleGrid>
-                {isLoading && getLoader()}
                 {error && getErrorMessage()}
             </>
             <AddEditProductDrawer isEdit={false} isOpen={isOpen} onClose={onClose} onSubmit={onAddNewProduct}/>

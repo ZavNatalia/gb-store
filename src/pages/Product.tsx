@@ -33,7 +33,7 @@ import {getToken} from "../utilities/local-storage-handling";
 
 export const Product = () => {
     const {productId} = useParams();
-    const {isAdmin} = useCustomer();
+    const {isAdmin, customer} = useCustomer();
     const {getItemQuantity} = useCart();
     const [error, setError] = useState('');
     const [product, setProduct] = useState<IProduct>({} as IProduct);
