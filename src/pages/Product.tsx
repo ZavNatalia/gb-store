@@ -196,7 +196,7 @@ export const Product = () => {
                                 <Flex flex={1} gap={3} textAlign='right' alignItems='center'>
                                     <Counter product={product} quantity={getItemQuantity(product.id)}
                                              buttonColor='yellow.400'/>
-                                    <FavouriteSwitcher isFav={isFav}/>
+                                    <FavoriteSwitcher onAddFavorite={onAddFavorite} onDeleteFavorite={onDeleteFavorite} isFav={product.isFavourite}/>
                                 </Flex>
                             </Flex>
                             <Box width='100%'>
