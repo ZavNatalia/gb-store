@@ -107,7 +107,6 @@ const ProductList = () => {
         setOffset(0);
     }
 
-
     useEffect(() => {
         document.addEventListener('scroll', scrollHandler)
         return function () {

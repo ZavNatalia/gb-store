@@ -1,5 +1,5 @@
 import {Box, Flex, Image, Stack, Text} from '@chakra-ui/react';
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Link} from 'react-router-dom';
 import {useCart} from "../../context/CartContext";
 import {IProduct} from '../../models/IProduct';
@@ -20,20 +20,22 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
     const {id, image, price, title} = product;
     const {getItemQuantity} = useCart();
     const {isAdmin, isAuth, customer} = useCustomer();
+    const [isFav, setIsFav] = useState(product?.isFavourite)
 
     const onAddFavorite = async () => {
         try {
             const config = getHeaderConfig();
             await ProductService.addFavoriteProduct(customer.id, id, config);
+            setIsFav(true);
         } catch (e: any) {
             ToastError(e?.message);
         }
     }
     const onDeleteFavorite = async () => {
-
         try {
             const config = getHeaderConfig();
             await ProductService.deleteFavoriteProduct(customer.id, id, config);
+            setIsFav(false);
         } catch (e: any) {
             ToastError(e?.message);
         }
@@ -58,7 +60,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             {isAuth && <Box position='absolute'
                             right={2}
                             top={2}>
-                <FavoriteSwitcher isFav={product.isFavourite} onAddFavorite={onAddFavorite}
+                <FavoriteSwitcher isFav={isFav} onAddFavorite={onAddFavorite}
                                   onDeleteFavorite={onDeleteFavorite}/>
             </Box>}
             <Box py={4}>
