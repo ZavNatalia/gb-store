@@ -7,10 +7,7 @@ import {toCurrency} from "../../utilities/formatCurrency";
 import Counter from "../../UI/Counter";
 import {FavoriteSwitcher} from "../../UI/FavoriteSwitcher";
 import {useCustomer} from "../../context/CustomerContext";
-import ProductService from "../../api/ProductService";
-import {ToastError} from "../../utilities/error-handling";
 import {slashEscape} from "../../utilities/RegExpURL";
-import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 
 interface ProductItemProps {
     product: IProduct
@@ -18,29 +15,13 @@ interface ProductItemProps {
 
 export const ProductItem: FC<ProductItemProps> = ({product}) => {
     const {id, image, price, title} = product;
-    const {getItemQuantity} = useCart();
+    const [isFav, setIsFav] = useState(product?.isFavourite);
     const {isAdmin, isAuth, customer} = useCustomer();
-    const [isFav, setIsFav] = useState(product?.isFavourite)
+    const {getItemQuantity} = useCart();
 
-    const onAddFavorite = async () => {
-        try {
-            const config = getHeaderConfig();
-            await ProductService.addFavoriteProduct(customer.id, id, config);
-            setIsFav(true);
-        } catch (e: any) {
-            ToastError(e?.message);
-        }
+    const handleSetIsFav = (value: boolean) => {
+        setIsFav(value);
     }
-    const onDeleteFavorite = async () => {
-        try {
-            const config = getHeaderConfig();
-            await ProductService.deleteFavoriteProduct(customer.id, id, config);
-            setIsFav(false);
-        } catch (e: any) {
-            ToastError(e?.message);
-        }
-    }
-
 
     return (
         <Flex
@@ -60,14 +41,13 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             {isAuth && <Box position='absolute'
                             right={2}
                             top={2}>
-                <FavoriteSwitcher isFav={isFav} onAddFavorite={onAddFavorite}
-                                  onDeleteFavorite={onDeleteFavorite}/>
+                <FavoriteSwitcher isFav={isFav} customerId={customer.id} productId={id} handleSetIsFav={handleSetIsFav}/>
             </Box>}
             <Box py={4}>
                 <Link
                     to={isAdmin
-                        ? `/edit/${id}/${slashEscape(title)}`
-                        : `/${slashEscape(product.category?.name)?.toLowerCase()}/${product.id}/${slashEscape(product.title)}`}>
+                        ? `/edit/${id}`
+                        : `/${slashEscape(product.category?.name)?.toLowerCase()}/${product.id}`}>
                     <Flex height='250px' width='100%' justifyContent='center'>
                         {image && <Image
                             maxH='100%'
@@ -87,7 +67,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
                     </Stack>
                 </Link>
                 <Box px={4}>
-                    <Counter product={product} quantity={getItemQuantity(product.id)}/>
+                    <Counter product={product} quantity={getItemQuantity(id)}/>
                 </Box>
             </Box>
         </Flex>

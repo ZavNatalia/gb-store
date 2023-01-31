@@ -29,26 +29,40 @@ import ProductService from "../api/ProductService";
 import {AiOutlineReload} from 'react-icons/ai';
 import {useCustomer} from "../context/CustomerContext";
 import {getToken} from "../utilities/local-storage-handling";
+import {getHeaderConfig} from "../utilities/getHeaderConfig";
 
 export const Product = () => {
     const {productId} = useParams();
-    const {isAdmin, customer} = useCustomer();
-    const {getItemQuantity} = useCart();
-    const [error, setError] = useState('');
-    const [product, setProduct] = useState<IProduct>({} as IProduct);
-    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
     const editDisclosure = useDisclosure();
     const removeDisclosure = useDisclosure();
+
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [isFav, setIsFav] = useState(false);
+    const [product, setProduct] = useState<IProduct>({} as IProduct);
+
     const {onChangeCategories, currentCategory} = useCategory();
-    const navigate = useNavigate();
+    const {isAdmin, customer} = useCustomer();
+    const {getItemQuantity} = useCart();
+
+    useEffect(() => {
+        getProduct();
+        if (isAdmin) {
+            fetchCategories();
+        }
+    }, []);
+
 
     const getProduct = async () => {
         if (productId) {
             setError('');
             setIsLoading(true);
             try {
-                const {data} = await ProductService.getProduct(productId);
+                const config = getHeaderConfig();
+                const {data} = await ProductService.getProduct(productId, config);
                 setProduct(data);
+                setIsFav(data.isFavourite);
             } catch (e: any) {
                 setError(e?.message);
             } finally {
@@ -68,19 +82,10 @@ export const Product = () => {
         }
     };
 
-    useEffect(() => {
-        getProduct();
-        if (isAdmin) {
-            fetchCategories();
-        }
-    }, []);
-
     const onEditProduct = async (result: IProduct) => {
         if (productId) {
             try {
-                const config = {
-                    headers: {Authorization: `Bearer ${getToken()}`}
-                };
+                const config = getHeaderConfig();
                 await ProductService.updateProduct(
                     {
                         ...product,
@@ -116,29 +121,8 @@ export const Product = () => {
         }
     }
 
-    const onAddFavorite = async () => {
-        if (productId) {
-            try {
-                const config = {
-                    headers: {Authorization: `Bearer ${getToken()}`}
-                };
-                await ProductService.addFavoriteProduct(customer.id, productId, config);
-            } catch (e: any) {
-                ToastError(e?.message);
-            }
-        }
-    }
-    const onDeleteFavorite = async () => {
-        if (productId) {
-            try {
-                const config = {
-                    headers: {Authorization: `Bearer ${getToken()}`}
-                };
-                await ProductService.deleteFavoriteProduct(customer.id, productId, config);
-            } catch (e: any) {
-                ToastError(e?.message);
-            }
-        }
+    const handleSetIsFav = (value: boolean) => {
+        setIsFav(value)
     }
 
     return (
@@ -198,7 +182,7 @@ export const Product = () => {
                                 <Flex flex={1} gap={3} textAlign='right' alignItems='center'>
                                     <Counter product={product} quantity={getItemQuantity(product.id)}
                                              buttonColor='yellow.400'/>
-                                    <FavoriteSwitcher onAddFavorite={onAddFavorite} onDeleteFavorite={onDeleteFavorite} isFav={product.isFavourite}/>
+                                    <FavoriteSwitcher customerId={customer.id} productId={product.id} isFav={isFav} handleSetIsFav={handleSetIsFav}/>
                                 </Flex>
                             </Flex>
                             <Box width='100%'>

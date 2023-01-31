@@ -33,13 +33,15 @@ const ProductList = () => {
     const [products, setProducts] = useState<IProduct[]>([]);
     const [error, setError] = useState('');
     const [offset, setOffset] = useState(0);
-    const [limit] = useState(8);
-    const {isAdmin, isAuth} = useCustomer();
-    const {currentCategory, onChangeCurrentCategory, categories} = useCategory();
-    const {isOpen, onOpen, onClose} = useDisclosure()
     const [isLoading, setIsLoading] = useState(false);
     const [quantity, setQuantity] = useState(0);
     const [searchQuery, setSearchQuery] = useState('');
+    const limit = 8;
+
+    const {isAdmin, isAuth} = useCustomer();
+    const {currentCategory, onChangeCurrentCategory, categories} = useCategory();
+    const {isOpen, onOpen, onClose} = useDisclosure();
+
 
     useEffect(() => {
         updateList();

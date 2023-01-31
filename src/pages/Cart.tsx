@@ -100,7 +100,7 @@ export const Cart = () => {
                 {cart?.items.map(({item, quantity}) => (
                     <ListItem key={item.id} pr={2}>
                         <HStack spacing={3}>
-                            <Link to={`/${slashEscape(item.category?.name)}/${item.id}/${slashEscape(item.title)}`}
+                            <Link to={`/${slashEscape(item.category?.name)}/${item.id}`}
                                   style={{display: "flex", alignItems: 'center'}}>
                                 <Flex maxH='110px'
                                       maxW='110px'

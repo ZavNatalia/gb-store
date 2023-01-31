@@ -17,7 +17,7 @@ const CartSidebar = () => {
                     {cart?.items.map(({item, quantity}) => (
                         <ListItem key={item?.id}>
                             <HStack spacing={3}>
-                                <Link to={`/${slashEscape(item.category?.name)}/${item?.id}/${slashEscape(item?.title)}`}
+                                <Link to={`/${slashEscape(item.category?.name)}/${item?.id}`}
                                       style={{display: 'flex', alignItems: 'center', flex: 1}}>
                                     <Flex maxH='100px'
                                           maxW='100px'

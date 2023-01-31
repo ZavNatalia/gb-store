@@ -3,10 +3,10 @@ import * as pages from '../pages/index'
 
 export enum RouteNames {
     HOME = '/',
-    EDIT_PRODUCT = '/edit/:productId/:productTitle',
+    EDIT_PRODUCT = '/edit/:productId',
     ALL_PRODUCTS = '/all',
     CATEGORY = '/:currentCategory',
-    PRODUCT = '/:category/:productId/:productTitle',
+    PRODUCT = '/:categoryName/:productId',
     FAVOURITES = '/favorites',
     CART = '/cart',
     ORDERS = '/orders',

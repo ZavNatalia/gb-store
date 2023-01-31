@@ -2,15 +2,39 @@ import React from 'react';
 import {IconButton} from "@chakra-ui/react";
 import {FaHeart, FaRegHeart} from "react-icons/fa";
 import {useCustomer} from "../context/CustomerContext";
+import {getHeaderConfig} from "../utilities/getHeaderConfig";
+import ProductService from "../api/ProductService";
+import {ToastError} from "../utilities/error-handling";
 
 interface FavoriteSwitcherProps {
     isFav: boolean,
-    onAddFavorite: () => void
-    onDeleteFavorite: () => void
+    productId: string,
+    customerId: string,
+    handleSetIsFav: (value: boolean) => void
 }
 
-export const FavoriteSwitcher = ({isFav, onAddFavorite, onDeleteFavorite}: FavoriteSwitcherProps) => {
+export const FavoriteSwitcher = ({isFav, productId, customerId, handleSetIsFav}: FavoriteSwitcherProps) => {
     const {isAdmin, isAuth} = useCustomer();
+
+    const onAddFavorite = async () => {
+        try {
+            const config = getHeaderConfig();
+            await ProductService.addFavoriteProduct(customerId, productId, config);
+            handleSetIsFav(true);
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
+    }
+
+    const onDeleteFavorite = async () => {
+        try {
+            const config = getHeaderConfig();
+            await ProductService.deleteFavoriteProduct(customerId, productId, config);
+            handleSetIsFav(false);
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
+    }
 
     return (
         <IconButton icon={isFav ? <FaHeart/> : <FaRegHeart/>}

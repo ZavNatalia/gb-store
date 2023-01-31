@@ -21,10 +21,9 @@ const FavoritesList = () => {
     const {currentCategory} = useCategory();
     const {isAuth} = useCustomer();
     const [error, setError] = useState('');
-    const [offset, setOffset] = useState(0);
-    const [limit] = useState(8);
     const [isLoading, setIsLoading] = useState(false);
-
+    const [offset, setOffset] = useState(0);
+    const limit = 8;
 
     useEffect(() => {
         updateList();
