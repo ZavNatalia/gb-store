@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import {rootURL} from "../constants/URLs";
 import {ICart} from "../models/ICart";
+import {IOrder} from "../models/IOrder";
 
 export default class CartService {
     static async getCart(cartId: string, config: any): Promise<AxiosResponse<ICart>> {

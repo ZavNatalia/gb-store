@@ -26,7 +26,7 @@ export const Orders = () => {
             {list.length > 0 ? (
                 <SimpleGrid minChildWidth='210px' width='100%' spacing='6'>
                     {list.map(order => (
-                        <Text>{order.id} - {order.name} - {order.phone}</Text>
+                        <Text>order</Text>
                     ))}
                 </SimpleGrid>
             ) : (
