@@ -1,11 +1,12 @@
-import {CartItem} from "../context/CartContext";
+import {ICart} from "./ICart";
+import {IAddress} from "./ICustomer";
 
 export type IOrder = {
-    id?: number,
-    name: string,
-    email: string,
-    address: string,
-    cartItems: CartItem[],
-    comment?: string,
-    phone: string
+    address: IAddress,
+    cart: ICart,
+    user: {
+        email: string,
+        id: string,
+        role: string
+    }
 }

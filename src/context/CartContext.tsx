@@ -3,7 +3,8 @@ import {IProduct} from "../models/IProduct";
 import CartService from "../api/CartService";
 import {ToastError, ToastInfo} from "../utilities/error-handling";
 import {ICart} from "../models/ICart";
-import {getCartId, getToken, removeCartId} from "../utilities/local-storage-handling";
+import {getCartId} from "../utilities/local-storage-handling";
+import {getHeaderConfig} from "../utilities/getHeaderConfig";
 
 type CartProviderProps = {
     children: ReactNode
@@ -24,7 +25,6 @@ type CartContextProps = {
     getDeliveryCost: () => number
     onAddItemToCart: (id: string) => void
     onDeleteItemFromCart: (id: string) => void
-    onRemoveCart: () => void
     onEmptyCartContext: () => void
     onFetchCart: (id: string) => void
     getCartQuantity: () => number
@@ -90,9 +90,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const onFetchCart = async (cartID: string) => {
         try {
-            const config = {
-                headers: { Authorization: `Bearer ${getToken()}` }
-            };
+            const config = getHeaderConfig();
             const {data} = await CartService.getCart(cartID, config);
             setCart(data);
         } catch (e: any) {
@@ -100,26 +98,10 @@ export const CartProvider = ({children}: CartProviderProps) => {
         }
     };
 
-    const onRemoveCart = async () => {
-        if (cartId) {
-            try {
-                const config = {
-                    headers: { Authorization: `Bearer ${getToken()}` }
-                };
-                await CartService.deleteCart(cartId, config);
-                onEmptyCartContext();
-            } catch (e: any) {
-                ToastError(e?.message);
-            }
-        }
-    };
-
     const onAddItemToCart = async (id: string) => {
         if (cartId && id) {
             try {
-                const config = {
-                    headers: { Authorization: `Bearer ${getToken()}` }
-                };
+                const config = getHeaderConfig();
                 await CartService.addItemToCart(cartId, id, config);
                 onFetchCart(cartId);
             } catch (e: any) {
@@ -131,9 +113,7 @@ export const CartProvider = ({children}: CartProviderProps) => {
     const onDeleteItemFromCart = async (id: string) => {
         if (cartId) {
             try {
-                const config = {
-                    headers: { Authorization: `Bearer ${getToken()}` }
-                };
+                const config = getHeaderConfig();
                 await CartService.deleteItemFromCart(cartId, id, config);
                 onFetchCart(cartId);
             } catch (e: any) {
@@ -144,7 +124,6 @@ export const CartProvider = ({children}: CartProviderProps) => {
 
     const onEmptyCartContext = () => {
         setCart({} as ICart);
-        removeCartId();
     }
 
     return (
@@ -160,7 +139,6 @@ export const CartProvider = ({children}: CartProviderProps) => {
                 onFetchCart,
                 getCartQuantity,
                 cart,
-                onRemoveCart,
                 onEmptyCartContext,
                 openCart,
                 closeCart,

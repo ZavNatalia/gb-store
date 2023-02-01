@@ -25,7 +25,15 @@ import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
-import {getToken, removeToken, removeUserId, setCartId, setToken, setUserId} from "../utilities/local-storage-handling";
+import {
+    getToken,
+    removeCartId,
+    removeToken,
+    removeUserId,
+    setCartId,
+    setToken,
+    setUserId
+} from "../utilities/local-storage-handling";
 import {useCustomer} from "../context/CustomerContext";
 import {useCart} from "../context/CartContext";
 import SettingsModal from "../modals/SettingsModal";
@@ -121,6 +129,7 @@ export const Header = () => {
                 onChangeAuth(false);
                 onChangeAdmin(false);
                 onEmptyCartContext();
+                removeCartId();
                 removeToken();
                 removeUserId();
                 ToastSuccess('Вы вышли из аккаунта');

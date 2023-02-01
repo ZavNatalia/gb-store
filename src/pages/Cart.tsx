@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useCart} from "../context/CartContext";
 import {
     Box,
@@ -27,22 +27,32 @@ import Counter from "../UI/Counter";
 import {useCategory} from '../context/CategoryContext';
 import MainBlockLayout from '../UI/MainBlockLayout';
 import {OrderForm} from '../components/cart/OrderForm';
-import {ToastError} from "../utilities/error-handling";
 import {slashEscape} from "../utilities/RegExpURL";
+import {IOrder} from "../models/IOrder";
+import {getHeaderConfig} from "../utilities/getHeaderConfig";
+import CartService from "../api/CartService";
+import {setCartId} from "../utilities/local-storage-handling";
+import {ToastSuccess} from "../utilities/error-handling";
 
 export const Cart = () => {
-    const {cart, getTotalCost, getItemsCost, getDeliveryCost, getTotalQuantity, onRemoveCart} = useCart();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const {cart, getTotalCost, getItemsCost, getDeliveryCost, getTotalQuantity, onEmptyCartContext} = useCart();
     const {currentCategory} = useCategory();
 
-    const handleFormSubmit = async () => {
+    const handleFormSubmit = async (order: IOrder) => {
         try {
-            // TODO: send the order
-            onRemoveCart();
-        } catch (e: any) {
-            ToastError(e?.message);
+            setIsLoading(true);
+            const config = getHeaderConfig();
+            const {data} = await CartService.createOrder(order, config);
+            setCartId(data.newCartId);
+            onEmptyCartContext();
+            ToastSuccess('Спасибо за заказ. На указанный email мы пришлём ссылку на оплату.')
+        } catch (error: any) {
+            setError('Не удалось отправить заказ. Повторите попытку позже.');
         } finally {
-            // создать корзину снова
-            // onFetchCartByUserId(customer.id);
+            setIsLoading(false);
         }
     }
 

@@ -17,13 +17,13 @@ import {Field, Form, Formik, FormikHelpers} from "formik";
 import * as Yup from "yup";
 import {useCart} from "../../context/CartContext";
 import {useCustomer} from "../../context/CustomerContext";
-import {ToastInfo} from "../../utilities/error-handling";
+import {IOrder} from "../../models/IOrder";
 
 interface OrderFormProps {
-    handleFormSubmit: (values: Values) => void
+    handleFormSubmit: (values: IOrder) => void
 }
 
-interface Values {
+export interface OrderValues {
     firstname: string;
     lastname: string;
     zipcode: string;
@@ -31,8 +31,6 @@ interface Values {
     city: string;
     street: string;
     email: string;
-    phone: string;
-    comment: string;
 }
 
 export const OrderForm = ({handleFormSubmit}: OrderFormProps) => {
@@ -56,8 +54,6 @@ export const OrderForm = ({handleFormSubmit}: OrderFormProps) => {
             .required('Пожалуйста, заполните обязательное поле'),
         email: Yup.string()
             .email('Введен некорректный email')
-            .required('Пожалуйста, заполните обязательное поле'),
-        phone: Yup.string()
             .required('Пожалуйста, заполните обязательное поле')
     });
 
@@ -70,21 +66,17 @@ export const OrderForm = ({handleFormSubmit}: OrderFormProps) => {
                 country: customer?.address?.country ?? '',
                 city: customer?.address?.city ?? '',
                 street: customer?.address?.street ?? '',
-                email: customer?.email ?? '',
-                phone: '',
-                comment: '',
+                email: customer?.email ?? ''
             }}
             validationSchema={ValidationSchema}
             onSubmit={(
-                values: Values,
-                {setSubmitting}: FormikHelpers<Values>
+                values: OrderValues,
+                {setSubmitting}: FormikHelpers<OrderValues>
             ) => {
-                const order = Object.assign({}, [cart.items], values);
-                console.log(order);
-                handleFormSubmit(order)
+                const address = {city: values.city, country: values.country, street: values.street, zipcode: values.zipcode}
+                const order: IOrder = {address: address, cart: cart, user: {email: values.email, id: customer.id, role: 'Customer'} }
+                handleFormSubmit(order);
                 setSubmitting(false);
-                ToastInfo('not implemented')
-                // ToastSuccess('Спасибо за заказ. В ближайшее время наши операторы свяжутся с вами для уточнения сроков доставки.')
             }}
         >
             {({isSubmitting, isValid, dirty}) => (
@@ -237,37 +229,6 @@ export const OrderForm = ({handleFormSubmit}: OrderFormProps) => {
                                                        placeholder="Введите ваш адрес электронной почты..."
                                                        isInvalid={meta.touched ? meta.error : false} {...field} />
                                             </InputGroup>
-                                            {meta.touched && meta.error && (
-                                                <Text color='red.400' fontSize='sm' mt={1}>{meta.error}</Text>
-                                            )}
-                                        </>
-                                    )}
-                                </Field>
-                            </FormControl>
-                            <FormControl id="phone">
-                                <Field name="phone">
-                                    {({field, meta}: any) => (
-                                        <>
-                                            <InputGroup>
-                                                <InputLeftAddon children='+7'/>
-                                                <Input type="tel"
-                                                       placeholder="Введите номер телефона..."
-                                                       isInvalid={meta.touched ? meta.error : false} {...field} />
-                                            </InputGroup>
-                                            {meta.touched && meta.error && (
-                                                <Text color='red.400' fontSize='sm' mt={1}>{meta.error}</Text>
-                                            )}
-                                        </>
-                                    )}
-                                </Field>
-                            </FormControl>
-                            <FormControl id="comment">
-                                <Field name="comment">
-                                    {({field, meta}: any) => (
-                                        <>
-                                            <Textarea
-                                                placeholder="Комментарий курьеру" {...field}
-                                            />
                                             {meta.touched && meta.error && (
                                                 <Text color='red.400' fontSize='sm' mt={1}>{meta.error}</Text>
                                             )}
