@@ -18,4 +18,10 @@ export default class CartService {
     static async deleteItemFromCart(cartId: string, id: string, config: any): Promise<AxiosResponse> {
         return axios.delete(`${rootURL}/cart/delete/${cartId}/${id}`, config)
     }
+    static async getOrders(userId: string, config: any): Promise<AxiosResponse> {
+        return axios.get(`${rootURL}/order/list/${userId}`, config)
+    }
+    static async createOrder(order: IOrder, config: any): Promise<AxiosResponse> {
+        return axios.post(`${rootURL}/order/create`, order, config)
+    }
 }
