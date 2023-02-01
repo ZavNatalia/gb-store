@@ -11,14 +11,7 @@ import {
     List,
     ListItem,
     Spacer,
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
-    Text,
-    Tfoot,
-    Th,
-    Tr
+    Text
 } from "@chakra-ui/react";
 import {toCurrency} from "../utilities/formatCurrency";
 import {Link} from 'react-router-dom';
@@ -30,22 +23,23 @@ import {OrderForm} from '../components/cart/OrderForm';
 import {slashEscape} from "../utilities/RegExpURL";
 import {IOrder} from "../models/IOrder";
 import {getHeaderConfig} from "../utilities/getHeaderConfig";
-import CartService from "../api/CartService";
 import {setCartId} from "../utilities/local-storage-handling";
 import {ToastSuccess} from "../utilities/error-handling";
+import OrderService from "../api/OrderService";
+import TotalCostTable from '../UI/TotalCostTable';
+import Loader from "../UI/Loader";
 
 export const Cart = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-
-    const {cart, getTotalCost, getItemsCost, getDeliveryCost, getTotalQuantity, onEmptyCartContext} = useCart();
+    const {cart, getTotalQuantity, onEmptyCartContext, isLoadingCart} = useCart();
     const {currentCategory} = useCategory();
 
     const handleFormSubmit = async (order: IOrder) => {
         try {
             setIsLoading(true);
             const config = getHeaderConfig();
-            const {data} = await CartService.createOrder(order, config);
+            const {data} = await OrderService.createOrder(order, config);
             setCartId(data.newCartId);
             onEmptyCartContext();
             ToastSuccess('Спасибо за заказ. На указанный email мы пришлём ссылку на оплату.')
@@ -55,33 +49,6 @@ export const Cart = () => {
             setIsLoading(false);
         }
     }
-
-    const TotalCostTable = () => (
-        <TableContainer mx={-5} mt={2} mb={4}>
-            <Table variant='unstyled'>
-                <Tbody borderTop='1px solid' borderColor='gray.200'>
-                    <Tr>
-                        <Td>Товары</Td>
-                        <Td fontWeight='bold'>
-                            {toCurrency(getItemsCost())}
-                        </Td>
-                    </Tr>
-                    <Tr>
-                        <Td>Доставка</Td>
-                        <Td fontWeight='bold'>{toCurrency(getDeliveryCost())}</Td>
-                    </Tr>
-                </Tbody>
-                <Tfoot>
-                    <Tr borderTop='1px solid' borderColor='gray.200'>
-                        <Th fontSize='large' fontWeight='bold'>К оплате</Th>
-                        <Th isNumeric fontSize='large' fontWeight='bold'>
-                            {toCurrency(getTotalCost())}
-                        </Th>
-                    </Tr>
-                </Tfoot>
-            </Table>
-        </TableContainer>
-    );
 
     const EmptyCart = () => (
         <Flex flexDirection='column' alignItems='center' gap={4} mt={10}>
@@ -106,7 +73,7 @@ export const Cart = () => {
 
     const OrderList = () => (
         <Flex flex={1} overflow='hidden' height='calc(100vh - 300px)' flexDirection='column'>
-            <List overflow='auto'>
+            <List overflow='auto' spacing={3}>
                 {cart?.items.map(({item, quantity}) => (
                     <ListItem key={item.id} pr={2}>
                         <HStack spacing={3}>
@@ -145,20 +112,19 @@ export const Cart = () => {
 
     return (
         <MainBlockLayout title={'Корзина'}>
-            {cart?.items?.length > 0 ? (
-                <Flex gap={10} borderTop='1px solid' borderColor='gray.200' pt={2}>
+            {isLoadingCart && cart?.items?.length === 0 && <Loader/>}
+            {cart?.items?.length > 0 && (
+                <Flex gap={10} pt={2}>
                     <OrderList/>
                     <Box flex={1} overflow={"auto"}>
                         <Heading fontSize='x-large' mb={2}>Итого</Heading>
-                        <Text color='gray'>Доставка 15–30 мин. Оплата при получении картой или наличными.</Text>
-                        <TotalCostTable/>
+                        <Text color='gray' borderBottom='1px solid' borderBottomColor='gray.300' pb={2}>Бесплатная доставка 30–60 мин. Оплата при получении картой или наличными.</Text>
+                        <TotalCostTable items={cart.items}/>
                         <Heading fontSize='x-large' mb={4}>Адрес доставки</Heading>
                         <OrderForm handleFormSubmit={handleFormSubmit}/>
                     </Box>
-                </Flex>
-            ) : (
-                <EmptyCart/>
-            )}
+                </Flex>)}
+            {!isLoadingCart && cart?.items?.length === 0 && <EmptyCart/>}
         </MainBlockLayout>
     );
 };

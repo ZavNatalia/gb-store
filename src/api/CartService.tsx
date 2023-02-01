@@ -1,7 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {rootURL} from "../constants/URLs";
 import {ICart} from "../models/ICart";
-import {IOrder} from "../models/IOrder";
 
 export default class CartService {
     static async getCart(cartId: string, config: any): Promise<AxiosResponse<ICart>> {
@@ -18,11 +17,5 @@ export default class CartService {
     }
     static async deleteItemFromCart(cartId: string, id: string, config: any): Promise<AxiosResponse> {
         return axios.delete(`${rootURL}/cart/delete/${cartId}/${id}`, config)
-    }
-    static async getOrders(userId: string, config: any): Promise<AxiosResponse> {
-        return axios.get(`${rootURL}/order/list/${userId}`, config)
-    }
-    static async createOrder(order: IOrder, config: any): Promise<AxiosResponse> {
-        return axios.post(`${rootURL}/order/create`, order, config)
     }
 }

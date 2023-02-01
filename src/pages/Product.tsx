@@ -175,7 +175,7 @@ export const Product = () => {
                         </Flex>
                         <Flex w='50%' flexDirection='column' gap={8} justifyContent='start'>
                             <Flex
-                                border='1px solid' borderColor='gray.200' borderRadius='2xl' p={4}
+                                border='1px solid' borderColor='gray.200' rounded='3xl' p={4}
                                 justifyContent='space-between' alignItems='center' minW='390px' maxW='400px' gap={3}>
                                 <Text flex={1} color='red.600'
                                       fontSize='x-large'>{toCurrency(product.price)}</Text>

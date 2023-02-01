@@ -14,7 +14,7 @@ interface CounterProps {
 
 const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps) => {
     const {isAdmin, isAuth} = useCustomer();
-    const {onAddItemToCart, onDeleteItemFromCart} = useCart();
+    const {onAddItemToCart, onDeleteItemFromCart, isLoadingCart} = useCart();
     return (
         <>
             {quantity === 0 ? (
@@ -53,6 +53,8 @@ const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps)
                                 borderRadius='xl'
                                 py={6}
                                 _focus={{boxShadow: 'none'}}
+                                isDisabled={isLoadingCart}
+                                _disabled={{color: 'black', cursor: 'wait'}}
                                 onClick={() => onDeleteItemFromCart(product.id)}
                     />
                     <Text textAlign={"center"} fontSize={"large"} fontWeight='bold' px={2}>
@@ -64,6 +66,8 @@ const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps)
                                 borderRadius='xl'
                                 py={6}
                                 _focus={{boxShadow: 'none'}}
+                                isDisabled={isLoadingCart}
+                                _disabled={{color: 'black', cursor: 'wait'}}
                                 onClick={() => onAddItemToCart(product.id)}
                     />
                 </HStack>

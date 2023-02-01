@@ -12,7 +12,7 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useCategory} from "../context/CategoryContext";
 import {ICategory} from '../models/ICategory';
 import axios from "axios";
@@ -26,6 +26,7 @@ import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
 import {
+    getCartId,
     getToken,
     removeCartId,
     removeToken,
@@ -50,10 +51,17 @@ export const Header = () => {
     const {onFetchCart, onEmptyCartContext} = useCart();
     const {onChangeCurrentCategory} = useCategory();
     const {customer, onChangeCustomer, onChangeAdmin, isAdmin, isAuth, onChangeAuth} = useCustomer();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const cartId = getCartId();
         if (isAuth) {
             getUserWithSession();
+            if (cartId) {
+                onFetchCart(cartId);
+            }
+        } else {
+            navigate('');
         }
     }, [])
 
@@ -132,6 +140,7 @@ export const Header = () => {
                 removeCartId();
                 removeToken();
                 removeUserId();
+                navigate('');
                 ToastSuccess('Вы вышли из аккаунта');
             })
             .catch(error => {

@@ -8,7 +8,7 @@ import {BsBag} from "react-icons/bs";
 import {slashEscape} from "../../utilities/RegExpURL";
 
 const CartSidebar = () => {
-    const {cart, getTotalCost, getDeliveryCost} = useCart();
+    const {cart, getTotalCost} = useCart();
 
     const CartList = () => (
         <>
@@ -70,7 +70,7 @@ const CartSidebar = () => {
                     >
                         Перейти в корзину&nbsp;
                         <Text as={"span"} fontSize='xl' fontWeight='bold'>
-                            {toCurrency(getTotalCost())}
+                            {toCurrency(getTotalCost(cart.items))}
                         </Text>
                     </Button>
                 </Link>
@@ -96,8 +96,7 @@ const CartSidebar = () => {
             {cart?.items?.length > 0 &&
                 <Box borderTop='1px solid' borderColor='gray.300' pt={3} pr={3} color='gray' fontSize='sm'
                      textAlign='right'>
-                    <Text>Доставка 15–30 мин </Text>
-                    <Text>{toCurrency(getDeliveryCost())}</Text>
+                    <Text>Бесплатная доставка 30–60 мин </Text>
                 </Box>}
             <CartLink/>
         </Flex>

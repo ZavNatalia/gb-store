@@ -10,6 +10,7 @@ export enum RouteNames {
     FAVOURITES = '/favorites',
     CART = '/cart',
     ORDERS = '/orders',
+    ORDER = '/order/:orderId',
 }
 
 export const routes: IRoute[] = [
@@ -19,5 +20,6 @@ export const routes: IRoute[] = [
     { path: RouteNames.PRODUCT, component: pages.Product },
     { path: RouteNames.FAVOURITES, component: pages.Favorites },
     { path: RouteNames.CART, component: pages.Cart },
-    { path: RouteNames.ORDERS, component: pages.Orders }
+    { path: RouteNames.ORDERS, component: pages.OrderList },
+    { path: RouteNames.ORDER, component: pages.Order }
 ]

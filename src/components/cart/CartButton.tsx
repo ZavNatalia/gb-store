@@ -11,7 +11,7 @@ const CartButton = () => {
             {cart?.items?.length > 0 ?
                 <Button leftIcon={<BsBagFill fontSize='x-large'/>} colorScheme='yellow' variant='solid'
                         fontSize='large'>
-                    <Text as='span' pt={1} fontWeight='normal'>{toCurrency(getTotalCost())}</Text>
+                    <Text as='span' pt={1} fontWeight='normal'>{toCurrency(getTotalCost(cart?.items))}</Text>
                 </Button>
                 :
                 <IconButton

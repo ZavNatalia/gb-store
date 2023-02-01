@@ -2,7 +2,7 @@ import React, {ReactNode, useContext, useEffect, useState} from "react";
 import {IProduct} from "../models/IProduct";
 import CartService from "../api/CartService";
 import {ToastError, ToastInfo} from "../utilities/error-handling";
-import {ICart} from "../models/ICart";
+import {ICart, ICartItem} from "../models/ICart";
 import {getCartId} from "../utilities/local-storage-handling";
 import {getHeaderConfig} from "../utilities/getHeaderConfig";
 
@@ -19,10 +19,9 @@ type CartContextProps = {
     openCart: () => void
     closeCart: () => void
     isOpen: boolean
+    isLoadingCart: boolean
     getTotalQuantity: () => number
-    getTotalCost: () => number
-    getItemsCost: () => number
-    getDeliveryCost: () => number
+    getTotalCost: (items: ICartItem[]) => number
     onAddItemToCart: (id: string) => void
     onDeleteItemFromCart: (id: string) => void
     onEmptyCartContext: () => void
@@ -32,8 +31,6 @@ type CartContextProps = {
     getItemQuantity: (id: string) => number
 }
 
-export const DELIVERY_COST_BASE = 100;
-
 const CartContext = React.createContext({} as CartContextProps);
 
 export const useCart = () => {
@@ -42,6 +39,7 @@ export const useCart = () => {
 
 export const CartProvider = ({children}: CartProviderProps) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoadingCart, setIsLoadingCart] = useState(false);
     const [cart, setCart] = useState<ICart>({} as ICart);
     const cartId = getCartId();
 
@@ -74,27 +72,22 @@ export const CartProvider = ({children}: CartProviderProps) => {
         }, 0)
     }
 
-    const getItemsCost = () => {
-        return cart?.items?.reduce((total, cartItem) => {
+    const getTotalCost = (items: ICartItem[]) => {
+        return items?.reduce((total, cartItem) => {
             return total + cartItem.quantity * Number(cartItem.item.price)
         }, 0)
     }
 
-    const getTotalCost = () => {
-        return getItemsCost() + getDeliveryCost()
-    }
-
-    const getDeliveryCost = () => {
-        return getTotalQuantity() < 6 ? DELIVERY_COST_BASE : DELIVERY_COST_BASE * 3
-    }
-
     const onFetchCart = async (cartID: string) => {
         try {
+            setIsLoadingCart(true);
             const config = getHeaderConfig();
             const {data} = await CartService.getCart(cartID, config);
             setCart(data);
         } catch (e: any) {
             ToastError(e?.message);
+        } finally {
+            setIsLoadingCart(false);
         }
     };
 
@@ -130,10 +123,8 @@ export const CartProvider = ({children}: CartProviderProps) => {
         <CartContext.Provider
             value={{
                 getItemQuantity,
-                getItemsCost,
                 getTotalQuantity,
                 getTotalCost,
-                getDeliveryCost,
                 onAddItemToCart,
                 onDeleteItemFromCart,
                 onFetchCart,
@@ -142,7 +133,8 @@ export const CartProvider = ({children}: CartProviderProps) => {
                 onEmptyCartContext,
                 openCart,
                 closeCart,
-                isOpen
+                isOpen,
+                isLoadingCart
             }}>
             {children}
         </CartContext.Provider>
