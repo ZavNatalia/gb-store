@@ -5,11 +5,10 @@ import {getHeaderConfig} from "../utilities/getHeaderConfig";
 import OrderService from "../api/OrderService";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import {ICreatedOrder} from "../models/ICreatedOrder";
-import {getConvertedDate} from "../utilities/getConvertedDate";
 import Loader from "../UI/Loader";
 import {toCurrency} from "../utilities/formatCurrency";
 import TotalCostTable from "../UI/TotalCostTable";
-import {getConvertedTime} from '../utilities/getConvertedTime';
+import moment from "moment";
 
 export const Order = () => {
     const {orderId} = useParams();
@@ -77,9 +76,9 @@ export const Order = () => {
             {isLoading && <Loader/>}
 
             {!isLoading && order && <Box w='100%' my={8}>
-                <Heading>Заказ от {getConvertedDate(order?.shipment_time)} </Heading>
+                <Heading>Заказ от {moment(order?.shipment_time).format('DD MMMM')} </Heading>
                 <Flex mt={2} color='gray.500' fontSize='lg' alignItems='center'>
-                    <Text>Создан в {getConvertedTime(order?.shipment_time)} -&nbsp;</Text>
+                    <Text>Создан в {moment(order?.shipment_time).format('LT')} -&nbsp;</Text>
                     <Text>№ {order?.id}</Text>
                 </Flex>
 

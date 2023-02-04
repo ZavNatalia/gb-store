@@ -5,8 +5,8 @@ import {ICartItem} from "../../models/ICart";
 import {ICreatedOrder} from '../../models/ICreatedOrder';
 import {toCurrency} from "../../utilities/formatCurrency";
 import {useCart} from "../../context/CartContext";
-import {getConvertedDate} from "../../utilities/getConvertedDate";
 import OrderStatusBadge from "../../UI/OrderStatusBadge";
+import moment from "moment";
 
 interface OrderItemProps {
     order: ICreatedOrder;
@@ -40,7 +40,8 @@ export const OrderItem = ({order}: OrderItemProps) => {
                   width='50%' minW='600px' p={8}>
             <Link to={`/order/${order.id}`}>
                 <Flex alignItems='center' justifyContent='space-between' w='100%'>
-                    <Text fontSize='x-large' fontWeight='bold'>{getConvertedDate(order.shipment_time)}</Text>
+                    <Text fontSize='x-large' fontWeight='bold'>{
+                        moment(order.shipment_time).format('DD MMMM в LT')}</Text>
                     <OrderStatusBadge status={order.status}/>
                 </Flex>
                 <Flex>
