@@ -14,7 +14,7 @@ import {
     Text
 } from "@chakra-ui/react";
 import {toCurrency} from "../utilities/formatCurrency";
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {BsBag} from 'react-icons/bs';
 import Counter from "../UI/Counter";
 import {useCategory} from '../context/CategoryContext';
@@ -34,6 +34,7 @@ export const Cart = () => {
     const [error, setError] = useState('');
     const {cart, getTotalQuantity, onEmptyCartContext, isLoadingCart} = useCart();
     const {currentCategory} = useCategory();
+    const navigate = useNavigate();
 
     const handleFormSubmit = async (order: IOrder) => {
         try {
@@ -42,7 +43,8 @@ export const Cart = () => {
             const {data} = await OrderService.createOrder(order, config);
             setCartId(data.newCartId);
             onEmptyCartContext();
-            ToastSuccess('Спасибо за заказ. На указанный email мы пришлём ссылку на оплату.')
+            ToastSuccess('Спасибо за заказ. На указанный email мы пришлём ссылку на оплату.');
+            navigate('');
         } catch (error: any) {
             setError('Не удалось отправить заказ. Повторите попытку позже.');
         } finally {
@@ -67,7 +69,6 @@ export const Cart = () => {
                     </Button>
                 </Link>
             </HStack>
-
         </Flex>
     );
 
