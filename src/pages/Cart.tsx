@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {useCart} from "../context/CartContext";
 import {
     Box,
@@ -23,32 +23,35 @@ import {OrderForm} from '../components/cart/OrderForm';
 import {slashEscape} from "../utilities/RegExpURL";
 import {IOrder} from "../models/IOrder";
 import {getHeaderConfig} from "../utilities/getHeaderConfig";
-import {setCartId} from "../utilities/local-storage-handling";
-import {ToastSuccess} from "../utilities/error-handling";
+import {getCartId, setCartId} from "../utilities/local-storage-handling";
+import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import OrderService from "../api/OrderService";
 import TotalCostTable from '../UI/TotalCostTable';
 import Loader from "../UI/Loader";
 
 export const Cart = () => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
-    const {cart, getTotalQuantity, onEmptyCartContext, isLoadingCart} = useCart();
+    const {cart, getTotalQuantity, onEmptyCartContext, onFetchCart, isLoadingCart} = useCart();
     const {currentCategory} = useCategory();
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const cartId = getCartId();
+        if (cartId) {
+            onFetchCart(cartId);
+        }
+    }, []);
+
     const handleFormSubmit = async (order: IOrder) => {
         try {
-            setIsLoading(true);
             const config = getHeaderConfig();
             const {data} = await OrderService.createOrder(order, config);
             setCartId(data.newCartId);
             onEmptyCartContext();
             ToastSuccess('Спасибо за заказ. На указанный email мы пришлём ссылку на оплату.');
-            navigate('');
         } catch (error: any) {
-            setError('Не удалось отправить заказ. Повторите попытку позже.');
+            ToastError('Не удалось отправить заказ. Повторите попытку позже.');
         } finally {
-            setIsLoading(false);
+            navigate('/orders');
         }
     }
 

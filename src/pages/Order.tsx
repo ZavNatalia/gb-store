@@ -64,7 +64,7 @@ export const Order = () => {
                                 <Text fontSize='sm' fontWeight='bold'>{toCurrency(item?.price)}</Text>
                             </Flex>
                         </Flex>
-                        <Text textAlign='right' fontWeight='bold'>x {quantity}</Text>
+                        <Text textAlign='right' fontSize='lg' fontWeight='bold'>x {quantity}</Text>
                     </HStack>
                 </ListItem>
             ))}
@@ -76,9 +76,9 @@ export const Order = () => {
             {isLoading && <Loader/>}
 
             {!isLoading && order && <Box w='100%' my={8}>
-                <Heading>Заказ от {moment(order?.shipment_time).format('DD MMMM')} </Heading>
+                <Heading>Заказ от {moment(order?.created_at).format('DD MMMM')} </Heading>
                 <Flex mt={2} color='gray.500' fontSize='lg' alignItems='center'>
-                    <Text>Создан в {moment(order?.shipment_time).format('LT')} -&nbsp;</Text>
+                    <Text>Создан в {moment(order?.created_at).format('LT')} -&nbsp;</Text>
                     <Text>№ {order?.id}</Text>
                 </Flex>
 
@@ -92,6 +92,9 @@ export const Order = () => {
                             <Title title='Детали доставки'/>
                             <Text fontSize='sm' color='gray'>Адрес</Text>
                             <Text>{order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}</Text>
+
+                            <Text fontSize='sm' color='gray' mt={3}>Дата доставки</Text>
+                            <Text>{moment(order?.shipment_time).format('DD MMMM YYYY г.')}</Text>
                         </Box>
                     </Flex>
                     <Box w='340px'>

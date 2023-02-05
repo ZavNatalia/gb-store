@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {
-    Avatar,
     Button,
     Flex,
     HStack,
+    IconButton,
     Menu,
     MenuButton,
     MenuDivider,
@@ -39,6 +39,7 @@ import {useCustomer} from "../context/CustomerContext";
 import {useCart} from "../context/CartContext";
 import SettingsModal from "../modals/SettingsModal";
 import {IRole} from "../models/IRole";
+import {BsFillPersonFill} from 'react-icons/bs';
 
 export const Header = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -272,17 +273,9 @@ export const Header = () => {
                     </HStack>
                     <Menu>
                         <MenuButton
-                            as={Button}
-                            rounded={'full'}
-                            variant={'link'}
-                            cursor={'pointer'}
-                            minW={0}>
-                            <Avatar
-                                size={'md'}
-                                src='/imgs/avatar-placeholder.png'
-                                border='1px solid'
-                                borderColor='gray.400'
-                            />
+                            as={IconButton}
+                            cursor={'pointer'}>
+                            <IconButton as={BsFillPersonFill} size='sm' aria-label='Profile' color='black' backgroundColor='transparent'/>
                         </MenuButton>
                         <MenuList>
                             <MenuItem onClick={editProfileDisclosure.onOpen}>Профиль</MenuItem>

@@ -6,6 +6,7 @@ export interface ICreatedOrder {
     id: string,
     items: ICartItem[],
     shipment_time: string,
+    created_at: string,
     status: string,
     user_id: string
 }
