@@ -26,6 +26,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
     return (
         <Flex
             maxW='300px'
+            minW='260px'
             overflow='hidden'
             bg='gray.100'
             border='1px solid'

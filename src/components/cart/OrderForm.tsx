@@ -241,7 +241,7 @@ export const OrderForm = ({handleFormSubmit}: OrderFormProps) => {
                                 variant="solid"
                                 colorScheme='yellow'
                                 isLoading={isSubmitting}
-                                isDisabled={!isValid || !dirty}>
+                                isDisabled={!isValid}>
                                 Отправить заказ
                             </Button>
                         </VStack>

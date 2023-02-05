@@ -9,7 +9,22 @@ const OrderStatusBadge = ({status}: OrderStatusBadgeProps) => {
     const getOrderStatus = () => {
         switch (status) {
             case 'order created': {
-                return {text: 'Заказ создан', color: 'green'}
+                return {text: 'Заказ создан', color: 'gray'}
+            }
+            case 'order processing': {
+                return {text: 'Обработка заказа', color: 'yellow'}
+            }
+            case 'order processed': {
+                return {text: 'Заказ принят', color: 'yellow'}
+            }
+            case 'ready for shipment': {
+                return {text: 'Готов к отправке', color: 'yellow'}
+            }
+            case 'picked by courier': {
+                return {text: 'Курьер забрал заказ', color: 'purple'}
+            }
+            case 'delivered': {
+                return {text: 'Закза доставлен', color: 'green'}
             }
         }
     }

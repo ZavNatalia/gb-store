@@ -21,18 +21,6 @@ export default class ProductService {
     static async updateProduct(product: any, config: any): Promise<AxiosResponse> {
         return axios.put<IProduct>(`${rootURL}/items/update`, product, config)
     }
-    static async getQuantity(categoryName?: string, searchQuery?: string): Promise<AxiosResponse> {
-        if (!!searchQuery) {
-            return axios.get<number>(`${rootURL}/items/quantitySearch/${searchQuery}`)
-        }
-        if (!!categoryName) {
-            return axios.get<number>(`${rootURL}/items/quantityCat/${categoryName}`)
-        }
-        return axios.get<number>(`${rootURL}/items/quantity`)
-    }
-    static async getFavListQuantity(userID: string, config: any): Promise<AxiosResponse> {
-        return axios.get(`${rootURL}/items/quantityFav/${userID}`, config)
-    }
     static async deleteProduct(id: string, config: any): Promise<AxiosResponse> {
         return axios.delete<IProduct>(`${rootURL}/items/delete/${id}`, config)
     }

@@ -9,6 +9,7 @@ import Loader from "../UI/Loader";
 import {toCurrency} from "../utilities/formatCurrency";
 import TotalCostTable from "../UI/TotalCostTable";
 import moment from "moment";
+import OrderStatusBadge from "../UI/OrderStatusBadge";
 
 export const Order = () => {
     const {orderId} = useParams();
@@ -76,10 +77,12 @@ export const Order = () => {
             {isLoading && <Loader/>}
 
             {!isLoading && order && <Box w='100%' my={8}>
-                <Heading>Заказ от {moment(order?.created_at).format('DD MMMM')} </Heading>
-                <Flex mt={2} color='gray.500' fontSize='lg' alignItems='center'>
-                    <Text>Создан в {moment(order?.created_at).format('LT')} -&nbsp;</Text>
-                    <Text>№ {order?.id}</Text>
+                <Flex justifyContent='space-between' alignItems='start'>
+                    <Box>
+                        <Heading>Заказ от {moment(order?.created_at).format('DD MMMM')} </Heading>
+                        <Text mt={2} color='gray.500' fontSize='lg'>Создан в {moment(order?.created_at).format('LT')} -  №{order?.id}</Text>
+                    </Box>
+                    <OrderStatusBadge status={order.status}/>
                 </Flex>
 
                 <Flex gap='50px'>

@@ -99,7 +99,7 @@ const FavoritesList = () => {
             <Icon fontSize='140px' color='gray.400' as={IoIosHeartEmpty}/>
             <Heading fontSize='xx-large' my={2}>В избранном ничего нет</Heading>
             <Text color='gray' textAlign='center'>Здесь пока ничего нет, но вы можете
-                <br/>добавить товар в избранное, кликнув на <Icon as={MdFavorite}/></Text>
+                <br/>добавить товар в избранное, нажав на <Icon as={MdFavorite}/></Text>
             <Link to={`/${slashEscape(currentCategory?.name) ?? ''}`}>
                 <Button colorScheme='yellow' px={10} mt={6}>
                     В каталог
