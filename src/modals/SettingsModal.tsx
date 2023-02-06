@@ -42,7 +42,7 @@ const SettingsModal = ({
                     <Tabs variant='soft-rounded' colorScheme='gray'>
                         <TabList flexWrap='wrap'>
                             <Tab>Права пользователя</Tab>
-                            <Tab>Изменение стутуса заказа</Tab>
+                            <Tab>Изменение статуса заказа</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
