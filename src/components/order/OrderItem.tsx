@@ -2,11 +2,11 @@ import {Circle, Divider, Flex, Image, ListItem, Text} from '@chakra-ui/react';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {ICartItem} from "../../models/ICart";
-import {ICreatedOrder} from '../../models/ICreatedOrder';
 import {toCurrency} from "../../utilities/formatCurrency";
 import {useCart} from "../../context/CartContext";
 import OrderStatusBadge from "../../UI/OrderStatusBadge";
 import moment from "moment";
+import { ICreatedOrder } from '../../models/IOrder';
 
 interface OrderItemProps {
     order: ICreatedOrder;

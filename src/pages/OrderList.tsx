@@ -7,10 +7,10 @@ import {slashEscape} from "../utilities/RegExpURL";
 import {getHeaderConfig} from "../utilities/getHeaderConfig";
 import {getUserId} from "../utilities/local-storage-handling";
 import {OrderItem} from "../components/order/OrderItem";
-import {ICreatedOrder} from "../models/ICreatedOrder";
 import OrderService from "../api/OrderService";
 import Loader from '../UI/Loader';
 import {useCustomer} from "../context/CustomerContext";
+import { ICreatedOrder } from '../models/IOrder';
 
 export const OrderList = () => {
     const [isLoading, setIsLoading] = useState(true);

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Badge} from "@chakra-ui/react";
+import { IOrderStatus } from '../models/IOrder';
 
 interface OrderStatusBadgeProps  {
     status: string
@@ -8,22 +9,22 @@ interface OrderStatusBadgeProps  {
 const OrderStatusBadge = ({status}: OrderStatusBadgeProps) => {
     const getOrderStatus = () => {
         switch (status) {
-            case 'order created': {
+            case IOrderStatus.ORDER_CREATED: {
                 return {text: 'Заказ создан', color: 'gray'}
             }
-            case 'order processing': {
+            case IOrderStatus.ORDER_PROCESSING: {
                 return {text: 'Обработка заказа', color: 'yellow'}
             }
-            case 'order processed': {
+            case IOrderStatus.ORDER_PROCESSED: {
                 return {text: 'Заказ принят', color: 'yellow'}
             }
-            case 'ready for shipment': {
+            case IOrderStatus.READY_FOR_SHIPMENT: {
                 return {text: 'Готов к отправке', color: 'yellow'}
             }
-            case 'picked by courier': {
+            case IOrderStatus.PICKED_BY_COURIER: {
                 return {text: 'Курьер забрал заказ', color: 'purple'}
             }
-            case 'delivered': {
+            case IOrderStatus.DELIVERED: {
                 return {text: 'Закза доставлен', color: 'green'}
             }
         }

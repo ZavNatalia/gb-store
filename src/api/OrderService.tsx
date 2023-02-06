@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from "axios";
 import {rootURL} from "../constants/URLs";
-import {IOrder} from "../models/IOrder";
+import {IEditOrderStatus, IOrder} from "../models/IOrder";
 
 export default class OrderService {
     static async getOrders(userId: string, config: any): Promise<AxiosResponse> {
@@ -11,5 +11,8 @@ export default class OrderService {
     }
     static async createOrder(order: IOrder, config: any): Promise<AxiosResponse> {
         return axios.post(`${rootURL}/order/create`, order, config)
+    }
+    static async changeOrderStatus(order: IEditOrderStatus, config: any): Promise<AxiosResponse> {
+        return axios.patch(`${rootURL}/order/changestatus/`, order, config)
     }
 }

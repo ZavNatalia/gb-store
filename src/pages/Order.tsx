@@ -4,12 +4,12 @@ import {Box, Flex, Heading, HStack, Image, List, ListItem, Text} from "@chakra-u
 import {getHeaderConfig} from "../utilities/getHeaderConfig";
 import OrderService from "../api/OrderService";
 import MainBlockLayout from "../UI/MainBlockLayout";
-import {ICreatedOrder} from "../models/ICreatedOrder";
 import Loader from "../UI/Loader";
 import {toCurrency} from "../utilities/formatCurrency";
 import TotalCostTable from "../UI/TotalCostTable";
 import moment from "moment";
 import OrderStatusBadge from "../UI/OrderStatusBadge";
+import { ICreatedOrder } from '../models/IOrder';
 
 export const Order = () => {
     const {orderId} = useParams();
