@@ -13,6 +13,6 @@ export default class OrderService {
         return axios.post(`${rootURL}/order/create`, order, config)
     }
     static async changeOrderStatus(order: IEditOrderStatus, config: any): Promise<AxiosResponse> {
-        return axios.patch(`${rootURL}/order/changestatus/`, order, config)
+        return axios.patch(`${rootURL}/order/changestatus`, order, config)
     }
 }

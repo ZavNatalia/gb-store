@@ -109,9 +109,7 @@ export const Product = () => {
     const onRemoveProduct = async () => {
         if (productId) {
             try {
-                const config = {
-                    headers: {Authorization: `Bearer ${getToken()}`}
-                };
+                const config = getHeaderConfig();
                 await ProductService.deleteProduct(productId, config);
                 ToastSuccess('Товар был удалён');
                 navigate(`/${currentCategory?.name?.toLowerCase() ?? ''}`)

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
     Button,
     Flex,
@@ -155,9 +155,7 @@ export const Header = () => {
     }
 
     const getUserWithSession = async () => {
-        const config = {
-            headers: {Authorization: `Bearer ${getToken()}`}
-        };
+        const config = getHeaderConfig();
         await axios.get(`${rootURL}/user/profile`, config)
             .then(({data}) => {
                 onChangeCustomer(data);
@@ -179,9 +177,7 @@ export const Header = () => {
     }
 
     const onEditProfile = async (values: ICustomer) => {
-        const config = {
-            headers: {Authorization: `Bearer ${getToken()}`}
-        };
+        const config = getHeaderConfig();
         await axios.put(
             `${rootURL}/user/profile/edit`, values, config
         )
@@ -199,9 +195,7 @@ export const Header = () => {
     }
 
     const onOpenSettingsModal = async () => {
-        const config = {
-            headers: {Authorization: `Bearer ${getToken()}`}
-        };
+        const config = getHeaderConfig();
         await axios.get(
             `${rootURL}/user/rights/list`, config
         ).then(({data}) => {
@@ -285,9 +279,9 @@ export const Header = () => {
                     <Menu>
                         <MenuButton
                             as={IconButton}
-                            cursor={'pointer'}>
-                            <IconButton as={BsFillPersonFill} size='sm' aria-label='Profile' color='black' backgroundColor='transparent'/>
-                        </MenuButton>
+                            aria-label='Профиль'
+                            icon={<BsFillPersonFill fontSize='xx-large'/>}
+                        />
                         <MenuList>
                             <MenuItem onClick={editProfileDisclosure.onOpen}>Профиль</MenuItem>
                             {isAdmin && <MenuItem onClick={onOpenSettingsModal}>Настройки</MenuItem>}

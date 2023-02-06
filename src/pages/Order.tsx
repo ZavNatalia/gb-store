@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {Box, Flex, Heading, HStack, Image, List, ListItem, Text} from "@chakra-ui/react";
+import {Box, Flex, Heading, HStack, IconButton, Image, List, ListItem, Text, useClipboard} from "@chakra-ui/react";
 import {getHeaderConfig} from "../utilities/getHeaderConfig";
 import OrderService from "../api/OrderService";
 import MainBlockLayout from "../UI/MainBlockLayout";
@@ -10,12 +10,15 @@ import TotalCostTable from "../UI/TotalCostTable";
 import moment from "moment";
 import OrderStatusBadge from "../UI/OrderStatusBadge";
 import { ICreatedOrder } from '../models/IOrder';
+import { CheckIcon, CopyIcon } from '@chakra-ui/icons';
 
 export const Order = () => {
     const {orderId} = useParams();
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [order, setOrder] = useState<ICreatedOrder>();
+
+    const {hasCopied, setValue, onCopy} = useClipboard('');
 
     useEffect(() => {
         fetchOrderById();
@@ -27,6 +30,7 @@ export const Order = () => {
             if (orderId) {
                 const {data} = await OrderService.getOrderById(orderId, config);
                 setOrder(data);
+                setValue(orderId);
             }
         } catch (error: any) {
             setError('Не удалось загрузить информацию о заказе');
@@ -80,7 +84,15 @@ export const Order = () => {
                 <Flex justifyContent='space-between' alignItems='start'>
                     <Box>
                         <Heading>Заказ от {moment(order?.created_at).format('DD MMMM')} </Heading>
-                        <Text mt={2} color='gray.500' fontSize='lg'>Создан в {moment(order?.created_at).format('LT')} -  №{order?.id}</Text>
+                        <Flex gap={2} alignItems='center'>
+                            <Text mt={2} color='gray.500' fontSize='lg'>Создан в {moment(order?.created_at).format('LT')} -  №{order?.id}</Text>
+                            <IconButton
+                                aria-label='Copy link'
+                                size='sm'
+                                icon={hasCopied ? <CheckIcon color='green'/> : <CopyIcon/>}
+                                onClick={onCopy}
+                            />
+                        </Flex>
                     </Box>
                     <OrderStatusBadge status={order.status}/>
                 </Flex>

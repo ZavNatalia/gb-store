@@ -4,27 +4,18 @@ import {Button, Flex, FormControl, FormLabel, Input, Select, Stack, Text} from "
 import * as Yup from "yup";
 import {IRole} from "../../models/IRole";
 import {ORDER_STATUS} from "../../models/IOrder";
+import {useCustomer} from "../../context/CustomerContext";
 
 export interface Values {
     orderId: string,
-    status: string,
-    email: string,
-    userId: string,
-    roleName: string
+    status: string
 }
 
 const ValidationSchema = Yup.object().shape({
     orderId: Yup.string()
         .required('Пожалуйста, введите ID заказа'),
     status: Yup.string()
-        .required('Пожалуйста, выберите статус заказа'),
-    email: Yup.string()
-        .email('Пожалуйста, введите корректный Email')
-        .required('Пожалуйста, введите ваш E-mail'),
-    userId: Yup.string()
-        .required('Пожалуйста, введите ID пользователя'),
-    roleName: Yup.string()
-        .required('Пожалуйста, выберите выберите роль пользователя'),
+        .required('Пожалуйста, выберите статус заказа')
 });
 
 interface EditOrderStatusFormProps {
@@ -34,15 +25,13 @@ interface EditOrderStatusFormProps {
 }
 
 export const EditOrderStatusForm = ({roles, onEditOrderStatus, onClose}: EditOrderStatusFormProps) => {
+    const {customer} = useCustomer();
 
     return (
         <Formik
             initialValues={{
                 orderId: '',
-                status: '',
-                email: '',
-                userId: '',
-                roleName: '',
+                status: ''
             }}
             validationSchema={ValidationSchema}
             onSubmit={async (
@@ -53,9 +42,9 @@ export const EditOrderStatusForm = ({roles, onEditOrderStatus, onClose}: EditOrd
                     order_id: values.orderId,
                     status: values.status,
                     user: {
-                        email: values.email,
-                        id: values.userId,
-                        role: values.roleName
+                        email: customer.email,
+                        id: customer.id,
+                        role: customer.rights?.rules.find((item: any) => item == 'Admin')
                     }
                 }
                 await onEditOrderStatus(result);
@@ -101,62 +90,6 @@ export const EditOrderStatusForm = ({roles, onEditOrderStatus, onClose}: EditOrd
                                 )}
                             </Field>
                         </FormControl>
-
-                        <FormControl>
-                            <FormLabel htmlFor='email' fontSize='m' color='gray.500'>Email
-                                пользователя</FormLabel>
-                            <Field name="email">
-                                {({field, meta}: any) => (
-                                    <>
-                                        <Input type="email"
-                                               isInvalid={meta.touched ? meta.error : false} {...field} />
-                                        {meta.touched && meta.error && (
-                                            <Text color='red.400' mt={2}
-                                                  fontSize='sm'>{meta.error}</Text>
-                                        )}
-                                    </>
-                                )}
-                            </Field>
-                        </FormControl>
-                        <FormControl>
-                            <FormLabel htmlFor='userId' fontSize='m' color='gray.500'>ID
-                                пользователя</FormLabel>
-                            <Field name="userId">
-                                {({field, meta}: any) => (
-                                    <>
-                                        <Input type="userId"
-                                               isInvalid={meta.touched ? meta.error : false} {...field} />
-                                        {meta.touched && meta.error && (
-                                            <Text color='red.400' mt={2}
-                                                  fontSize='sm'>{meta.error}</Text>
-                                        )}
-                                    </>
-                                )}
-                            </Field>
-                        </FormControl>
-                        {roles?.length > 0 && <FormControl>
-                            <FormLabel htmlFor='roleName' fontSize='m' color='gray.500'>Роль
-                                пользователя</FormLabel>
-                            <Field name="roleName">
-                                {({field, meta}: any) => (
-                                    <>
-                                        <Select id='roleName' name='roleName'
-                                                placeholder={'Выберите роль пользователя'}
-                                                {...field}>
-                                            {roles.map((role) => (
-                                                <option value={role.name}
-                                                        key={role.id}>{role.name}</option>
-                                            ))}
-                                        </Select>
-                                        {meta.touched && meta.error && (
-                                            <Text color='red.400' mt={2}
-                                                  fontSize='sm'>{meta.error}</Text>
-                                        )}
-                                    </>
-                                )}
-                            </Field>
-                        </FormControl>
-                        }
                     </Stack>
                     <Flex justifyContent={"flex-end"} mt={6}>
                         <Button variant='ghost' mr={3} onClick={onClose}>Отмена</Button>

@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-    Avatar,
     Button,
     Center,
     Flex,
     FormControl,
     FormLabel,
+    Icon,
     Input,
     Modal,
     ModalBody,
@@ -20,6 +20,7 @@ import {
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {IAddress, ICustomer} from "../models/ICustomer";
+import { BsFillPersonFill } from 'react-icons/bs';
 
 interface EditCategoryModalProps {
     customer: ICustomer,
@@ -83,11 +84,8 @@ const EditProfileModal = ({
                         <Form>
                             <ModalBody my={4}>
                                 <Stack spacing={4}>
-                                    <Center mb={6}>
-                                        <Avatar
-                                            src='/imgs/avatar-placeholder.png'
-                                            size='2xl'
-                                        />
+                                    <Center mb={3}>
+                                        <Icon as={BsFillPersonFill} fontSize='160px'/>
                                     </Center>
                                     <Flex gap={3}>
                                         <FormControl>
