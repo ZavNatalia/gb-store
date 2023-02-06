@@ -1,31 +1,31 @@
 import React from 'react';
 import {Badge} from "@chakra-ui/react";
-import { IOrderStatus } from '../models/IOrder';
+import {ORDER_STATUS} from '../models/IOrder';
 
-interface OrderStatusBadgeProps  {
+interface OrderStatusBadgeProps {
     status: string
 }
 
 const OrderStatusBadge = ({status}: OrderStatusBadgeProps) => {
     const getOrderStatus = () => {
         switch (status) {
-            case IOrderStatus.ORDER_CREATED: {
-                return {text: 'Заказ создан', color: 'gray'}
+            case ORDER_STATUS.ORDER_CREATED.status: {
+                return {text: ORDER_STATUS.ORDER_CREATED.translation, color: ORDER_STATUS.ORDER_CREATED.color}
             }
-            case IOrderStatus.ORDER_PROCESSING: {
-                return {text: 'Обработка заказа', color: 'yellow'}
+            case ORDER_STATUS.ORDER_PROCESSING.status: {
+                return {text: ORDER_STATUS.ORDER_PROCESSING.translation, color: ORDER_STATUS.ORDER_PROCESSING.color}
             }
-            case IOrderStatus.ORDER_PROCESSED: {
-                return {text: 'Заказ принят', color: 'yellow'}
+            case ORDER_STATUS.ORDER_PROCESSED.status: {
+                return {text: ORDER_STATUS.ORDER_PROCESSED.translation, color: ORDER_STATUS.ORDER_PROCESSED.color}
             }
-            case IOrderStatus.READY_FOR_SHIPMENT: {
-                return {text: 'Готов к отправке', color: 'yellow'}
+            case ORDER_STATUS.READY_FOR_SHIPMENT.status: {
+                return {text: ORDER_STATUS.READY_FOR_SHIPMENT.translation, color: ORDER_STATUS.READY_FOR_SHIPMENT.color}
             }
-            case IOrderStatus.PICKED_BY_COURIER: {
-                return {text: 'Курьер забрал заказ', color: 'purple'}
+            case ORDER_STATUS.PICKED_BY_COURIER.status: {
+                return {text: ORDER_STATUS.PICKED_BY_COURIER.translation, color: ORDER_STATUS.PICKED_BY_COURIER.color}
             }
-            case IOrderStatus.DELIVERED: {
-                return {text: 'Закза доставлен', color: 'green'}
+            case ORDER_STATUS.DELIVERED.status: {
+                return {text: ORDER_STATUS.DELIVERED.translation, color: ORDER_STATUS.DELIVERED.color}
             }
         }
     }

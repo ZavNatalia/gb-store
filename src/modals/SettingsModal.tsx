@@ -14,19 +14,22 @@ import {
 } from "@chakra-ui/react";
 import {IRole} from '../models/IRole';
 import { EditUserRoleForm } from '../components/admin-panel/EditUserRoleForm';
+import {EditOrderStatusForm} from "../components/admin-panel/EditOrderStatusForm";
 
 interface SettingsModalProps {
     roles: IRole[],
     isOpen: boolean,
     onClose: () => void,
     onEditUserRole: (values: any) => void,
+    onEditOrderStatus: (values: any) => void,
 }
 
 const SettingsModal = ({
                            roles,
                            isOpen,
                            onClose,
-                           onEditUserRole
+                           onEditUserRole,
+                           onEditOrderStatus
                        }: SettingsModalProps) => {
 
     return (
@@ -39,10 +42,14 @@ const SettingsModal = ({
                     <Tabs variant='soft-rounded' colorScheme='gray'>
                         <TabList flexWrap='wrap'>
                             <Tab>Права пользователя</Tab>
+                            <Tab>Изменение стутуса заказа</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
                                <EditUserRoleForm roles={roles} onEditUserRole={onEditUserRole} onClose={onClose}/>
+                            </TabPanel>
+                            <TabPanel>
+                                <EditOrderStatusForm roles={roles} onEditOrderStatus={onEditOrderStatus} onClose={onClose}/>
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

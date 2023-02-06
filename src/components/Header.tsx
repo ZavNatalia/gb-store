@@ -40,6 +40,8 @@ import {useCart} from "../context/CartContext";
 import SettingsModal from "../modals/SettingsModal";
 import {IRole} from "../models/IRole";
 import {BsFillPersonFill} from 'react-icons/bs';
+import {getHeaderConfig} from "../utilities/getHeaderConfig";
+import OrderService from "../api/OrderService";
 
 export const Header = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -209,9 +211,7 @@ export const Header = () => {
     }
 
     const onEditUserRole = async (values: any) => {
-        const config = {
-            headers: {Authorization: `Bearer ${getToken()}`}
-        };
+        const config = getHeaderConfig();
         await axios.put(
             `${rootURL}/user/role/update`, values, config
         )
@@ -224,6 +224,17 @@ export const Header = () => {
             .finally(() => {
                 settingsDisclosure.onClose();
             })
+    }
+
+    const onEditOrderStatus = async (values: any) => {
+        try {
+            const config = getHeaderConfig();
+            await OrderService.changeOrderStatus(values, config);
+            ToastSuccess('Статус заказа был изменен');
+            settingsDisclosure.onClose();
+        } catch (e: any) {
+            ToastError(e?.message);
+        }
     }
 
     return (
@@ -299,7 +310,8 @@ export const Header = () => {
             <SettingsModal roles={roles}
                            isOpen={settingsDisclosure.isOpen}
                            onClose={settingsDisclosure.onClose}
-                           onEditUserRole={onEditUserRole}/>
+                           onEditUserRole={onEditUserRole}
+                           onEditOrderStatus={onEditOrderStatus}/>
 
             <SignIn isOpen={signInDisclosure.isOpen}
                     onClose={signInDisclosure.onClose}

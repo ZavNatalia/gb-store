@@ -1,13 +1,37 @@
 import {ICart, ICartItem} from "./ICart";
 import {IAddress} from "./ICustomer";
 
-export enum IOrderStatus {
-    ORDER_CREATED = 'order created',
-    ORDER_PROCESSING = 'order processing',
-    ORDER_PROCESSED = 'order processed',
-    READY_FOR_SHIPMENT = 'ready for shipment',
-    PICKED_BY_COURIER = 'picked by courier',
-    DELIVERED = 'delivered',
+export const ORDER_STATUS = {
+    ORDER_CREATED: {
+        status: 'order created',
+        translation: 'заказ создан',
+        color: 'gray'
+    },
+    ORDER_PROCESSING: {
+        status: 'order processing',
+        translation: 'заказ в обработке',
+        color: 'yellow'
+    },
+    ORDER_PROCESSED: {
+        status: 'order processed',
+        translation: 'заказ обработан',
+        color: 'orange'
+    },
+    READY_FOR_SHIPMENT: {
+        status: 'ready for shipment',
+        translation: 'заказ готов к отгрузке',
+        color: 'cyan'
+    },
+    PICKED_BY_COURIER: {
+        status: 'picked by courier',
+        translation: 'курьер забрал заказ',
+        color: 'purple'
+    },
+    DELIVERED: {
+        status: 'delivered',
+        translation: 'заказ доставлен',
+        color: 'green'
+    }
 }
 
 export type IOrder = {
@@ -32,7 +56,7 @@ export interface ICreatedOrder {
 
 export interface IEditOrderStatus {
     order_id: string,
-    status: IOrderStatus,
+    status: string,
     user: {
         email: string,
         id: string,
