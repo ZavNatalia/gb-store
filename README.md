@@ -1,5 +1,9 @@
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+#
+
+###### Main branch - cozy dragon API http://cozydragon.online/
+###### Master branch - Platzi Fake Store API https://fakeapi.platzi.com/
+
+#
 
 ## Available Scripts
 
