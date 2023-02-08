@@ -1,6 +1,9 @@
 #
 
 ###### Main branch - cozy dragon API http://cozydragon.online/
+Runs the app in the development mode.<br /> Open
+[http://cozydragon.online:80](http://cozydragon.online:80) to view it in the browser.
+
 ###### Master branch - Platzi Fake Store API https://fakeapi.platzi.com/
 
 #
