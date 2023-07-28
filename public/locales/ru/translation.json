@@ -1,0 +1,11 @@
+{
+  "Language": "RU",
+  "Product was added successfully": "Товар был успешно добавлен",
+  "Price low to high": "Сначала дешёвые",
+  "Price high to low": "Сначала дорогие",
+  "There are no products in this category": "В данной категории нет товаров",
+  "Add new item": "Добавить новый товар",
+  "Search for items...": "Поиск по товарам...",
+  "Failed to load product list": "Не удалось загрузить список товаров",
+  "Failed to load product list. Please try again later.": "Не удалось загрузить список товаров. Повторите попытку позже."
+}

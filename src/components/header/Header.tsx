@@ -14,17 +14,17 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCategory } from "../context/CategoryContext";
-import { ICategory } from '../models/ICategory';
+import { useCategory } from "../../context/CategoryContext";
+import { ICategory } from '../../models/ICategory';
 import axios from "axios";
-import { ToastError, ToastSuccess } from "../utilities/error-handling";
-import SignIn from '../modals/SignIn';
-import SignUp from "../modals/SignUp";
-import { ICustomer } from "../models/ICustomer";
-import { Links } from './cart/Links';
-import { rootURL } from '../constants/URLs';
-import EditProfileModal from '../modals/EditProfileModal';
-import LogOut from '../modals/LogOut';
+import { ToastError, ToastSuccess } from "../../utilities/error-handling";
+import SignIn from '../../modals/SignIn';
+import SignUp from "../../modals/SignUp";
+import { ICustomer } from "../../models/ICustomer";
+import { Links } from '../cart/Links';
+import { rootURL } from '../../constants/URLs';
+import EditProfileModal from '../../modals/EditProfileModal';
+import LogOut from '../../modals/LogOut';
 
 import {
     getCartId,
@@ -34,15 +34,16 @@ import {
     setCartId,
     setToken,
     setUserId
-} from "../utilities/local-storage-handling";
-import { useCustomer } from "../context/CustomerContext";
-import { useCart } from "../context/CartContext";
-import SettingsModal from "../modals/SettingsModal";
-import { IRole } from "../models/IRole";
+} from "../../utilities/local-storage-handling";
+import { useCustomer } from "../../context/CustomerContext";
+import { useCart } from "../../context/CartContext";
+import SettingsModal from "../../modals/SettingsModal";
+import { IRole } from "../../models/IRole";
 import { BsFillPersonFill } from 'react-icons/bs';
-import { getHeaderConfig } from "../utilities/getHeaderConfig";
-import OrderService from "../api/OrderService";
-import Logo from '../shared/assets/images/logo.png';
+import { getHeaderConfig } from "../../utilities/getHeaderConfig";
+import OrderService from "../../api/OrderService";
+import Logo from '../../shared/assets/images/logo.png';
+import { LangSwitcher } from '../../UI/LangSwitcher';
 
 export const Header = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -296,6 +297,7 @@ export const Header = () => {
                             <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
                         </MenuList>
                     </Menu>
+                    <LangSwitcher/>
                 </>}
             </Flex>
 

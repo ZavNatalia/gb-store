@@ -28,8 +28,10 @@ import { useCustomer } from "../../context/CustomerContext";
 import { ICategory } from "../../models/ICategory";
 import { MdClose } from 'react-icons/md';
 import { getHeaderConfig } from '../../utilities/getHeaderConfig';
+import { useTranslation } from 'react-i18next';
 
 const ProductList = () => {
+    const {t} = useTranslation();
     const [products, setProducts] = useState<IProduct[]>([]);
     const [error, setError] = useState('');
     const [offset, setOffset] = useState(0);
@@ -72,9 +74,9 @@ const ProductList = () => {
                 setOffset(prevState => prevState + limit);
             } catch (e: any) {
                 if (products?.length > 0) {
-                    ToastError('Не удалось загрузить список товаров');
+                    ToastError(t('Failed to load product list'));
                 } else {
-                    setError('Не удалось загрузить список товаров. Повторите попытку позже.');
+                    setError(t('Failed to load product list. Please try again later.'));
                 }
             } finally {
                 setIsLoading(false);
@@ -134,7 +136,7 @@ const ProductList = () => {
             } else {
                 updateList();
             }
-            ToastSuccess('Товар был успешно добавлен');
+            ToastSuccess(t('Product was added successfully'));
             onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -153,8 +155,8 @@ const ProductList = () => {
                 color='gray.500'
                 focusBorderColor={'yellow.500'}
                 onChange={handleSortOrderChange}>
-            <option value='asc'>Сначала дешёвые</option>
-            <option value='desc'>Сначала дорогие</option>
+            <option value='asc'>{t('Price low to high')}</option>
+            <option value='desc'>{t('Price high to low')}</option>
         </Select>
     )
 
@@ -176,7 +178,7 @@ const ProductList = () => {
     const NoContent = () => {
         return isLoading ? <SkeletonList amount={8}/> : (
             <Center h='50vh'>
-                <Text color='gray'>В данной категории нет товаров</Text>
+                <Text color='gray'>{t('There are no products in this category')}</Text>
             </Center>
         )
     }
@@ -216,7 +218,7 @@ const ProductList = () => {
                             colorScheme='yellow'
                             fontWeight='normal'
                             onClick={onOpen}>
-                            Добавить новый товар
+                            {t('Add new item')}
                         </Button>
                     }
                 </Flex>
@@ -228,7 +230,7 @@ const ProductList = () => {
                             value={searchQuery}
                             pr='40px'
                             type='text'
-                            placeholder='Поиск по товарам...'
+                            placeholder={t('Search for items...')}
                             focusBorderColor={'yellow.500'}
                             borderRadius='2xl'
                             onChange={handleSearchQueryChange}
