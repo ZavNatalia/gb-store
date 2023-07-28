@@ -13,20 +13,20 @@ import {
     Text,
     useDisclosure
 } from '@chakra-ui/react';
-import React, {useEffect, useMemo, useState} from 'react';
-import {ProductItem} from "./ProductItem";
-import {IProduct} from '../../models/IProduct';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ProductItem } from "./ProductItem";
+import { IProduct } from '../../models/IProduct';
 import ErrorMessage from "../../UI/ErrorMessage";
-import {useCategory} from "../../context/CategoryContext";
-import {GrAdd} from "react-icons/gr";
+import { useCategory } from "../../context/CategoryContext";
+import { GrAdd } from "react-icons/gr";
 import AddEditProductDrawer from '../../modals/AddEditProductDrawer';
-import {isEmpty} from "../../utilities/isEmpty";
-import {ToastError, ToastSuccess} from '../../utilities/error-handling';
+import { isEmpty } from "../../utilities/isEmpty";
+import { ToastError, ToastSuccess } from '../../utilities/error-handling';
 import SkeletonList from '../../UI/SkeletonList';
 import ProductService from "../../api/ProductService";
-import {useCustomer} from "../../context/CustomerContext";
-import {ICategory} from "../../models/ICategory";
-import {MdClose} from 'react-icons/md';
+import { useCustomer } from "../../context/CustomerContext";
+import { ICategory } from "../../models/ICategory";
+import { MdClose } from 'react-icons/md';
 import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 
 const ProductList = () => {
@@ -63,7 +63,7 @@ const ProductList = () => {
                 if (searchQuery) {
                     res = await ProductService.getProductsBySearchQuery(searchQuery, offset, limit, config, sortOrder);
                 } else if (isEmpty(currentCategory)) {
-                    res =  await ProductService.getPaginatedProducts(offset, limit, config, sortOrder);
+                    res = await ProductService.getPaginatedProducts(offset, limit, config, sortOrder);
                 } else {
                     res = await ProductService.getAllProductsByCategory(currentCategory.name, offset, limit, config, sortOrder);
                 }
@@ -111,7 +111,7 @@ const ProductList = () => {
     }
 
     const onChangeCategory = (id: number) => {
-        const selectedCategory = categories.find(c => c.id == id);
+        const selectedCategory = categories.find(c => Number(c.id) === Number(id));
         if (selectedCategory) {
             onChangeCurrentCategory(selectedCategory);
         }
@@ -220,29 +220,29 @@ const ProductList = () => {
                         </Button>
                     }
                 </Flex>
-                {!error && <Flex my={6} alignItems='center' gap={6}>
+                {!error && <Flex my={6} alignItems='center' gap={4}>
                     <SortOrderSelect/>
 
                     <InputGroup size='lg'>
                         <Input
                             value={searchQuery}
-                            pr='160px'
+                            pr='40px'
                             type='text'
                             placeholder='Поиск по товарам...'
                             focusBorderColor={'yellow.500'}
                             borderRadius='2xl'
                             onChange={handleSearchQueryChange}
                         />
-                        <InputRightElement width='160px' px={2} justifyContent='flex-end'>
-                            {searchQuery.length > 0 &&
+                        {searchQuery.length > 0 &&
+                            <InputRightElement justifyContent='flex-end'>
                                 <IconButton size='lg' variant='link'
                                             aria-label='Clear' icon={<MdClose/>}
                                             onClick={() => {
                                                 setSearchQuery('');
                                                 updateList();
                                             }}/>
-                            }
-                        </InputRightElement>
+                            </InputRightElement>
+                        }
                     </InputGroup>
                 </Flex>}
                 <SimpleGrid minChildWidth='250px' width='100%' spacing='10' placeItems='center'>

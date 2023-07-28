@@ -1,11 +1,11 @@
-import {Box, Button, Flex, Heading, HStack, Icon, Image, List, ListItem, Text} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, HStack, Icon, Image, List, ListItem, Text } from '@chakra-ui/react';
 import React from 'react';
-import {useCart} from "../../context/CartContext";
-import {toCurrency} from "../../utilities/formatCurrency";
-import {Link} from "react-router-dom";
+import { useCart } from "../../context/CartContext";
+import { toCurrency } from "../../utilities/formatCurrency";
+import { Link } from "react-router-dom";
 import Counter from "../../UI/Counter";
-import {BsBag} from "react-icons/bs";
-import {slashEscape} from "../../utilities/RegExpURL";
+import { BsBag } from "react-icons/bs";
+import { slashEscape } from "../../utilities/RegExpURL";
 
 const CartSidebar = () => {
     const {cart, getTotalCost} = useCart();

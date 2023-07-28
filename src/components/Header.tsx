@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button,
     Flex,
     HStack,
     IconButton,
+    Image,
     Menu,
     MenuButton,
     MenuDivider,
@@ -12,16 +13,16 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react';
-import {Link, useNavigate} from 'react-router-dom';
-import {useCategory} from "../context/CategoryContext";
-import {ICategory} from '../models/ICategory';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCategory } from "../context/CategoryContext";
+import { ICategory } from '../models/ICategory';
 import axios from "axios";
-import {ToastError, ToastSuccess} from "../utilities/error-handling";
+import { ToastError, ToastSuccess } from "../utilities/error-handling";
 import SignIn from '../modals/SignIn';
 import SignUp from "../modals/SignUp";
-import {ICustomer} from "../models/ICustomer";
-import {Links} from './cart/Links';
-import {rootURL} from '../constants/URLs';
+import { ICustomer } from "../models/ICustomer";
+import { Links } from './cart/Links';
+import { rootURL } from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
 import LogOut from '../modals/LogOut';
 
@@ -34,13 +35,14 @@ import {
     setToken,
     setUserId
 } from "../utilities/local-storage-handling";
-import {useCustomer} from "../context/CustomerContext";
-import {useCart} from "../context/CartContext";
+import { useCustomer } from "../context/CustomerContext";
+import { useCart } from "../context/CartContext";
 import SettingsModal from "../modals/SettingsModal";
-import {IRole} from "../models/IRole";
-import {BsFillPersonFill} from 'react-icons/bs';
-import {getHeaderConfig} from "../utilities/getHeaderConfig";
+import { IRole } from "../models/IRole";
+import { BsFillPersonFill } from 'react-icons/bs';
+import { getHeaderConfig } from "../utilities/getHeaderConfig";
 import OrderService from "../api/OrderService";
+import Logo from '../shared/assets/images/logo.png';
 
 export const Header = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -65,7 +67,7 @@ export const Header = () => {
         } else {
             navigate('');
         }
-    }, [])
+    }, [isAuth])
 
     const signInBySocial = async (source: string) => {
         await axios.get(
@@ -245,10 +247,11 @@ export const Header = () => {
         >
             <Link to='' onClick={() => onChangeCurrentCategory({} as ICategory)}>
                 <Flex alignItems='center' color='gray.500' textTransform={"uppercase"} ml={4}>
-                    <svg width="52" height="52"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <image href="/imgs/logo.png" height="52" width="52"/>
-                    </svg>
+                    <Image
+                        h='52px'
+                        w='52px'
+                        objectFit={'contain'}
+                        src={Logo}/>
                     <Text ml={2} as='h1' fontSize='3xl' fontWeight='thin' textTransform='lowercase'>
                         Cozy Dragon
                     </Text>
