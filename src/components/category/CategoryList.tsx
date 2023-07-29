@@ -13,8 +13,10 @@ import CreateCategoryModal from '../../modals/CreateCategoryModal';
 import CategoryService from "../../api/CategoryService";
 import {useCustomer} from "../../context/CustomerContext";
 import { getHeaderConfig } from '../../utilities/getHeaderConfig';
+import { useTranslation } from 'react-i18next';
 
 export const CategoryList = () => {
+    const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const createDisclosure = useDisclosure();
@@ -34,7 +36,7 @@ export const CategoryList = () => {
             const {data} = await CategoryService.getCategories();
             onChangeCategories(data);
         } catch (error: any) {
-            setError('Не удалось загрузить список категорий');
+            setError(t('Failed to load category list'));
         } finally {
             setIsLoading(false);
         }
@@ -45,7 +47,7 @@ export const CategoryList = () => {
             const config = getHeaderConfig();
             await CategoryService.deleteCategory(id, config);
             fetchCategories();
-            ToastSuccess('Категория была удалена');
+            ToastSuccess(t('Category has been removed'));
             removeDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -57,7 +59,7 @@ export const CategoryList = () => {
             const config = getHeaderConfig();
             await CategoryService.updateCategory(category.id, category, config);
             fetchCategories();
-            ToastSuccess('Категория была отредактирована');
+            ToastSuccess(t('Category has been edited'));
             editDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -75,7 +77,7 @@ export const CategoryList = () => {
                 'image': ''
             }, config);
             fetchCategories();
-            ToastSuccess('Категория была успешно создана');
+            ToastSuccess(t('Category has been successfully created'));
             createDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -92,7 +94,7 @@ export const CategoryList = () => {
                 pb={4}
                 height='calc(100vh - 80px)'
                 borderRightColor='gray.200'>
-                <ErrorMessage message={'Не удалось получить список категорий'}/>
+                <ErrorMessage message={t('Failed to get list of categories')}/>
             </Box>
         )
     }
@@ -119,12 +121,12 @@ export const CategoryList = () => {
                 borderRightColor='gray.200'
                 overflowY='auto'>
                 {isAdmin && <Button mx={2} mb={2} onClick={() => createDisclosure.onOpen()}>
-                    Добавить категорию
+                    {t('Add category')}
                 </Button>}
 
                 {categories.length === 0 && <Center>
                     <Text mt={4} mx={2} color='gray' fontSize='sm'>
-                        Список категорий пуст
+                        {t('Category list is empty')}
                     </Text>
                 </Center>}
 
@@ -133,7 +135,7 @@ export const CategoryList = () => {
                     fontWeight={isEmpty(currentCategory) ? '800' : '400'}
                     onClick={() => onChangeCurrentCategory({} as ICategory)}
                 >
-                    Все товары
+                    {t('All goods')}
                 </NavItem>}
                 {categories?.map((category) => (
                     <Flex

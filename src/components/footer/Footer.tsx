@@ -25,7 +25,7 @@ export default function Footer() {
                         ml: 8,
                     }}>
                     <Text fontSize={'sm'} textAlign={'center'} color='gray'>
-                        © {currentYear} Cozy Dragon. All rights reserved
+                        © {currentYear} cozy dragon.
                     </Text>
                 </Flex>
             </Box>
