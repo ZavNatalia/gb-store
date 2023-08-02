@@ -277,7 +277,7 @@ export const Header = () => {
                         mx={2}
                         fontSize='25px'>
                         {isAdmin && <Text ml={2} fontSize='2xl' fontWeight='thin' color='gray'>
-                            Панель администратора
+                            {t('Admin panel')}
                         </Text>}
                         {!isAdmin && Links.map(({title, icon, path}) => (
                             <Link to={path} key={title}>

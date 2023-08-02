@@ -26,25 +26,32 @@ interface AddEditProductFormProps {
     onClose: () => void,
 }
 
-export const AddEditProductForm = ({product = {} as IProduct, onSubmit, onClose}: AddEditProductFormProps) => {
+export const AddEditProductForm = (props: AddEditProductFormProps) => {
+    const {product = {} as IProduct, onSubmit, onClose} = props;
     const {t} = useTranslation();
     const {currentCategory, categories} = useCategory();
 
     const ValidationSchema = Yup.object().shape({
         title: Yup.string()
-            .min(5, 'Пожалуйста, введите не меньше 5 символов')
-            .max(100, 'Пожалуйста, введите не более 100 символов')
-            .required('Пожалуйста, заполните обязательное поле'),
+            .min(5, t('Please enter at least 5 characters'))
+            .max(150, t('Please enter no more than 150 characters'))
+            .required(t('Please fill in the required field')),
         categoryId: Yup.string()
-            .required('Пожалуйста, выберите категорию'),
+            .required(t('Please select a category')),
         description: Yup.string()
-            .max(900, 'Пожалуйста, введите не более 900 символов')
-            .required('Пожалуйста, заполните обязательное поле'),
+            .max(900, t('Please enter no more than 900 characters'))
+            .required(t('Please fill in the required field')),
         vendor: Yup.string()
-            .max(100, 'Пожалуйста, введите не более 100 символов')
-            .required('Пожалуйста, заполните обязательное поле'),
+            .max(100, t('Please enter no more than 100 characters'))
+            .required(t('Please fill in the required field')),
         price: Yup.string()
-            .required('Пожалуйста, заполните обязательное поле'),
+            .required(t('Please fill in the required field')),
+        // image: Yup.mixed()
+        //     .when('isArray', {
+        //         is: Array.isArray,
+        //         then: Yup.array().of(Yup.string()),
+        //         otherwise: Yup.string(),
+        //     }),
     });
 
     return (
@@ -107,7 +114,7 @@ export const AddEditProductForm = ({product = {} as IProduct, onSubmit, onClose}
 
                             <FormControl>
                                 <FormLabel htmlFor='title' fontSize='m' color='gray.500'>
-                                    Наименование товара
+                                    {t('Product name')}
                                 </FormLabel>
                                 <Field name="title">
                                     {({field, meta}: any) => (
@@ -187,7 +194,9 @@ export const AddEditProductForm = ({product = {} as IProduct, onSubmit, onClose}
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel htmlFor='price' fontSize='m' color='gray.500'>Цена</FormLabel>
+                                <FormLabel htmlFor='price' fontSize='m' color='gray.500'>
+                                    {t('Price')}
+                                </FormLabel>
                                 <Field name="price">
                                     {({field, meta}: any) => (
                                         <>
@@ -220,7 +229,7 @@ export const AddEditProductForm = ({product = {} as IProduct, onSubmit, onClose}
                     </DrawerBody>
                     <DrawerFooter borderTopWidth='1px' bgColor='white'>
                         <Button variant='outline' mr={3} fontWeight='500' onClick={onClose}>
-                            Отмена
+                            {t('Cancel')}
                         </Button>
                         <Button colorScheme='yellow' type='submit' fontWeight='500' isLoading={isSubmitting}
                                 isDisabled={!isValid || !dirty}

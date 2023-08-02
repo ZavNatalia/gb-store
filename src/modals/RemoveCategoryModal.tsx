@@ -19,7 +19,9 @@ interface RemoveCategoryModalProps {
     onRemoveCategory: (id: number) => void
 }
 
-const RemoveCategoryModal = ({category, isOpen, onClose, onRemoveCategory}: RemoveCategoryModalProps) => {
+const RemoveCategoryModal = (props: RemoveCategoryModalProps) => {
+    const {category, isOpen, onClose, onRemoveCategory} = props;
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.16)'}}/>

@@ -27,13 +27,14 @@ interface AddEditProductDrawerProps {
     onSubmit: (values: any) => void
 }
 
-const AddEditProductDrawer = ({
-                                  isEdit,
-                                  product = {} as IProduct,
-                                  isOpen,
-                                  onClose,
-                                  onSubmit
-                              }: AddEditProductDrawerProps) => {
+const AddEditProductDrawer = (props: AddEditProductDrawerProps) => {
+    const {
+        isEdit,
+        product = {} as IProduct,
+        isOpen,
+        onClose,
+        onSubmit
+    } = props;
     const {t} = useTranslation();
 
     return (
