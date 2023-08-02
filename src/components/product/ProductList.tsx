@@ -19,7 +19,7 @@ import { IProduct } from '../../models/IProduct';
 import ErrorMessage from "../../UI/ErrorMessage";
 import { useCategory } from "../../context/CategoryContext";
 import { GrAdd } from "react-icons/gr";
-import AddEditProductDrawer from '../../modals/AddEditProductDrawer';
+import AddEditProductDrawer from '../../modals/AddEditProduct/AddEditProductDrawer';
 import { isEmpty } from "../../utilities/isEmpty";
 import { ToastError, ToastSuccess } from '../../utilities/error-handling';
 import SkeletonList from '../../UI/SkeletonList';
@@ -205,7 +205,7 @@ const ProductList = () => {
         >
             <>
                 <Flex justifyContent='space-between' gap={5}>
-                    <Heading mb={5}>{currentCategory?.name?.toUpperCase() ?? 'Все товары'.toUpperCase()}</Heading>
+                    <Heading mb={5}>{currentCategory?.name?.toUpperCase() ?? t('All goods').toUpperCase()}</Heading>
                     {isAdmin &&
                         <Button
                             position='fixed'

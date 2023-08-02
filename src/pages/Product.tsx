@@ -18,7 +18,7 @@ import {useCart} from "../context/CartContext";
 import {FavoriteSwitcher} from "../UI/FavoriteSwitcher";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
-import AddEditProductDrawer from "../modals/AddEditProductDrawer";
+import AddEditProductDrawer from "../modals/AddEditProduct/AddEditProductDrawer";
 import Carousel from "../UI/Carousel";
 import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
