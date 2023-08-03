@@ -21,6 +21,7 @@ import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {IAddress, ICustomer} from "../models/ICustomer";
 import { BsFillPersonFill } from 'react-icons/bs';
+import { useTranslation } from 'react-i18next';
 
 interface EditCategoryModalProps {
     customer: ICustomer,
@@ -45,6 +46,7 @@ const EditProfileModal = ({
                               onClose,
                               onEditProfile
                           }: EditCategoryModalProps) => {
+    const {t} = useTranslation();
     const ValidationSchema = Yup.object().shape({
         firstname: Yup.string()
             .max(50, 'Пожалуйста, введите не более 50 символов')
@@ -55,7 +57,7 @@ const EditProfileModal = ({
             .max(10, 'Пожалуйста, введите не более 10 символов'),
         email: Yup.string()
             .email('Пожалуйста, введите корректный  email')
-            .required('Пожалуйста, введите ваш E-mail'),
+            .required('Пожалуйста, введите ваш email'),
     });
 
     return (
@@ -178,7 +180,7 @@ const EditProfileModal = ({
                                             {({field, meta}: any) => (
                                                 <>
                                                     <Input type='email'
-                                                           placeholder='E-mail'
+                                                           placeholder={t('Enter email')}
                                                            mb={2}
                                                            isInvalid={meta.touched ? meta.error : false}
                                                            isDisabled

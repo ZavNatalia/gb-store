@@ -300,7 +300,7 @@ export const Header = () => {
                                 </Link>
                             }
                             <MenuDivider/>
-                            <MenuItem onClick={() => logOutHandler()}>{t('Log out')}</MenuItem>
+                            <MenuItem onClick={logOutDisclosure.onOpen}>{t('Log out')}</MenuItem>
                         </MenuList>
                     </Menu>
                     <LangSwitcher/>
