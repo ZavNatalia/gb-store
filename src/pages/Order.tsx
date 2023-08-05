@@ -11,8 +11,10 @@ import moment from "moment";
 import OrderStatusBadge from "../UI/OrderStatusBadge";
 import { ICreatedOrder } from '../models/IOrder';
 import { CheckIcon, CopyIcon } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
 
 export const Order = () => {
+    const {t} = useTranslation();
     const {orderId} = useParams();
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +35,7 @@ export const Order = () => {
                 setValue(orderId);
             }
         } catch (error: any) {
-            setError('Не удалось загрузить информацию о заказе');
+            setError(t('Failed to load order information'));
         } finally {
             setIsLoading(false);
         }
@@ -77,7 +79,7 @@ export const Order = () => {
     )
 
     return (
-        <MainBlockLayout link={`/orders`} linkTitle={'К моим заказам'}>
+        <MainBlockLayout link={`/orders`} linkTitle={t('Go to my orders')}>
             {isLoading && <Loader/>}
 
             {!isLoading && order && <Box w='100%' my={8}>
@@ -85,7 +87,9 @@ export const Order = () => {
                     <Box>
                         <Heading>Заказ от {moment(order?.created_at).format('DD MMMM')} </Heading>
                         <Flex gap={2} alignItems='center'>
-                            <Text mt={2} color='gray.500' fontSize='lg'>Создан в {moment(order?.created_at).format('LT')} -  №{order?.id}</Text>
+                            <Text mt={2} color='gray.500' fontSize='lg'>
+                                {t('Created at')}{moment(order?.created_at).format('LT')} -  №{order?.id}
+                            </Text>
                             <IconButton
                                 aria-label='Copy link'
                                 size='sm'
@@ -100,20 +104,20 @@ export const Order = () => {
                 <Flex gap='50px'>
                     <Flex flexDirection='column' flexGrow={1} maxW='540px'>
                         <Box>
-                            <Title title='Ваш заказ'/>
+                            <Title title={t('Your order')}/>
                             <ListOfItems/>
                         </Box>
                         <Box>
                             <Title title='Детали доставки'/>
-                            <Text fontSize='sm' color='gray'>Адрес</Text>
+                            <Text fontSize='sm' color='gray'>{t('Address')}</Text>
                             <Text>{order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}</Text>
 
-                            <Text fontSize='sm' color='gray' mt={3}>Дата доставки</Text>
+                            <Text fontSize='sm' color='gray' mt={3}>{t('Delivery date')}</Text>
                             <Text>{moment(order?.shipment_time).format('DD MMMM YYYY г.')}</Text>
                         </Box>
                     </Flex>
                     <Box w='340px'>
-                        <Title title='Итого'/>
+                        <Title title={t('Total')}/>
                         <TotalCostTable items={order.items}/>
                     </Box>
                 </Flex>
