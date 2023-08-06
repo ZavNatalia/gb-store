@@ -42,7 +42,12 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             {isAuth && <Box position='absolute'
                             right={2}
                             top={2}>
-                <FavoriteSwitcher isFav={isFav} customerId={customer.id} productId={id} handleSetIsFav={handleSetIsFav}/>
+                <FavoriteSwitcher
+                    isFav={isFav}
+                    customerId={customer.id}
+                    productId={id}
+                    handleSetIsFav={handleSetIsFav}
+                />
             </Box>}
             <Box py={4}>
                 <Link

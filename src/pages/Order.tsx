@@ -108,12 +108,13 @@ export const Order = () => {
                             <ListOfItems/>
                         </Box>
                         <Box>
-                            <Title title='Детали доставки'/>
+                            <Title title={t('Delivery details')}/>
                             <Text fontSize='sm' color='gray'>{t('Address')}</Text>
-                            <Text>{order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}</Text>
-
+                            <Text>
+                                {order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}
+                            </Text>
                             <Text fontSize='sm' color='gray' mt={3}>{t('Delivery date')}</Text>
-                            <Text>{moment(order?.shipment_time).format('DD MMMM YYYY г.')}</Text>
+                            <Text>{moment(order?.shipment_time).format('DD MMMM YYYY')}</Text>
                         </Box>
                     </Flex>
                     <Box w='340px'>
