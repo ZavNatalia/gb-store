@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
     Grid,
     GridItem
@@ -9,7 +9,7 @@ import CartSidebar from "../components/cart/CartSidebar";
 import {useCart} from "../context/CartContext";
 import {useCustomer} from "../context/CustomerContext";
 
-export const Home = () => {
+export const Home = memo(() => {
     const {isAdmin} = useCustomer();
     const {isOpen} = useCart();
 
@@ -33,4 +33,4 @@ export const Home = () => {
             </GridItem>
         </Grid>
     );
-}
+});
