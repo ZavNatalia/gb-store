@@ -47,9 +47,9 @@ export const Order = memo(() => {
         <Heading size='lg' my={3} py={3} borderBottom='1px solid' borderBottomColor='gray.300'>{title}</Heading>
     )
 
-    const ListOfItems = () => (
+    const memorizedListOfItems = useMemo(() => (
         <List flexGrow={1} spacing={3} overflowY='auto' py={5}>
-            {order?.items.map(({item, quantity}) => (
+            {order?.items?.map(({item, quantity}) => (
                 <ListItem key={item?.id}>
                     <HStack spacing={3}>
                         <Flex alignItems='center' flex={1}>
@@ -65,7 +65,8 @@ export const Order = memo(() => {
                                     minH='90px'
                                     minW='90px'
                                     objectFit={'contain'}
-                                    src={item?.image[0] ?? '/assets/images/placeholder-image.jpg'}
+                                    src={item?.image[0]}
+                                    fallbackSrc='/assets/images/placeholder-image.jpg'
                                 />
                             </Flex>
                             <Flex gap={2} flexDirection='column'>
@@ -78,7 +79,7 @@ export const Order = memo(() => {
                 </ListItem>
             ))}
         </List>
-    )
+    ), [order?.items]);
 
     if (isLoading) {
         return (
@@ -124,7 +125,7 @@ export const Order = memo(() => {
                     <Flex flexDirection='column' flexGrow={1} maxW='540px'>
                         <Box>
                             <Title title={t('Your order')}/>
-                            <ListOfItems/>
+                            {memorizedListOfItems}
                         </Box>
                         <Box>
                             <Title title={t('Delivery details')}/>

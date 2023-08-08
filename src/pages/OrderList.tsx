@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { useCategory } from "../context/CategoryContext";
 import { Button, Flex, Heading, List } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import ErrorMessage from '../UI/ErrorMessage';
 import Loader from '../UI/Loader';
 
-export const OrderList = () => {
+export const OrderList = memo(() => {
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
     const [list, setList] = useState([] as ICreatedOrder[]);
@@ -85,4 +85,4 @@ export const OrderList = () => {
                 )}
         </MainBlockLayout>
     );
-};
+});

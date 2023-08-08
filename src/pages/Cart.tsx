@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import {useCart} from "../context/CartContext";
 import {
     Box,
@@ -30,7 +30,7 @@ import TotalCostTable from '../UI/TotalCostTable';
 import Loader from "../UI/Loader";
 import { useTranslation } from 'react-i18next';
 
-export const Cart = () => {
+export const Cart = memo(() => {
     const {t} = useTranslation();
     const {cart, getTotalQuantity, onEmptyCartContext, onFetchCart, isLoadingCart} = useCart();
     const {currentCategory} = useCategory();
@@ -83,10 +83,10 @@ export const Cart = () => {
         </Flex>
     );
 
-    const OrderList = () => (
+    const memorizedOrderList = useMemo(() => (
         <Flex flex={1} overflow='hidden' height='calc(100vh - 300px)' flexDirection='column'>
             <List overflow='auto' spacing={3}>
-                {cart?.items.map(({item, quantity}) => (
+                {cart?.items?.map(({item, quantity}) => (
                     <ListItem key={item.id} pr={2}>
                         <HStack spacing={3}>
                             <Link to={`/${slashEscape(item.category?.name)}/${item.id}`}
@@ -101,7 +101,8 @@ export const Cart = () => {
                                         minH='110px'
                                         minW='110px'
                                         objectFit={'contain'}
-                                        src={item.image[0] ?? '/assets/images/placeholder-image.jpg'}
+                                        src={item.image[0]}
+                                        fallbackSrc='/assets/images/placeholder-image.jpg'
                                     />
                                 </Flex>
                                 <Flex flexGrow={1} flexDirection='column' px={4}>
@@ -120,14 +121,14 @@ export const Cart = () => {
                 {t('Total number of goods')}: {getTotalQuantity()}
             </Text>
         </Flex>
-    )
+    ), [cart?.items]);
 
     return (
         <MainBlockLayout title={t('My bag')}>
             {isLoadingCart && cart?.items?.length === 0 && <Loader/>}
             {cart?.items?.length > 0 && (
                 <Flex gap={10} pt={2}>
-                    <OrderList/>
+                    {memorizedOrderList}
                     <Box flex={1} overflow={"auto"}>
                         <Heading fontSize='x-large' mb={2}>{t('Total')}</Heading>
                         <Text color='gray' borderBottom='1px solid' borderBottomColor='gray.300' pb={2}>
@@ -143,4 +144,4 @@ export const Cart = () => {
             {!isLoadingCart && cart?.items?.length === 0 && <EmptyCart/>}
         </MainBlockLayout>
     );
-};
+});
