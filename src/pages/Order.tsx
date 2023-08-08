@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { Box, Flex, Heading, HStack, IconButton, Image, List, ListItem, Text, useClipboard } from "@chakra-ui/react";
 import { getHeaderConfig } from "../utilities/getHeaderConfig";
@@ -7,20 +7,21 @@ import MainBlockLayout from "../UI/MainBlockLayout";
 import Loader from "../UI/Loader";
 import { toCurrency } from "../utilities/formatCurrency";
 import TotalCostTable from "../UI/TotalCostTable";
-import moment from "moment";
 import OrderStatusBadge from "../UI/OrderStatusBadge";
 import { ICreatedOrder } from '../models/IOrder';
 import { CheckIcon, CopyIcon } from '@chakra-ui/icons';
 import { useTranslation } from 'react-i18next';
 import ErrorMessage from '../UI/ErrorMessage';
+import { getDate } from '../utilities/getDate';
+import { getTime } from '../utilities/getTime';
 
-export const Order = () => {
-    const {t} = useTranslation();
+export const Order = memo(() => {
+    const {t, i18n} = useTranslation();
+    const lang = i18n.language === 'en' ? 'en-US' : 'Ru-ru';
     const {orderId} = useParams();
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [order, setOrder] = useState<ICreatedOrder>();
-
     const {hasCopied, setValue, onCopy} = useClipboard('');
 
     useEffect(() => {
@@ -102,11 +103,11 @@ export const Order = () => {
                 <Flex justifyContent='space-between' alignItems='start'>
                     <Box>
                         <Heading>
-                            {t('Order from')} {moment(order?.created_at).format('MM/DD/YYYY')}
+                            {t('Order from')}&nbsp;{getDate(order?.created_at, lang)}
                         </Heading>
                         <Flex gap={2} alignItems='center'>
                             <Text mt={2} color='gray.500' fontSize='lg'>
-                                {t('Created at')} {moment(order?.created_at).format('LT')} - №{order?.id}
+                                {t('Created at')} {getTime(order?.created_at, lang)} - №{order?.id}
                             </Text>
                             <IconButton
                                 aria-label='Copy link'
@@ -132,7 +133,7 @@ export const Order = () => {
                                 {order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}
                             </Text>
                             <Text fontSize='sm' color='gray' mt={3}>{t('Delivery date')}</Text>
-                            <Text>{moment(order?.shipment_time).format('MM/DD/YYYY')}</Text>
+                            <Text>{getDate(order?.shipment_time, lang)}</Text>
                         </Box>
                     </Flex>
                     <Box w='340px'>
@@ -144,4 +145,4 @@ export const Order = () => {
             }
         </MainBlockLayout>
     );
-};
+});
