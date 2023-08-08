@@ -33,7 +33,7 @@ const CartSidebar = () => {
                                             minH='100px'
                                             minW='100px'
                                             objectFit={'contain'}
-                                            src={item?.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                            src={item?.image[0] ?? '/assets/images/placeholder-image.jpg'}
                                         />
                                     </Flex>
                                     <Flex gap={2} flexDirection='column'>

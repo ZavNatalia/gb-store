@@ -26,7 +26,7 @@ export const OrderItem = ({order}: OrderItemProps) => {
                     minH='70px'
                     minW='70px'
                     objectFit={'contain'}
-                    src={item.image[0] ?? '/imgs/placeholder-image.jpg'}
+                    src={item.image[0] ?? '/assets/images/placeholder-image.jpg'}
                 />
             </Flex>
             {quantity > 1 && <Circle size='30px' backgroundColor='gray.100' mt={1}>

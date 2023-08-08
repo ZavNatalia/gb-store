@@ -64,7 +64,7 @@ export const Order = () => {
                                     minH='90px'
                                     minW='90px'
                                     objectFit={'contain'}
-                                    src={item?.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                    src={item?.image[0] ?? '/assets/images/placeholder-image.jpg'}
                                 />
                             </Flex>
                             <Flex gap={2} flexDirection='column'>

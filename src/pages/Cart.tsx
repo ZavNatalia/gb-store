@@ -101,7 +101,7 @@ export const Cart = () => {
                                         minH='110px'
                                         minW='110px'
                                         objectFit={'contain'}
-                                        src={item.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                        src={item.image[0] ?? '/assets/images/placeholder-image.jpg'}
                                     />
                                 </Flex>
                                 <Flex flexGrow={1} flexDirection='column' px={4}>

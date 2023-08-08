@@ -60,7 +60,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
                             maxW='100%'
                             objectFit={'contain'}
                             src={image[0]}
-                            fallbackSrc={'/imgs/placeholder-image.jpg'}
+                            fallbackSrc={'/assets/images/placeholder-image.jpg'}
                         />}
                     </Flex>
                     <Stack height='130px' alignItems='start' justifyContent='center' px={4}>

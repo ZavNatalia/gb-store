@@ -15,7 +15,7 @@ const AuthSocialButtons = ({signInHandler}: AuthSocialButtonsProps) => {
             </Text>
             <Button size='lg' variant='outline' borderRadius='50%' p={0}
                     onClick={() => signInHandler('google')}>
-                <Image h={7} src={'/imgs/google-logo.svg'} alt='Google Icon'/>
+                <Image h={7} src={'/assets/images/google-logo.svg'} alt='Google Icon'/>
             </Button>
         </Box>
     );
