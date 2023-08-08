@@ -54,7 +54,7 @@ const FavoritesList = () => {
             if (list?.length > 0) {
                 ToastError(t('Failed to load favorites list'));
             } else {
-                setError(t('Failed to load list of favorite products. Please try again later.'));
+                setError(t('Failed to load list of favorite items. Please try again later.'));
             }
         } finally {
             setIsLoading(false);
@@ -99,9 +99,13 @@ const FavoritesList = () => {
     const EmptyList = () => (
         <Flex alignItems='center' justifyContent='center' gap={4} flexDirection='column' mt={10}>
             <Icon fontSize='140px' color='gray.400' as={IoIosHeartEmpty}/>
-            <Heading fontSize='xx-large' my={2}>{t('Favorites list is empty')}</Heading>
-            <Text color='gray' textAlign='center'>{t('There is nothing here yet, but you can add the product to your favorites by clicking on')}
-                <Icon as={MdFavorite}/></Text>
+            <Heading fontSize='xx-large' my={2}>
+                {t('Favorites list is empty')}
+            </Heading>
+            <Text color='gray' textAlign='center'>
+                {t('There is nothing here yet, but you can add the item to your favorites by clicking on')}
+                <Icon as={MdFavorite} ml='2'/>
+            </Text>
             <Link to={`/${slashEscape(currentCategory?.name) ?? ''}`}>
                 <Button colorScheme='yellow' px={10} mt={6}>
                     {t('Go to catalog')}

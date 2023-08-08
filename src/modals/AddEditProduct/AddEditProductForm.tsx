@@ -87,7 +87,7 @@ export const AddEditProductForm = (props: AddEditProductFormProps) => {
                         <Stack spacing={6} py={4}>
                             {categories?.length > 0 && <FormControl>
                                 <FormLabel htmlFor='categoryId' fontSize='m' color='gray.500'>
-                                    {t('Product category')}
+                                    {t('The item category')}
                                 </FormLabel>
                                 <Field name="categoryId">
                                     {({field, meta}: any) => (
@@ -114,7 +114,7 @@ export const AddEditProductForm = (props: AddEditProductFormProps) => {
 
                             <FormControl>
                                 <FormLabel htmlFor='title' fontSize='m' color='gray.500'>
-                                    {t('Product name')}
+                                    {t('Item name')}
                                 </FormLabel>
                                 <Field name="title">
                                     {({field, meta}: any) => (
@@ -130,7 +130,7 @@ export const AddEditProductForm = (props: AddEditProductFormProps) => {
                             </FormControl>
                             <FormControl>
                                 <FormLabel htmlFor='title' fontSize='m' color='gray.500'>
-                                    {t('Product images')}
+                                    {t('Item images')}
                                 </FormLabel>
                                 <FieldArray name="image">
                                     {({remove, push}) => (
@@ -146,12 +146,12 @@ export const AddEditProductForm = (props: AddEditProductFormProps) => {
                                                                         <Input
                                                                             type='url'
                                                                             fontSize='sm'
-                                                                            placeholder={t('Add a link to the product image')}
+                                                                            placeholder={t('Add a link to the item image')}
                                                                             isInvalid={meta.touched ? meta.error : false} {...field}
                                                                         />
                                                                         {meta.touched && meta.error && (
                                                                             <Text color='red.400' fontSize='sm'>
-                                                                                {t('Add a link to the product image')}
+                                                                                {t('Add a link to the item image')}
                                                                             </Text>
                                                                         )}
                                                                     </Box>

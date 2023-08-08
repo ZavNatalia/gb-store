@@ -48,7 +48,7 @@ const AddEditProductDrawer = (props: AddEditProductDrawerProps) => {
                 <DrawerCloseButton/>
                 <DrawerHeader borderBottomWidth='1px' backgroundColor='gray.100' boxShadow='md' minH='80px'
                               display='flex' alignItems='center'>
-                    {isEdit ? t('Edit product') : t('Adding a new product')}
+                    {isEdit ? t('The item editing') : t('Adding a new item')}
                 </DrawerHeader>
                 <AddEditProductForm product={product} onSubmit={onSubmit} onClose={onClose}/>
             </DrawerContent>

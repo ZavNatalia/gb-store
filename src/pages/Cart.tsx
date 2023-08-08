@@ -66,7 +66,7 @@ export const Cart = () => {
                 {t('Your bag is empty')}
             </Heading>
             <Text color='gray'>
-                {t('The items you order will appear here')}
+                {t('You do not have any items in your bag')}
             </Text>
             <HStack mt={10}>
                 <Link to={`/${slashEscape(currentCategory?.name) ?? ''}`}>

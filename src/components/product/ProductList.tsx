@@ -74,9 +74,9 @@ const ProductList = () => {
                 setOffset(prevState => prevState + limit);
             } catch (e: any) {
                 if (products?.length > 0) {
-                    ToastError(t('Failed to load product list'));
+                    ToastError(t('Failed to load item list'));
                 } else {
-                    setError(t('Failed to load product list. Please try again later.'));
+                    setError(t('Failed to load item list. Please try again later.'));
                 }
             } finally {
                 setIsLoading(false);
@@ -136,7 +136,7 @@ const ProductList = () => {
             } else {
                 updateList();
             }
-            ToastSuccess(t('Product was added successfully'));
+            ToastSuccess(t('The item was added successfully'));
             onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -178,7 +178,7 @@ const ProductList = () => {
     const NoContent = () => {
         return isLoading ? <SkeletonList amount={8}/> : (
             <Center h='50vh'>
-                <Text color='gray'>{t('There are no products in this category')}</Text>
+                <Text color='gray'>{t('There are no items in this category')}</Text>
             </Center>
         )
     }

@@ -17,9 +17,9 @@ import {
     Stack,
     Text
 } from "@chakra-ui/react";
-import {Field, Form, Formik} from "formik";
+import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import {IAddress, ICustomer} from "../models/ICustomer";
+import { IAddress, ICustomer } from "../models/ICustomer";
 import { BsFillPersonFill } from 'react-icons/bs';
 import { useTranslation } from 'react-i18next';
 
@@ -40,31 +40,34 @@ type Values = {
     street?: string | undefined;
 };
 
-const EditProfileModal = ({
-                              customer,
-                              isOpen,
-                              onClose,
-                              onEditProfile
-                          }: EditCategoryModalProps) => {
+const EditProfileModal = (props: EditCategoryModalProps) => {
+    const {
+        customer,
+        isOpen,
+        onClose,
+        onEditProfile
+    } = props;
     const {t} = useTranslation();
     const ValidationSchema = Yup.object().shape({
         firstname: Yup.string()
-            .max(50, 'Пожалуйста, введите не более 50 символов')
-            .required('Пожалуйста, введите ваше имя'),
+            .max(50, t('Please enter no more than 50 characters'))
+            .required(t('Please enter your firstname')),
         lastname: Yup.string()
-            .max(50, 'Пожалуйста, введите не более 50 символов'),
+            .max(50, t('Please enter no more than 50 characters')),
         zipcode: Yup.string()
-            .max(10, 'Пожалуйста, введите не более 10 символов'),
+            .max(10, t('Please enter no more than 10 characters')),
         email: Yup.string()
-            .email('Пожалуйста, введите корректный  email')
-            .required('Пожалуйста, введите ваш email'),
+            .email(t('Please enter a valid email'))
+            .required(t('Please enter your email')),
     });
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.4)'}}/>
             <ModalContent borderRadius='2xl' minW='500px' maxW='600px'>
-                <ModalHeader>Ваши данные</ModalHeader>
+                <ModalHeader>
+                    {t('Your data')}
+                </ModalHeader>
                 <ModalCloseButton/>
                 <Formik
                     initialValues={{
@@ -91,26 +94,34 @@ const EditProfileModal = ({
                                     </Center>
                                     <Flex gap={3}>
                                         <FormControl>
-                                            <FormLabel htmlFor='firstname' fontWeight='bold'>Ваше имя</FormLabel>
+                                            <FormLabel htmlFor='firstname' fontWeight='bold'>
+                                                {t('Your name')}
+                                            </FormLabel>
                                             <Field name="firstname">
                                                 {({field, meta}: any) => (
                                                     <>
                                                         <Input name='firstname' type='string' {...field}/>
                                                         {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                            <Text color='red.400' fontSize='sm' mt={2}>
+                                                                {meta.error}
+                                                            </Text>
                                                         )}
                                                     </>
                                                 )}
                                             </Field>
                                         </FormControl>
                                         <FormControl>
-                                            <FormLabel htmlFor='lastname' fontWeight='bold'>Ваша фамилия</FormLabel>
+                                            <FormLabel htmlFor='lastname' fontWeight='bold'>
+                                                {t('Your last name')}
+                                            </FormLabel>
                                             <Field name="lastname">
                                                 {({field, meta}: any) => (
                                                     <>
                                                         <Input name='lastname' type='string' {...field}/>
                                                         {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                            <Text color='red.400' fontSize='sm' mt={2}>
+                                                                {meta.error}
+                                                            </Text>
                                                         )}
                                                     </>
                                                 )}
@@ -118,27 +129,33 @@ const EditProfileModal = ({
                                         </FormControl>
                                     </Flex>
                                     <Flex gap={3}>
-                                        <FormControl >
-                                            <FormLabel htmlFor='zipcode' fontWeight='bold'>Индекс</FormLabel>
+                                        <FormControl>
+                                            <FormLabel htmlFor='zipcode' fontWeight='bold'>
+                                                {t('Zip code')}
+                                            </FormLabel>
                                             <Field name="zipcode">
                                                 {({field, meta}: any) => (
                                                     <>
                                                         <Input name='zipcode' type='string' {...field}/>
                                                         {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                            <Text color='red.400' fontSize='sm'
+                                                                  mt={2}>{meta.error}</Text>
                                                         )}
                                                     </>
                                                 )}
                                             </Field>
                                         </FormControl>
-                                        <FormControl >
-                                            <FormLabel htmlFor='country' fontWeight='bold'>Страна</FormLabel>
+                                        <FormControl>
+                                            <FormLabel htmlFor='country' fontWeight='bold'>
+                                                {t('Country')}
+                                            </FormLabel>
                                             <Field name="country">
                                                 {({field, meta}: any) => (
                                                     <>
                                                         <Input name='country' type='string' {...field}/>
                                                         {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                            <Text color='red.400' fontSize='sm'
+                                                                  mt={2}>{meta.error}</Text>
                                                         )}
                                                     </>
                                                 )}
@@ -146,27 +163,35 @@ const EditProfileModal = ({
                                         </FormControl>
                                     </Flex>
                                     <Flex gap={3}>
-                                        <FormControl >
-                                            <FormLabel htmlFor='city' fontWeight='bold'>Город</FormLabel>
+                                        <FormControl>
+                                            <FormLabel htmlFor='city' fontWeight='bold'>
+                                                {t('City')}
+                                            </FormLabel>
                                             <Field name="city">
                                                 {({field, meta}: any) => (
                                                     <>
                                                         <Input name='city' type='string' {...field}/>
                                                         {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                            <Text color='red.400' fontSize='sm' mt={2}>
+                                                                {meta.error}
+                                                            </Text>
                                                         )}
                                                     </>
                                                 )}
                                             </Field>
                                         </FormControl>
-                                        <FormControl >
-                                            <FormLabel htmlFor='street' fontWeight='bold'>Улица, дом, квартира</FormLabel>
+                                        <FormControl>
+                                            <FormLabel htmlFor='street' fontWeight='bold'>
+                                                {t('Street, house, flat')}
+                                            </FormLabel>
                                             <Field name="street">
                                                 {({field, meta}: any) => (
                                                     <>
                                                         <Input name='street' type='string' {...field}/>
                                                         {meta.touched && meta.error && (
-                                                            <Text color='red.400' fontSize='sm' mt={2}>{meta.error}</Text>
+                                                            <Text color='red.400' fontSize='sm' mt={2}>
+                                                                {meta.error}
+                                                            </Text>
                                                         )}
                                                     </>
                                                 )}
@@ -175,7 +200,9 @@ const EditProfileModal = ({
                                     </Flex>
 
                                     <FormControl>
-                                        <FormLabel htmlFor='email' fontWeight='bold'>Email</FormLabel>
+                                        <FormLabel htmlFor='email' fontWeight='bold'>
+                                            {t('Email')}
+                                        </FormLabel>
                                         <Field name='email'>
                                             {({field, meta}: any) => (
                                                 <>
@@ -196,10 +223,11 @@ const EditProfileModal = ({
                             </ModalBody>
                             <ModalFooter>
                                 <Button variant='ghost' mr={3} onClick={onClose}>
-                                    Отмена
+                                    {t('Cancel')}
                                 </Button>
-                                <Button isDisabled={!isValid || !dirty}
-                                        type='submit'>Сохранить</Button>
+                                <Button isDisabled={!isValid || !dirty} type='submit'>
+                                    {t('Save')}
+                                </Button>
                             </ModalFooter>
                         </Form>
                     )}

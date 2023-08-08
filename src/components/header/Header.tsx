@@ -42,7 +42,6 @@ import { IRole } from "../../models/IRole";
 import { BsFillPersonFill } from 'react-icons/bs';
 import { getHeaderConfig } from "../../utilities/getHeaderConfig";
 import OrderService from "../../api/OrderService";
-import Logo from '../../shared/assets/images/logo.png';
 import { LangSwitcher } from '../../UI/LangSwitcher';
 import { useTranslation } from 'react-i18next';
 
@@ -254,13 +253,14 @@ export const Header = () => {
                         h='52px'
                         w='52px'
                         objectFit={'contain'}
-                        src={Logo}/>
+                        src='/assets/images/logo.png'/>
                     <Text ml={2} as='h1' fontSize='3xl' fontWeight='thin' textTransform='lowercase'>
                         Cozy Dragon
                     </Text>
                 </Flex>
             </Link>
             <Flex alignItems={'center'}>
+                <LangSwitcher/>
                 {!isAuth && <HStack>
                     <Button onClick={signInDisclosure.onOpen} backgroundColor='gray.300' px={6}>
                         {t('Sign in')}
@@ -292,42 +292,53 @@ export const Header = () => {
                             icon={<BsFillPersonFill fontSize='xx-large'/>}
                         />
                         <MenuList>
-                            <MenuItem onClick={editProfileDisclosure.onOpen}>{t('Profile')}</MenuItem>
-                            {isAdmin && <MenuItem onClick={onOpenSettingsModal}>{t('Settings')}</MenuItem>}
-                            {!isAdmin &&
+                            <MenuItem onClick={editProfileDisclosure.onOpen}>
+                                {t('Profile')}
+                            </MenuItem>
+                            {isAdmin && (
+                                <MenuItem onClick={onOpenSettingsModal}>
+                                    {t('Settings')}
+                                </MenuItem>
+                            )}
+                            {!isAdmin && (
                                 <Link to={'/orders'}>
                                     <MenuItem>{t('My orders')}</MenuItem>
                                 </Link>
-                            }
+                            )}
                             <MenuDivider/>
-                            <MenuItem onClick={logOutDisclosure.onOpen}>{t('Log out')}</MenuItem>
+                            <MenuItem onClick={logOutDisclosure.onOpen}>
+                                {t('Log out')}
+                            </MenuItem>
                         </MenuList>
                     </Menu>
-                    <LangSwitcher/>
                 </>}
             </Flex>
 
-            <EditProfileModal customer={customer}
-                              isOpen={editProfileDisclosure.isOpen}
-                              onClose={editProfileDisclosure.onClose}
-                              onEditProfile={onEditProfile}/>
-            <SettingsModal roles={roles}
-                           isOpen={settingsDisclosure.isOpen}
-                           onClose={settingsDisclosure.onClose}
-                           onEditUserRole={onEditUserRole}
-                           onEditOrderStatus={onEditOrderStatus}/>
-
-            <SignIn isOpen={signInDisclosure.isOpen}
-                    onClose={signInDisclosure.onClose}
-                    onOpenSignUp={signUpDisclosure.onOpen}
-                    signInByEmail={signInByEmail}/>
-            <SignUp isOpen={signUpDisclosure.isOpen}
-                    onClose={signUpDisclosure.onClose}
-                    onOpenSignIn={signInDisclosure.onOpen}
-                    signUpHandler={signUpHandler}/>
-            <LogOut isOpen={logOutDisclosure.isOpen}
-                    onClose={logOutDisclosure.onClose}
-                    logOutHandler={logOutHandler}/>
+            <EditProfileModal
+                customer={customer}
+                isOpen={editProfileDisclosure.isOpen}
+                onClose={editProfileDisclosure.onClose}
+                onEditProfile={onEditProfile}/>
+            <SettingsModal
+                roles={roles}
+                isOpen={settingsDisclosure.isOpen}
+                onClose={settingsDisclosure.onClose}
+                onEditUserRole={onEditUserRole}
+                onEditOrderStatus={onEditOrderStatus}/>
+            <SignIn
+                isOpen={signInDisclosure.isOpen}
+                onClose={signInDisclosure.onClose}
+                onOpenSignUp={signUpDisclosure.onOpen}
+                signInByEmail={signInByEmail}/>
+            <SignUp
+                isOpen={signUpDisclosure.isOpen}
+                onClose={signUpDisclosure.onClose}
+                onOpenSignIn={signInDisclosure.onOpen}
+                signUpHandler={signUpHandler}/>
+            <LogOut
+                isOpen={logOutDisclosure.isOpen}
+                onClose={logOutDisclosure.onClose}
+                logOutHandler={logOutHandler}/>
         </Flex>
     );
 }

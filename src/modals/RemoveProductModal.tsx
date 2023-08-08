@@ -27,7 +27,7 @@ const RemoveProductModal = (props: RemoveProductModalProps) => {
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.16)'}}/>
             <ModalContent borderRadius='2xl'>
                 <ModalHeader borderBottom='1px solid' borderBottomColor='gray.200'>
-                    {t('Delete item')}
+                    {t('Delete the item')}
                 </ModalHeader>
                 <ModalCloseButton/>
                 <ModalBody my={4}>

@@ -19,7 +19,7 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
 
     const ValidationSchema = Yup.object().shape({
         firstname: Yup.string()
-            .required(t('Please enter your name')),
+            .required(t('Please enter your firstname')),
         email: Yup.string()
             .email(t('Please enter a valid email'))
             .required(t('Please enter your email')),
@@ -54,7 +54,7 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
                                 {({field, meta}: any) => (
                                     <>
                                         <Input type='text'
-                                               placeholder={t('Enter your name')}
+                                               placeholder={t('Enter your firstname')}
                                                mb={2}
                                                isInvalid={meta.touched ? meta.error : false} {...field} />
                                         {meta.touched && meta.error && (

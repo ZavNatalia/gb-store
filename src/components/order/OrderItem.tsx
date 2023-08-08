@@ -43,7 +43,7 @@ export const OrderItem = ({order}: OrderItemProps) => {
                     <Link to={`/order/${order.id}`}>
                         <Flex alignItems='center' justifyContent='space-between' w='100%'>
                             <Text fontSize='x-large' fontWeight='bold'>{
-                                moment(order.created_at).format('DD MMMM в LT')}</Text>
+                                moment(order.created_at).format('MM/DD/YYYY')}</Text>
                             <OrderStatusBadge status={order.status}/>
                         </Flex>
                         <Flex>

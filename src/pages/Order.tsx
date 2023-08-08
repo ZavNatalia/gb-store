@@ -1,17 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
-import {Box, Flex, Heading, HStack, IconButton, Image, List, ListItem, Text, useClipboard} from "@chakra-ui/react";
-import {getHeaderConfig} from "../utilities/getHeaderConfig";
+import React, { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
+import { Box, Flex, Heading, HStack, IconButton, Image, List, ListItem, Text, useClipboard } from "@chakra-ui/react";
+import { getHeaderConfig } from "../utilities/getHeaderConfig";
 import OrderService from "../api/OrderService";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import Loader from "../UI/Loader";
-import {toCurrency} from "../utilities/formatCurrency";
+import { toCurrency } from "../utilities/formatCurrency";
 import TotalCostTable from "../UI/TotalCostTable";
 import moment from "moment";
 import OrderStatusBadge from "../UI/OrderStatusBadge";
 import { ICreatedOrder } from '../models/IOrder';
 import { CheckIcon, CopyIcon } from '@chakra-ui/icons';
 import { useTranslation } from 'react-i18next';
+import ErrorMessage from '../UI/ErrorMessage';
 
 export const Order = () => {
     const {t} = useTranslation();
@@ -78,17 +79,34 @@ export const Order = () => {
         </List>
     )
 
+    if (isLoading) {
+        return (
+            <MainBlockLayout link={`/orders`} linkTitle={t('Go to my orders')}>
+                {isLoading && <Loader/>}
+            </MainBlockLayout>
+        )
+    }
+    if (error) {
+        return (
+            <MainBlockLayout link={`/orders`} linkTitle={t('Go to my orders')}>
+                <Box py='40px' textAlign='center'>
+                    <ErrorMessage message={error} borderRadius='2xl'/>
+                </Box>
+            </MainBlockLayout>
+        )
+    }
+
     return (
         <MainBlockLayout link={`/orders`} linkTitle={t('Go to my orders')}>
-            {isLoading && <Loader/>}
-
-            {!isLoading && order && <Box w='100%' my={8}>
+            {order && <Box w='100%' my={8}>
                 <Flex justifyContent='space-between' alignItems='start'>
                     <Box>
-                        <Heading>Заказ от {moment(order?.created_at).format('DD MMMM')} </Heading>
+                        <Heading>
+                            {t('Order from')} {moment(order?.created_at).format('MM/DD/YYYY')}
+                        </Heading>
                         <Flex gap={2} alignItems='center'>
                             <Text mt={2} color='gray.500' fontSize='lg'>
-                                {t('Created at')}{moment(order?.created_at).format('LT')} -  №{order?.id}
+                                {t('Created at')} {moment(order?.created_at).format('LT')} - №{order?.id}
                             </Text>
                             <IconButton
                                 aria-label='Copy link'
@@ -114,7 +132,7 @@ export const Order = () => {
                                 {order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}
                             </Text>
                             <Text fontSize='sm' color='gray' mt={3}>{t('Delivery date')}</Text>
-                            <Text>{moment(order?.shipment_time).format('DD MMMM YYYY')}</Text>
+                            <Text>{moment(order?.shipment_time).format('MM/DD/YYYY')}</Text>
                         </Box>
                     </Flex>
                     <Box w='340px'>
