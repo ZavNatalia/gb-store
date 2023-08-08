@@ -70,7 +70,7 @@ const Carousel = ({images}: CarouselProps) => {
                         minW='500px'
                         objectFit={'contain'}
                         src={url}
-                        fallbackSrc={'/imgs/placeholder-image.jpg'}
+                        fallbackSrc={'/assets/images/placeholder-image.jpg'}
                     />
                 ))}
             </Slider>

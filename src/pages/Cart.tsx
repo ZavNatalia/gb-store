@@ -28,8 +28,10 @@ import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import OrderService from "../api/OrderService";
 import TotalCostTable from '../UI/TotalCostTable';
 import Loader from "../UI/Loader";
+import { useTranslation } from 'react-i18next';
 
 export const Cart = () => {
+    const {t} = useTranslation();
     const {cart, getTotalQuantity, onEmptyCartContext, onFetchCart, isLoadingCart} = useCart();
     const {currentCategory} = useCategory();
     const navigate = useNavigate();
@@ -47,9 +49,11 @@ export const Cart = () => {
             const {data} = await OrderService.createOrder(order, config);
             setCartId(data.newCartId);
             onEmptyCartContext();
-            ToastSuccess('Спасибо за заказ. Вы можете отслеживать статус заказа в разделе Мои Заказы.');
+            ToastSuccess(
+                t('Thank you for the order. You can track the status of your order in the My Orders section.')
+            );
         } catch (error: any) {
-            ToastError('Не удалось отправить заказ. Повторите попытку позже.');
+            ToastError(t('Failed to submit order. Please try again later.'));
         } finally {
             navigate('/orders');
         }
@@ -58,17 +62,21 @@ export const Cart = () => {
     const EmptyCart = () => (
         <Flex flexDirection='column' alignItems='center' gap={4} mt={10}>
             <Icon fontSize='140px' color='gray.400' as={BsBag}/>
-            <Heading fontSize='xx-large' my={2}>В вашей корзине пока пусто</Heading>
-            <Text color='gray'>Тут появятся товары, которые вы закажете.</Text>
+            <Heading fontSize='xx-large' my={2}>
+                {t('Your bag is empty')}
+            </Heading>
+            <Text color='gray'>
+                {t('You do not have any items in your bag')}
+            </Text>
             <HStack mt={10}>
                 <Link to={`/${slashEscape(currentCategory?.name) ?? ''}`}>
                     <Button colorScheme='blackAlpha' px={10}>
-                        В каталог
+                        {t('Go to catalog')}
                     </Button>
                 </Link>
                 <Link to={`/orders`}>
                     <Button colorScheme='yellow' px={10}>
-                        Мои заказы
+                        {t('My orders')}
                     </Button>
                 </Link>
             </HStack>
@@ -93,7 +101,7 @@ export const Cart = () => {
                                         minH='110px'
                                         minW='110px'
                                         objectFit={'contain'}
-                                        src={item.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                        src={item.image[0] ?? '/assets/images/placeholder-image.jpg'}
                                     />
                                 </Flex>
                                 <Flex flexGrow={1} flexDirection='column' px={4}>
@@ -109,22 +117,26 @@ export const Cart = () => {
                 ))}
             </List>
             <Text alignSelf='end' color='gray' fontSize='sm' pt={3} pr={3}>
-                Общее количество товаров: {getTotalQuantity()}
+                {t('Total number of goods')}: {getTotalQuantity()}
             </Text>
         </Flex>
     )
 
     return (
-        <MainBlockLayout title={'Корзина'}>
+        <MainBlockLayout title={t('My bag')}>
             {isLoadingCart && cart?.items?.length === 0 && <Loader/>}
             {cart?.items?.length > 0 && (
                 <Flex gap={10} pt={2}>
                     <OrderList/>
                     <Box flex={1} overflow={"auto"}>
-                        <Heading fontSize='x-large' mb={2}>Итого</Heading>
-                        <Text color='gray' borderBottom='1px solid' borderBottomColor='gray.300' pb={2}>Бесплатная доставка. Оплата при получении картой или наличными.</Text>
+                        <Heading fontSize='x-large' mb={2}>{t('Total')}</Heading>
+                        <Text color='gray' borderBottom='1px solid' borderBottomColor='gray.300' pb={2}>
+                            {t('Free shipping. Payment upon receipt by card or cash.')}
+                        </Text>
                         <TotalCostTable items={cart.items}/>
-                        <Heading fontSize='x-large' mb={4}>Адрес доставки</Heading>
+                        <Heading fontSize='x-large' mb={4}>
+                            {t('Delivery address')}
+                        </Heading>
                         <OrderForm handleFormSubmit={handleFormSubmit}/>
                     </Box>
                 </Flex>)}

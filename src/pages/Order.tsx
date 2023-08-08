@@ -1,18 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
-import {Box, Flex, Heading, HStack, IconButton, Image, List, ListItem, Text, useClipboard} from "@chakra-ui/react";
-import {getHeaderConfig} from "../utilities/getHeaderConfig";
+import React, { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
+import { Box, Flex, Heading, HStack, IconButton, Image, List, ListItem, Text, useClipboard } from "@chakra-ui/react";
+import { getHeaderConfig } from "../utilities/getHeaderConfig";
 import OrderService from "../api/OrderService";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import Loader from "../UI/Loader";
-import {toCurrency} from "../utilities/formatCurrency";
+import { toCurrency } from "../utilities/formatCurrency";
 import TotalCostTable from "../UI/TotalCostTable";
 import moment from "moment";
 import OrderStatusBadge from "../UI/OrderStatusBadge";
 import { ICreatedOrder } from '../models/IOrder';
 import { CheckIcon, CopyIcon } from '@chakra-ui/icons';
+import { useTranslation } from 'react-i18next';
+import ErrorMessage from '../UI/ErrorMessage';
 
 export const Order = () => {
+    const {t} = useTranslation();
     const {orderId} = useParams();
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +36,7 @@ export const Order = () => {
                 setValue(orderId);
             }
         } catch (error: any) {
-            setError('Не удалось загрузить информацию о заказе');
+            setError(t('Failed to load order information'));
         } finally {
             setIsLoading(false);
         }
@@ -61,7 +64,7 @@ export const Order = () => {
                                     minH='90px'
                                     minW='90px'
                                     objectFit={'contain'}
-                                    src={item?.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                    src={item?.image[0] ?? '/assets/images/placeholder-image.jpg'}
                                 />
                             </Flex>
                             <Flex gap={2} flexDirection='column'>
@@ -76,16 +79,35 @@ export const Order = () => {
         </List>
     )
 
-    return (
-        <MainBlockLayout link={`/orders`} linkTitle={'К моим заказам'}>
-            {isLoading && <Loader/>}
+    if (isLoading) {
+        return (
+            <MainBlockLayout link={`/orders`} linkTitle={t('Go to my orders')}>
+                {isLoading && <Loader/>}
+            </MainBlockLayout>
+        )
+    }
+    if (error) {
+        return (
+            <MainBlockLayout link={`/orders`} linkTitle={t('Go to my orders')}>
+                <Box py='40px' textAlign='center'>
+                    <ErrorMessage message={error} borderRadius='2xl'/>
+                </Box>
+            </MainBlockLayout>
+        )
+    }
 
-            {!isLoading && order && <Box w='100%' my={8}>
+    return (
+        <MainBlockLayout link={`/orders`} linkTitle={t('Go to my orders')}>
+            {order && <Box w='100%' my={8}>
                 <Flex justifyContent='space-between' alignItems='start'>
                     <Box>
-                        <Heading>Заказ от {moment(order?.created_at).format('DD MMMM')} </Heading>
+                        <Heading>
+                            {t('Order from')} {moment(order?.created_at).format('MM/DD/YYYY')}
+                        </Heading>
                         <Flex gap={2} alignItems='center'>
-                            <Text mt={2} color='gray.500' fontSize='lg'>Создан в {moment(order?.created_at).format('LT')} -  №{order?.id}</Text>
+                            <Text mt={2} color='gray.500' fontSize='lg'>
+                                {t('Created at')} {moment(order?.created_at).format('LT')} - №{order?.id}
+                            </Text>
                             <IconButton
                                 aria-label='Copy link'
                                 size='sm'
@@ -100,20 +122,21 @@ export const Order = () => {
                 <Flex gap='50px'>
                     <Flex flexDirection='column' flexGrow={1} maxW='540px'>
                         <Box>
-                            <Title title='Ваш заказ'/>
+                            <Title title={t('Your order')}/>
                             <ListOfItems/>
                         </Box>
                         <Box>
-                            <Title title='Детали доставки'/>
-                            <Text fontSize='sm' color='gray'>Адрес</Text>
-                            <Text>{order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}</Text>
-
-                            <Text fontSize='sm' color='gray' mt={3}>Дата доставки</Text>
-                            <Text>{moment(order?.shipment_time).format('DD MMMM YYYY г.')}</Text>
+                            <Title title={t('Delivery details')}/>
+                            <Text fontSize='sm' color='gray'>{t('Address')}</Text>
+                            <Text>
+                                {order.address.zipcode}, {order.address.country}, {order.address.city}, {order.address.street}
+                            </Text>
+                            <Text fontSize='sm' color='gray' mt={3}>{t('Delivery date')}</Text>
+                            <Text>{moment(order?.shipment_time).format('MM/DD/YYYY')}</Text>
                         </Box>
                     </Flex>
                     <Box w='340px'>
-                        <Title title='Итого'/>
+                        <Title title={t('Total')}/>
                         <TotalCostTable items={order.items}/>
                     </Box>
                 </Flex>

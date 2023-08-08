@@ -5,6 +5,7 @@ import {useCart} from "../context/CartContext";
 import {IProduct} from '../models/IProduct';
 import {useCustomer} from "../context/CustomerContext";
 import {ToastInfo} from "../utilities/error-handling";
+import { useTranslation } from 'react-i18next';
 
 interface CounterProps {
     product: IProduct,
@@ -12,7 +13,9 @@ interface CounterProps {
     buttonColor?: string
 }
 
-const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps) => {
+const Counter = (props: CounterProps) => {
+    const {t} = useTranslation();
+    const {product, quantity = 0, buttonColor = 'gray.50'} = props;
     const {isAdmin, isAuth} = useCustomer();
     const {onAddItemToCart, onDeleteItemFromCart, isLoadingCart} = useCart();
     return (
@@ -30,13 +33,13 @@ const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps)
                         isDisabled={isAdmin}
                         onClick={() => {
                             if (!isAuth) {
-                                ToastInfo('Авторизуйтесь для добавления товаров в корзину')
+                                ToastInfo(t('Log in to add items to cart'))
                             } else {
                                 onAddItemToCart(product.id)
                             }
                         }}
                 >
-                    В корзину
+                    {t('Add to bag')}
                 </Button>
             ) : (
                 <HStack rounded='xl'
@@ -47,7 +50,7 @@ const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps)
                         cursor='default'
                         transition='all .3s ease'
                         _hover={{boxShadow: 'md'}}>
-                    <IconButton aria-label='Уменьшить количество'
+                    <IconButton aria-label='Minus'
                                 icon={<FaMinus/>}
                                 variant='ghost'
                                 borderRadius='xl'
@@ -60,7 +63,7 @@ const Counter = ({product, quantity = 0, buttonColor = 'gray.50'}: CounterProps)
                     <Text textAlign={"center"} fontSize={"large"} fontWeight='bold' px={2}>
                         {quantity}
                     </Text>
-                    <IconButton aria-label='Увеличить количество'
+                    <IconButton aria-label='Plus'
                                 icon={<FaPlus/>}
                                 variant='ghost'
                                 borderRadius='xl'

@@ -19,7 +19,7 @@ import { IProduct } from '../../models/IProduct';
 import ErrorMessage from "../../UI/ErrorMessage";
 import { useCategory } from "../../context/CategoryContext";
 import { GrAdd } from "react-icons/gr";
-import AddEditProductDrawer from '../../modals/AddEditProductDrawer';
+import AddEditProductDrawer from '../../modals/AddEditProduct/AddEditProductDrawer';
 import { isEmpty } from "../../utilities/isEmpty";
 import { ToastError, ToastSuccess } from '../../utilities/error-handling';
 import SkeletonList from '../../UI/SkeletonList';
@@ -28,8 +28,10 @@ import { useCustomer } from "../../context/CustomerContext";
 import { ICategory } from "../../models/ICategory";
 import { MdClose } from 'react-icons/md';
 import { getHeaderConfig } from '../../utilities/getHeaderConfig';
+import { useTranslation } from 'react-i18next';
 
 const ProductList = () => {
+    const {t} = useTranslation();
     const [products, setProducts] = useState<IProduct[]>([]);
     const [error, setError] = useState('');
     const [offset, setOffset] = useState(0);
@@ -72,9 +74,9 @@ const ProductList = () => {
                 setOffset(prevState => prevState + limit);
             } catch (e: any) {
                 if (products?.length > 0) {
-                    ToastError('Не удалось загрузить список товаров');
+                    ToastError(t('Failed to load item list'));
                 } else {
-                    setError('Не удалось загрузить список товаров. Повторите попытку позже.');
+                    setError(t('Failed to load item list. Please try again later.'));
                 }
             } finally {
                 setIsLoading(false);
@@ -134,7 +136,7 @@ const ProductList = () => {
             } else {
                 updateList();
             }
-            ToastSuccess('Товар был успешно добавлен');
+            ToastSuccess(t('The item was added successfully'));
             onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -153,8 +155,8 @@ const ProductList = () => {
                 color='gray.500'
                 focusBorderColor={'yellow.500'}
                 onChange={handleSortOrderChange}>
-            <option value='asc'>Сначала дешёвые</option>
-            <option value='desc'>Сначала дорогие</option>
+            <option value='asc'>{t('Price low to high')}</option>
+            <option value='desc'>{t('Price high to low')}</option>
         </Select>
     )
 
@@ -176,7 +178,7 @@ const ProductList = () => {
     const NoContent = () => {
         return isLoading ? <SkeletonList amount={8}/> : (
             <Center h='50vh'>
-                <Text color='gray'>В данной категории нет товаров</Text>
+                <Text color='gray'>{t('There are no items in this category')}</Text>
             </Center>
         )
     }
@@ -203,7 +205,7 @@ const ProductList = () => {
         >
             <>
                 <Flex justifyContent='space-between' gap={5}>
-                    <Heading mb={5}>{currentCategory?.name?.toUpperCase() ?? 'Все товары'.toUpperCase()}</Heading>
+                    <Heading mb={5}>{currentCategory?.name?.toUpperCase() ?? t('All goods').toUpperCase()}</Heading>
                     {isAdmin &&
                         <Button
                             position='fixed'
@@ -216,7 +218,7 @@ const ProductList = () => {
                             colorScheme='yellow'
                             fontWeight='normal'
                             onClick={onOpen}>
-                            Добавить новый товар
+                            {t('Add new item')}
                         </Button>
                     }
                 </Flex>
@@ -228,7 +230,7 @@ const ProductList = () => {
                             value={searchQuery}
                             pr='40px'
                             type='text'
-                            placeholder='Поиск по товарам...'
+                            placeholder={t('Search for items...')}
                             focusBorderColor={'yellow.500'}
                             borderRadius='2xl'
                             onChange={handleSearchQueryChange}

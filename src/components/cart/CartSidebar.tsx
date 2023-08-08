@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 import Counter from "../../UI/Counter";
 import { BsBag } from "react-icons/bs";
 import { slashEscape } from "../../utilities/RegExpURL";
+import { useTranslation } from 'react-i18next';
 
 const CartSidebar = () => {
+    const {t} = useTranslation();
     const {cart, getTotalCost} = useCart();
 
     const CartList = () => (
@@ -31,7 +33,7 @@ const CartSidebar = () => {
                                             minH='100px'
                                             minW='100px'
                                             objectFit={'contain'}
-                                            src={item?.image[0] ?? '/imgs/placeholder-image.jpg'}
+                                            src={item?.image[0] ?? '/assets/images/placeholder-image.jpg'}
                                         />
                                     </Flex>
                                     <Flex gap={2} flexDirection='column'>
@@ -48,8 +50,8 @@ const CartSidebar = () => {
                 :
                 <Flex flex={1} flexDirection='column' alignItems='center' justifyContent='center'>
                     <Icon fontSize='100px' color='gray.400' as={BsBag}/>
-                    <Heading fontSize='large' mt={6} mb={3}>В вашей корзине пока пусто</Heading>
-                    <Text>Тут появятся товары, которые вы закажете.</Text>
+                    <Heading fontSize='large' mt={6} mb={3}>{t('Your bag is empty')}</Heading>
+                    <Text>{t('The items you order will be displayed here')}</Text>
                 </Flex>
             }
         </>
@@ -68,8 +70,8 @@ const CartSidebar = () => {
                         borderRadius='2xl'
                         w='100%'
                     >
-                        Перейти в корзину&nbsp;
-                        <Text as={"span"} fontSize='xl' fontWeight='bold'>
+                        {t('View bag')}
+                        <Text as={"span"} fontSize='xl' ml={2} fontWeight='bold'>
                             {toCurrency(getTotalCost(cart.items))}
                         </Text>
                     </Button>
@@ -91,12 +93,12 @@ const CartSidebar = () => {
             borderLeft="1px"
             borderLeftColor='gray.200'
         >
-            <Heading fontSize='x-large'>Корзина</Heading>
+            <Heading fontSize='x-large'>{t('My bag')}</Heading>
             <CartList/>
             {cart?.items?.length > 0 &&
                 <Box borderTop='1px solid' borderColor='gray.300' pt={3} pr={3} color='gray' fontSize='sm'
                      textAlign='right'>
-                    <Text>Бесплатная доставка</Text>
+                    <Text>{t('Free shipping')}</Text>
                 </Box>}
             <CartLink/>
         </Flex>

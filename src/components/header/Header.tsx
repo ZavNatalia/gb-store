@@ -14,17 +14,17 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCategory } from "../context/CategoryContext";
-import { ICategory } from '../models/ICategory';
+import { useCategory } from "../../context/CategoryContext";
+import { ICategory } from '../../models/ICategory';
 import axios from "axios";
-import { ToastError, ToastSuccess } from "../utilities/error-handling";
-import SignIn from '../modals/SignIn';
-import SignUp from "../modals/SignUp";
-import { ICustomer } from "../models/ICustomer";
-import { Links } from './cart/Links';
-import { rootURL } from '../constants/URLs';
-import EditProfileModal from '../modals/EditProfileModal';
-import LogOut from '../modals/LogOut';
+import { ToastError, ToastSuccess } from "../../utilities/error-handling";
+import SignIn from '../../modals/SignIn';
+import SignUp from "../../modals/SignUp";
+import { ICustomer } from "../../models/ICustomer";
+import { Links } from '../cart/Links';
+import { rootURL } from '../../constants/URLs';
+import EditProfileModal from '../../modals/EditProfileModal';
+import LogOut from '../../modals/LogOut';
 
 import {
     getCartId,
@@ -34,17 +34,19 @@ import {
     setCartId,
     setToken,
     setUserId
-} from "../utilities/local-storage-handling";
-import { useCustomer } from "../context/CustomerContext";
-import { useCart } from "../context/CartContext";
-import SettingsModal from "../modals/SettingsModal";
-import { IRole } from "../models/IRole";
+} from "../../utilities/local-storage-handling";
+import { useCustomer } from "../../context/CustomerContext";
+import { useCart } from "../../context/CartContext";
+import SettingsModal from "../../modals/SettingsModal";
+import { IRole } from "../../models/IRole";
 import { BsFillPersonFill } from 'react-icons/bs';
-import { getHeaderConfig } from "../utilities/getHeaderConfig";
-import OrderService from "../api/OrderService";
-import Logo from '../shared/assets/images/logo.png';
+import { getHeaderConfig } from "../../utilities/getHeaderConfig";
+import OrderService from "../../api/OrderService";
+import { LangSwitcher } from '../../UI/LangSwitcher';
+import { useTranslation } from 'react-i18next';
 
 export const Header = () => {
+    const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [roles, setRoles] = useState<IRole[]>([]);
     const signInDisclosure = useDisclosure();
@@ -74,7 +76,7 @@ export const Header = () => {
             `${rootURL}/user/login/${source}`
         )
             .then(({data}) => {
-                ToastSuccess('Вы успешно авторизовались');
+                ToastSuccess(t('You have successfully logged in'));
                 setToken(data.token.access_token);
                 onFetchCart(data.cartId);
                 setCartId(data.cartId);
@@ -96,7 +98,7 @@ export const Header = () => {
             }
         )
             .then(({data}) => {
-                ToastSuccess('Вы успешно авторизовались');
+                ToastSuccess(t('You have successfully logged in'));
                 setToken(data.token.access_token);
                 onFetchCart(data.cartId);
                 setCartId(data.cartId);
@@ -105,9 +107,9 @@ export const Header = () => {
             })
             .catch(error => {
                 if (error.response.data?.message?.includes('incorrect email or password')) {
-                    ToastError('Неверный логин или пароль');
+                    ToastError(t('Wrong login or password'));
                 } else {
-                    ToastError('Сервис временно недоступен');
+                    ToastError(t('Service is temporarily unavailable'));
                 }
             })
             .finally(() => {
@@ -122,7 +124,7 @@ export const Header = () => {
             }
         )
             .then(() => {
-                ToastSuccess('Вы успешно зарегистрировались');
+                ToastSuccess(t('You have successfully signed up'));
             })
             .catch(error => {
                 ToastError(error.message);
@@ -145,10 +147,10 @@ export const Header = () => {
                 removeToken();
                 removeUserId();
                 navigate('');
-                ToastSuccess('Вы вышли из аккаунта');
+                ToastSuccess(t('You are logged out'));
             })
             .catch(error => {
-                ToastError('Сервис временно недоступен');
+                ToastError(t('Service is temporarily unavailable'));
             })
             .finally(() => {
                 logOutDisclosure.onClose();
@@ -167,7 +169,7 @@ export const Header = () => {
                 onChangeAuth(true);
             })
             .catch(error => {
-                ToastError('Сервис временно недоступен');
+                ToastError(t('Service is temporarily unavailable'));
                 removeToken();
                 removeUserId();
                 onChangeAuth(false);
@@ -185,7 +187,7 @@ export const Header = () => {
             .then(({data}) => {
                 onChangeCustomer(data);
                 setUserId(data.id);
-                ToastSuccess('Ваши данные были успешно изменены');
+                ToastSuccess(t('Your data has been successfully changed'));
             })
             .catch(error => {
                 ToastError(error.message);
@@ -211,7 +213,7 @@ export const Header = () => {
             `${rootURL}/user/role/update`, values, config
         )
             .then(() => {
-                ToastSuccess('Роль пользователя была успешно изменена');
+                ToastSuccess(t('User role has been successfully changed'));
             })
             .catch(error => {
                 ToastError(error.message);
@@ -225,7 +227,7 @@ export const Header = () => {
         try {
             const config = getHeaderConfig();
             await OrderService.changeOrderStatus(values, config);
-            ToastSuccess('Статус заказа был изменен');
+            ToastSuccess(t('Order status has been changed'));
             settingsDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
@@ -251,16 +253,21 @@ export const Header = () => {
                         h='52px'
                         w='52px'
                         objectFit={'contain'}
-                        src={Logo}/>
+                        src='/assets/images/logo.png'/>
                     <Text ml={2} as='h1' fontSize='3xl' fontWeight='thin' textTransform='lowercase'>
                         Cozy Dragon
                     </Text>
                 </Flex>
             </Link>
             <Flex alignItems={'center'}>
+                <LangSwitcher/>
                 {!isAuth && <HStack>
-                    <Button onClick={signInDisclosure.onOpen} backgroundColor='gray.300' px={6}>Войти</Button>
-                    <Button onClick={signUpDisclosure.onOpen} colorScheme={"yellow"} px={6}>Регистрация</Button>
+                    <Button onClick={signInDisclosure.onOpen} backgroundColor='gray.300' px={6}>
+                        {t('Sign in')}
+                    </Button>
+                    <Button onClick={signUpDisclosure.onOpen} colorScheme={"yellow"} px={6}>
+                        {t('Sign up')}
+                    </Button>
                 </HStack>}
 
                 {isAuth && <>
@@ -270,7 +277,7 @@ export const Header = () => {
                         mx={2}
                         fontSize='25px'>
                         {isAdmin && <Text ml={2} fontSize='2xl' fontWeight='thin' color='gray'>
-                            Панель администратора
+                            {t('Admin panel')}
                         </Text>}
                         {!isAdmin && Links.map(({title, icon, path}) => (
                             <Link to={path} key={title}>
@@ -281,45 +288,57 @@ export const Header = () => {
                     <Menu>
                         <MenuButton
                             as={IconButton}
-                            aria-label='Профиль'
+                            aria-label='Profile'
                             icon={<BsFillPersonFill fontSize='xx-large'/>}
                         />
                         <MenuList>
-                            <MenuItem onClick={editProfileDisclosure.onOpen}>Профиль</MenuItem>
-                            {isAdmin && <MenuItem onClick={onOpenSettingsModal}>Настройки</MenuItem>}
-                            {!isAdmin &&
+                            <MenuItem onClick={editProfileDisclosure.onOpen}>
+                                {t('Profile')}
+                            </MenuItem>
+                            {isAdmin && (
+                                <MenuItem onClick={onOpenSettingsModal}>
+                                    {t('Settings')}
+                                </MenuItem>
+                            )}
+                            {!isAdmin && (
                                 <Link to={'/orders'}>
-                                    <MenuItem>Мои заказы</MenuItem>
+                                    <MenuItem>{t('My orders')}</MenuItem>
                                 </Link>
-                            }
+                            )}
                             <MenuDivider/>
-                            <MenuItem onClick={() => logOutHandler()}>Выйти</MenuItem>
+                            <MenuItem onClick={logOutDisclosure.onOpen}>
+                                {t('Log out')}
+                            </MenuItem>
                         </MenuList>
                     </Menu>
                 </>}
             </Flex>
 
-            <EditProfileModal customer={customer}
-                              isOpen={editProfileDisclosure.isOpen}
-                              onClose={editProfileDisclosure.onClose}
-                              onEditProfile={onEditProfile}/>
-            <SettingsModal roles={roles}
-                           isOpen={settingsDisclosure.isOpen}
-                           onClose={settingsDisclosure.onClose}
-                           onEditUserRole={onEditUserRole}
-                           onEditOrderStatus={onEditOrderStatus}/>
-
-            <SignIn isOpen={signInDisclosure.isOpen}
-                    onClose={signInDisclosure.onClose}
-                    onOpenSignUp={signUpDisclosure.onOpen}
-                    signInByEmail={signInByEmail}/>
-            <SignUp isOpen={signUpDisclosure.isOpen}
-                    onClose={signUpDisclosure.onClose}
-                    onOpenSignIn={signInDisclosure.onOpen}
-                    signUpHandler={signUpHandler}/>
-            <LogOut isOpen={logOutDisclosure.isOpen}
-                    onClose={logOutDisclosure.onClose}
-                    logOutHandler={logOutHandler}/>
+            <EditProfileModal
+                customer={customer}
+                isOpen={editProfileDisclosure.isOpen}
+                onClose={editProfileDisclosure.onClose}
+                onEditProfile={onEditProfile}/>
+            <SettingsModal
+                roles={roles}
+                isOpen={settingsDisclosure.isOpen}
+                onClose={settingsDisclosure.onClose}
+                onEditUserRole={onEditUserRole}
+                onEditOrderStatus={onEditOrderStatus}/>
+            <SignIn
+                isOpen={signInDisclosure.isOpen}
+                onClose={signInDisclosure.onClose}
+                onOpenSignUp={signUpDisclosure.onOpen}
+                signInByEmail={signInByEmail}/>
+            <SignUp
+                isOpen={signUpDisclosure.isOpen}
+                onClose={signUpDisclosure.onClose}
+                onOpenSignIn={signInDisclosure.onOpen}
+                signUpHandler={signUpHandler}/>
+            <LogOut
+                isOpen={logOutDisclosure.isOpen}
+                onClose={logOutDisclosure.onClose}
+                logOutHandler={logOutHandler}/>
         </Flex>
     );
 }
