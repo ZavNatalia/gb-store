@@ -19,7 +19,7 @@ export const OrderItem = memo(({order}: OrderItemProps) => {
 
     const memorizedList = useMemo(() => (
         order?.items?.slice(0, 4).map(({item, quantity}) =>
-            <Flex borderRight='1px solid' borderColor='gray.200' px={2}>
+            <Flex borderRight='1px solid' borderColor='gray.200' px={2} key={item.id}>
                 <Flex maxH='70px'
                       maxW='70px'
                       justifyContent='center'>
@@ -38,7 +38,7 @@ export const OrderItem = memo(({order}: OrderItemProps) => {
                 </Circle>}
             </Flex>
         )
-    ), [order])
+    ), [order]);
 
     return (
         <>

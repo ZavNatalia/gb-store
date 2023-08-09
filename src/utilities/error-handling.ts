@@ -1,5 +1,4 @@
 import {createStandaloneToast} from "@chakra-ui/react";
-import { useTranslation } from 'react-i18next';
 
 export const ToastSuccess = (message: string) => {
     const { toast } = createStandaloneToast();
@@ -12,10 +11,9 @@ export const ToastSuccess = (message: string) => {
 };
 
 export const ToastError = (error: string) => {
-    const {t} = useTranslation();
     const { toast } = createStandaloneToast();
     return toast({
-        title: t('Error'),
+        title: 'Error',
         description: error,
         status: 'error',
         duration: 6000,

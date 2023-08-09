@@ -78,8 +78,8 @@ export const OrderList = memo(() => {
                 ? <EmptyList/>
                 : (
                     <List spacing={4}>
-                        {list.map((order, index) => (
-                            <OrderItem key={index} order={order}/>
+                        {list.map((order) => (
+                            <OrderItem key={order.id} order={order}/>
                         ))}
                     </List>
                 )}
