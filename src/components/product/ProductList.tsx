@@ -45,7 +45,6 @@ const ProductList = () => {
     const {currentCategory, onChangeCurrentCategory, categories} = useCategory();
     const {isOpen, onOpen, onClose} = useDisclosure();
 
-
     useEffect(() => {
         updateList();
     }, [currentCategory, searchQuery, sortOrder, isAuth]);
@@ -154,6 +153,7 @@ const ProductList = () => {
                 w='320px'
                 color='gray.500'
                 focusBorderColor={'yellow.500'}
+                placeholder={t('Sort')}
                 onChange={handleSortOrderChange}>
             <option value='asc'>{t('Price low to high')}</option>
             <option value='desc'>{t('Price high to low')}</option>

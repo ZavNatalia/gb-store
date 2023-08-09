@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Box, Button, Divider, Flex, Heading, Skeleton, SkeletonText, Text, useDisclosure } from "@chakra-ui/react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { IProduct } from "../models/IProduct";
@@ -21,7 +21,7 @@ import { useCustomer } from "../context/CustomerContext";
 import { getHeaderConfig } from "../utilities/getHeaderConfig";
 import { useTranslation } from 'react-i18next';
 
-export const Product = () => {
+export const Product = memo(() => {
     const {t} = useTranslation();
     const {productId} = useParams();
     const navigate = useNavigate();
@@ -206,7 +206,6 @@ export const Product = () => {
                             </Box>
                         </Flex>
                     </Flex>
-
                 </Box>
             }
             <AddEditProductDrawer
@@ -224,4 +223,4 @@ export const Product = () => {
             />
         </MainBlockLayout>
     );
-};
+});
