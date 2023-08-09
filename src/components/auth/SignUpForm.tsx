@@ -1,6 +1,6 @@
 import React from 'react';
-import {Field, Form, Formik, FormikHelpers} from "formik";
-import {Button, FormControl, Input, Stack, Text} from "@chakra-ui/react";
+import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Button, FormControl, Input, Stack, Text } from "@chakra-ui/react";
 import * as Yup from "yup";
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +10,7 @@ interface SignUpFormProps {
 
 export interface SignUpFormValues {
     firstname: string;
+    lastname: string;
     email: string;
     password: string;
 }
@@ -20,6 +21,8 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
     const ValidationSchema = Yup.object().shape({
         firstname: Yup.string()
             .required(t('Please enter your firstname')),
+        lastname: Yup.string()
+            .required(t('Please enter your lastname')),
         email: Yup.string()
             .email(t('Please enter a valid email'))
             .required(t('Please enter your email')),
@@ -34,6 +37,7 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
         <Formik
             initialValues={{
                 firstname: '',
+                lastname: '',
                 email: '',
                 password: ''
             }}
@@ -55,6 +59,21 @@ const SignUpForm = ({signUpHandler}: SignUpFormProps) => {
                                     <>
                                         <Input type='text'
                                                placeholder={t('Enter your firstname')}
+                                               mb={2}
+                                               isInvalid={meta.touched ? meta.error : false} {...field} />
+                                        {meta.touched && meta.error && (
+                                            <Text color='red.400' fontSize='md'>{meta.error}</Text>
+                                        )}
+                                    </>
+                                )}
+                            </Field>
+                        </FormControl>
+                        <FormControl>
+                            <Field name='lastname'>
+                                {({field, meta}: any) => (
+                                    <>
+                                        <Input type='text'
+                                               placeholder={t('Enter your lastname')}
                                                mb={2}
                                                isInvalid={meta.touched ? meta.error : false} {...field} />
                                         {meta.touched && meta.error && (

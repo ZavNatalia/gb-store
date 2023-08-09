@@ -81,12 +81,10 @@ export const Header = () => {
                 onFetchCart(data.cartId);
                 setCartId(data.cartId);
                 onChangeAuth(true);
+                signInDisclosure.onClose();
             })
             .catch(error => {
                 ToastError(error.message);
-            })
-            .finally(() => {
-                signInDisclosure.onClose();
             })
     }
 
@@ -104,6 +102,7 @@ export const Header = () => {
                 setCartId(data.cartId);
                 onChangeAuth(true);
                 getUserWithSession();
+                signInDisclosure.onClose();
             })
             .catch(error => {
                 if (error.response.data?.message?.includes('incorrect email or password')) {
@@ -112,26 +111,23 @@ export const Header = () => {
                     ToastError(t('Service is temporarily unavailable'));
                 }
             })
-            .finally(() => {
-                signInDisclosure.onClose();
-            })
     }
 
-    const signUpHandler = async ({firstname, email, password}: Partial<ICustomer>) => {
+    const signUpHandler = async ({firstname, lastname, email, password}: Partial<ICustomer>) => {
         await axios.post(
             `${rootURL}/user/create`, {
-                firstname, email, password
+                firstname, lastname, email, password
             }
         )
             .then(() => {
                 ToastSuccess(t('You have successfully signed up'));
+                signUpDisclosure.onClose();
             })
             .catch(error => {
                 ToastError(error.message);
             })
             .finally(() => {
                 setIsLoading(false);
-                signUpDisclosure.onClose();
             })
     }
     const logOutHandler = async () => {
