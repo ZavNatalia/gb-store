@@ -1,24 +1,24 @@
-import React, { memo, useEffect, useState } from 'react';
-import { Box, Button, Divider, Flex, Heading, Skeleton, SkeletonText, Text, useDisclosure } from "@chakra-ui/react";
+import React, { memo, useCallback, useEffect, useState } from 'react';
+import { Box, Button, Divider, Flex, Heading, Skeleton, SkeletonText, Text, useDisclosure } from '@chakra-ui/react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IProduct } from "../models/IProduct";
-import { toCurrency } from "../utilities/formatCurrency";
-import Counter from "../UI/Counter";
-import { useCart } from "../context/CartContext";
-import { FavoriteSwitcher } from "../UI/FavoriteSwitcher";
-import MainBlockLayout from "../UI/MainBlockLayout";
-import { isEmpty } from "../utilities/isEmpty";
-import AddEditProductDrawer from "../modals/AddEditProduct/AddEditProductDrawer";
-import Carousel from "../UI/Carousel";
-import { ToastError, ToastSuccess } from "../utilities/error-handling";
-import { useCategory } from "../context/CategoryContext";
-import RemoveProductModal from "../modals/RemoveProductModal";
-import ErrorMessage from "../UI/ErrorMessage";
-import CategoryService from "../api/CategoryService";
-import ProductService from "../api/ProductService";
+import { IProduct } from '../models/IProduct';
+import { toCurrency } from '../utilities/formatCurrency';
+import Counter from '../UI/Counter';
+import { useCart } from '../context/CartContext';
+import { FavoriteSwitcher } from '../UI/FavoriteSwitcher';
+import MainBlockLayout from '../UI/MainBlockLayout';
+import { isEmpty } from '../utilities/isEmpty';
+import AddEditProductDrawer from '../modals/AddEditProduct/AddEditProductDrawer';
+import Carousel from '../UI/Carousel';
+import { ToastError, ToastSuccess } from '../utilities/error-handling';
+import { useCategory } from '../context/CategoryContext';
+import RemoveProductModal from '../modals/RemoveProductModal';
+import ErrorMessage from '../UI/ErrorMessage';
+import CategoryService from '../api/CategoryService';
+import ProductService from '../api/ProductService';
 import { AiOutlineReload } from 'react-icons/ai';
-import { useCustomer } from "../context/CustomerContext";
-import { getHeaderConfig } from "../utilities/getHeaderConfig";
+import { useCustomer } from '../context/CustomerContext';
+import { getHeaderConfig } from '../utilities/getHeaderConfig';
 import { useTranslation } from 'react-i18next';
 
 export const ProductPage = memo(() => {
@@ -110,9 +110,9 @@ export const ProductPage = memo(() => {
         }
     }
 
-    const handleSetIsFav = (value: boolean) => {
+    const handleSetIsFav = useCallback((value: boolean) => {
         setIsFav(value);
-    }
+    }, []);
 
     if (isLoading) {
         return (
@@ -129,7 +129,7 @@ export const ProductPage = memo(() => {
                </Flex>
            </MainBlockLayout>
         )
-    };
+    }
 
     if (error) {
         return (

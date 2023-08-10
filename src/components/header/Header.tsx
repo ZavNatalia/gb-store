@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     Button,
     Flex,
@@ -14,13 +14,13 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCategory } from "../../context/CategoryContext";
+import { useCategory } from '../../context/CategoryContext';
 import { ICategory } from '../../models/ICategory';
-import axios from "axios";
-import { ToastError, ToastSuccess } from "../../utilities/error-handling";
+import axios from 'axios';
+import { ToastError, ToastSuccess } from '../../utilities/error-handling';
 import SignIn from '../../modals/SignIn';
-import SignUp from "../../modals/SignUp";
-import { ICustomer } from "../../models/ICustomer";
+import SignUp from '../../modals/SignUp';
+import { ICustomer } from '../../models/ICustomer';
 import { Links } from '../cart/Links';
 import { rootURL } from '../../constants/URLs';
 import EditProfileModal from '../../modals/EditProfileModal';
@@ -34,14 +34,14 @@ import {
     setCartId,
     setToken,
     setUserId
-} from "../../utilities/local-storage-handling";
-import { useCustomer } from "../../context/CustomerContext";
-import { useCart } from "../../context/CartContext";
-import SettingsModal from "../../modals/SettingsModal";
-import { IRole } from "../../models/IRole";
+} from '../../utilities/local-storage-handling';
+import { useCustomer } from '../../context/CustomerContext';
+import { useCart } from '../../context/CartContext';
+import SettingsModal from '../../modals/SettingsModal';
+import { IRole } from '../../models/IRole';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { getHeaderConfig } from "../../utilities/getHeaderConfig";
-import OrderService from "../../api/OrderService";
+import { getHeaderConfig } from '../../utilities/getHeaderConfig';
+import OrderService from '../../api/OrderService';
 import { LangSwitcher } from '../../UI/LangSwitcher';
 import { useTranslation } from 'react-i18next';
 
@@ -203,7 +203,7 @@ export const Header = () => {
         })
     }
 
-    const onEditUserRole = async (values: any) => {
+    const onEditUserRole = useCallback(async (values: any) => {
         const config = getHeaderConfig();
         await axios.put(
             `${rootURL}/user/role/update`, values, config
@@ -217,7 +217,7 @@ export const Header = () => {
             .finally(() => {
                 settingsDisclosure.onClose();
             })
-    }
+    }, [settingsDisclosure, t]);
 
     const onEditOrderStatus = async (values: any) => {
         try {
@@ -244,7 +244,7 @@ export const Header = () => {
               zIndex={100}
         >
             <Link to='' onClick={() => onChangeCurrentCategory({} as ICategory)}>
-                <Flex alignItems='center' color='gray.500' textTransform={"uppercase"} ml={4}>
+                <Flex alignItems='center' color='gray.500' textTransform={'uppercase'} ml={4}>
                     <Image
                         h='52px'
                         w='52px'
@@ -261,7 +261,7 @@ export const Header = () => {
                     <Button onClick={signInDisclosure.onOpen} backgroundColor='gray.300' px={6}>
                         {t('Sign in')}
                     </Button>
-                    <Button onClick={signUpDisclosure.onOpen} colorScheme={"yellow"} px={6}>
+                    <Button onClick={signUpDisclosure.onOpen} colorScheme={'yellow'} px={6}>
                         {t('Sign up')}
                     </Button>
                 </HStack>}
