@@ -39,10 +39,13 @@ export const ProductPage = memo(() => {
 
     useEffect(() => {
         getProduct();
-        if (isAdmin) {
+    }, []);
+
+    useEffect(() => {
+        if (isAdmin && editDisclosure.isOpen) {
             fetchCategories();
         }
-    }, []);
+    }, [editDisclosure.isOpen]);
 
 
     const getProduct = async () => {
@@ -62,7 +65,7 @@ export const ProductPage = memo(() => {
         }
     };
 
-    const fetchCategories = async () => {
+    const fetchCategories = useCallback(async () => {
         try {
             setIsLoading(true);
             const {data} = await CategoryService.getCategories();
@@ -71,7 +74,7 @@ export const ProductPage = memo(() => {
         } catch (error: any) {
             setError(error?.message);
         }
-    };
+    }, [onChangeCategories]);
 
     const onEditProduct = async (result: IProduct) => {
         if (productId) {
@@ -114,7 +117,7 @@ export const ProductPage = memo(() => {
         setIsFav(value);
     }, []);
 
-    if (isLoading) {
+    if (isLoading && isEmpty(product)) {
         return (
            <MainBlockLayout>
                <Flex gap={10} mt='60px'>
