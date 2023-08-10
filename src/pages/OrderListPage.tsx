@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import ErrorMessage from '../UI/ErrorMessage';
 import Loader from '../UI/Loader';
 
-export const OrderList = memo(() => {
+export const OrderListPage = memo(() => {
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(true);
     const [list, setList] = useState([] as ICreatedOrder[]);

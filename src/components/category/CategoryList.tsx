@@ -1,19 +1,20 @@
-import {Box, Button, Center, Flex, Skeleton, Stack, Text, useDisclosure} from '@chakra-ui/react';
-import React, {useEffect, useState} from 'react';
-import {NavItem} from '../../UI/NavItem';
-import {useCategory} from '../../context/CategoryContext';
-import {ICategory} from '../../models/ICategory';
-import {isEmpty} from '../../utilities/isEmpty';
-import {DeleteIcon, EditIcon} from '@chakra-ui/icons';
+import { Button, Center, Flex, Skeleton, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { NavItem } from '../../UI/NavItem';
+import { useCategory } from '../../context/CategoryContext';
+import { ICategory } from '../../models/ICategory';
+import { isEmpty } from '../../utilities/isEmpty';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import ErrorMessage from '../../UI/ErrorMessage';
 import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
 import EditCategoryModal from '../../modals/EditCategoryModal';
-import {ToastError, ToastSuccess} from '../../utilities/error-handling';
+import { ToastError, ToastSuccess } from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategoryModal';
 import CategoryService from "../../api/CategoryService";
-import {useCustomer} from "../../context/CustomerContext";
+import { useCustomer } from "../../context/CustomerContext";
 import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 import { useTranslation } from 'react-i18next';
+import Sidebar from '../../UI/Sidebar';
 
 export const CategoryList = () => {
     const {t} = useTranslation();
@@ -42,33 +43,33 @@ export const CategoryList = () => {
         }
     };
 
-    const onRemoveCategory = async (id: number) => {
+
+    const onRemoveCategory = useCallback(async (id: number) => {
         try {
             const config = getHeaderConfig();
             await CategoryService.deleteCategory(id, config);
-            fetchCategories();
+            await fetchCategories();
             ToastSuccess(t('Category has been removed'));
             removeDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
         }
-    }
+    }, [fetchCategories, removeDisclosure, t]);
 
-    const onEditCategory = async (category: ICategory) => {
+    const onEditCategory = useCallback(async (category: ICategory) => {
         try {
             const config = getHeaderConfig();
             await CategoryService.updateCategory(category.id, category, config);
-            fetchCategories();
+            await fetchCategories();
             ToastSuccess(t('Category has been edited'));
+            onChangeCurrentCategory({...category, name: category.name});
             editDisclosure.onClose();
         } catch (e: any) {
             ToastError(e?.message);
-        } finally {
-            onChangeCurrentCategory({...category, name: category.name});
         }
-    }
+    }, [editDisclosure, fetchCategories, onChangeCurrentCategory, t]);
 
-    const onCreateCategory = async (category: ICategory) => {
+    const onCreateCategory = useCallback(async (category: ICategory) => {
         try {
             const config = getHeaderConfig();
             await CategoryService.createCategory({
@@ -82,21 +83,65 @@ export const CategoryList = () => {
         } catch (e: any) {
             ToastError(e?.message);
         }
-    }
+    }, [createDisclosure, fetchCategories, t]);
 
-    if (error) {
-        return (
-            <Box
-                bg='white'
-                borderRight='1px'
-                position='sticky'
-                top='80px'
-                pb={4}
-                height='calc(100vh - 80px)'
-                borderRightColor='gray.200'>
-                <ErrorMessage message={t('Failed to get list of categories')}/>
-            </Box>
-        )
+
+    const categoryList = () => {
+        if (categories.length === 0) {
+            return (
+                <Center>
+                    <Text mt={4} mx={2} color='gray' fontSize='sm'>
+                        {t('Category list is empty')}
+                    </Text>
+                </Center>
+            )
+        } else {
+            return (
+                <>
+                    <NavItem
+                        key={0}
+                        fontWeight={isEmpty(currentCategory) ? '800' : '400'}
+                        onClick={() => onChangeCurrentCategory({} as ICategory)}
+                    >
+                        {t('All goods')}
+                    </NavItem>
+                    {categories?.map((category) => (
+                        <Flex
+                            key={category.id}
+                            w='100%'
+                            alignItems='center'
+                            color='gray.400'
+                            _hover={{backgroundColor: 'gray.400', color: 'gray.600'}}>
+                            <NavItem
+                                fontWeight={currentCategory.name === category.name ? '800' : '400'}
+                                onClick={() => onChangeCurrentCategory(category)}
+                            >
+                                {category.name}
+                            </NavItem>
+
+                            {isAdmin && (
+                                <>
+                                    <EditIcon
+                                        mr={2} fontSize='xl' cursor='pointer' _hover={{color: 'white'}}
+                                        onClick={() => {
+                                            setSelectedCategory(category);
+                                            editDisclosure.onOpen();
+                                        }}
+                                    />
+                                    <DeleteIcon
+                                        mr={2} fontSize='xl' cursor='pointer' _hover={{color: 'white'}}
+                                        onClick={() => {
+                                            setSelectedCategory(category);
+                                            removeDisclosure.onOpen();
+                                        }}
+                                    />
+                                </>
+                            )}
+                        </Flex>
+                    ))}
+                </>
+            )
+        }
     }
 
     if (isLoading) {
@@ -109,63 +154,24 @@ export const CategoryList = () => {
         )
     }
 
+    if (error) {
+        return (
+            <Sidebar>
+                <ErrorMessage message={t('Failed to get list of categories')}/>
+            </Sidebar>
+        )
+    }
+
     return (
         <>
-            {!isLoading && <Box
-                bg='white'
-                borderRight='1px'
-                position='sticky'
-                top='80px'
-                py={4}
-                height='calc(100vh - 80px)'
-                borderRightColor='gray.200'
-                overflowY='auto'>
-                {isAdmin && <Button mx={2} mb={2} onClick={() => createDisclosure.onOpen()}>
-                    {t('Add category')}
-                </Button>}
-
-                {categories.length === 0 && <Center>
-                    <Text mt={4} mx={2} color='gray' fontSize='sm'>
-                        {t('Category list is empty')}
-                    </Text>
-                </Center>}
-
-                {categories.length > 0 && <NavItem
-                    key={0}
-                    fontWeight={isEmpty(currentCategory) ? '800' : '400'}
-                    onClick={() => onChangeCurrentCategory({} as ICategory)}
-                >
-                    {t('All goods')}
-                </NavItem>}
-                {categories?.map((category) => (
-                    <Flex
-                        key={category.id}
-                        w='100%'
-                        alignItems='center'
-                        color='gray.400'
-                        _hover={{backgroundColor: 'gray.400', color: 'gray.600'}}>
-                        <NavItem
-                            fontWeight={currentCategory.name === category.name ? '800' : '400'}
-                            onClick={() => onChangeCurrentCategory(category)}
-                        >
-                            {category.name}
-                        </NavItem>
-
-                        {isAdmin &&
-                            <EditIcon mr={2} fontSize='xl' cursor='pointer' _hover={{color: 'white'}}
-                                      onClick={() => {
-                                          setSelectedCategory(category);
-                                          editDisclosure.onOpen();
-                                      }}/>}
-                        {isAdmin &&
-                            <DeleteIcon mr={2} fontSize='xl' cursor='pointer' _hover={{color: 'white'}}
-                                        onClick={() => {
-                                            setSelectedCategory(category);
-                                            removeDisclosure.onOpen();
-                                        }}/>}
-                    </Flex>
-                ))}
-            </Box>}
+            <Sidebar>
+                {isAdmin && (
+                    <Button mx={2} mb={2} onClick={() => createDisclosure.onOpen()}>
+                        {t('Add category')}
+                    </Button>
+                )}
+                {categoryList()}
+            </Sidebar>
             <CreateCategoryModal
                 isOpen={createDisclosure.isOpen}
                 onClose={createDisclosure.onClose}

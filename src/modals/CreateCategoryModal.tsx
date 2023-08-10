@@ -13,9 +13,9 @@ import {
     ModalOverlay,
     Stack,
     Text
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
-import * as Yup from "yup";
+import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 interface EditCategoryModalProps {
@@ -43,7 +43,6 @@ const CreateCategoryModal = (props: EditCategoryModalProps) => {
             .required(t('Please add a category description'))
     });
 
-
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.16)'}}/>
@@ -64,10 +63,10 @@ const CreateCategoryModal = (props: EditCategoryModalProps) => {
                             <ModalBody>
                                 <Stack spacing={4}>
                                     <FormControl>
-                                        <FormLabel htmlFor='name' fontWeight='bold'>
+                                        <FormLabel htmlFor='name' color={'gray.600'}>
                                             {t('Category name')}
                                         </FormLabel>
-                                        <Field name="name">
+                                        <Field name='name'>
                                             {({field, meta}: any) => (
                                                 <>
                                                     <Input
@@ -84,10 +83,10 @@ const CreateCategoryModal = (props: EditCategoryModalProps) => {
                                         </Field>
                                     </FormControl>
                                     <FormControl>
-                                        <FormLabel htmlFor='description' fontWeight='bold'>
+                                        <FormLabel htmlFor='description' color={'gray.600'}>
                                             {t('Category description')}
                                         </FormLabel>
-                                        <Field name="description">
+                                        <Field name='description'>
                                             {({field, meta}: any) => (
                                                 <>
                                                     <Input

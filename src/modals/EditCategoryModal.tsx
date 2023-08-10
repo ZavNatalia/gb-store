@@ -68,7 +68,7 @@ const EditCategoryModal = (props: EditCategoryModalProps) => {
                             <ModalBody my={4}>
                                 <Stack spacing={4}>
                                     <FormControl>
-                                        <FormLabel htmlFor='name' fontWeight='bold'>
+                                        <FormLabel htmlFor='name' color='gray.500'>
                                             {t('Category name')}
                                         </FormLabel>
                                         <Field name="name">
@@ -83,7 +83,7 @@ const EditCategoryModal = (props: EditCategoryModalProps) => {
                                         </Field>
                                     </FormControl>
                                     <FormControl>
-                                        <FormLabel htmlFor='description' fontWeight='bold'>
+                                        <FormLabel htmlFor='description' color='gray.500'>
                                             {t('Category description')}
                                         </FormLabel>
                                         <Field name="description">

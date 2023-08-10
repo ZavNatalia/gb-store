@@ -1,34 +1,20 @@
-import {
-    Box,
-    Button,
-    Center,
-    Flex,
-    Heading,
-    IconButton,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Select,
-    SimpleGrid,
-    Text,
-    useDisclosure
-} from '@chakra-ui/react';
-import React, { useEffect, useMemo, useState } from 'react';
-import { ProductItem } from "./ProductItem";
+import { Box, Button, Center, Flex, Heading, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { ProductItem } from './ProductItem';
 import { IProduct } from '../../models/IProduct';
-import ErrorMessage from "../../UI/ErrorMessage";
-import { useCategory } from "../../context/CategoryContext";
-import { GrAdd } from "react-icons/gr";
+import ErrorMessage from '../../UI/ErrorMessage';
+import { useCategory } from '../../context/CategoryContext';
+import { GrAdd } from 'react-icons/gr';
 import AddEditProductDrawer from '../../modals/AddEditProduct/AddEditProductDrawer';
-import { isEmpty } from "../../utilities/isEmpty";
+import { isEmpty } from '../../utilities/isEmpty';
 import { ToastError, ToastSuccess } from '../../utilities/error-handling';
 import SkeletonList from '../../UI/SkeletonList';
-import ProductService from "../../api/ProductService";
-import { useCustomer } from "../../context/CustomerContext";
-import { ICategory } from "../../models/ICategory";
-import { MdClose } from 'react-icons/md';
+import ProductService from '../../api/ProductService';
+import { useCustomer } from '../../context/CustomerContext';
 import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 import { useTranslation } from 'react-i18next';
+import ProductListFilters from './ProductListFilters';
+import { useDebounce } from '../../utilities/useDebounce';
 
 const ProductList = () => {
     const {t} = useTranslation();
@@ -46,16 +32,15 @@ const ProductList = () => {
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     useEffect(() => {
+        setSearchQuery('');
         updateList();
-    }, [currentCategory, searchQuery, sortOrder, isAuth]);
+    }, [currentCategory]);
 
     useEffect(() => {
-        if (isLoading) {
-            fetchProducts();
-        }
-    }, [isLoading]);
+        updateList();
+    }, [sortOrder, isAuth]);
 
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         setError('');
         if (products.length <= quantity) {
             try {
@@ -83,7 +68,13 @@ const ProductList = () => {
         } else {
             setIsLoading(false);
         }
-    };
+    }, [currentCategory, offset, products, quantity, searchQuery, sortOrder, t]);
+
+    useEffect(() => {
+        if (isLoading) {
+            fetchProducts();
+        }
+    }, [fetchProducts, isLoading]);
 
     const updateList = () => {
         window.scroll({
@@ -111,21 +102,21 @@ const ProductList = () => {
         }
     }
 
-    const onChangeCategory = (id: number) => {
+    const onChangeCategory = useCallback((id: number) => {
         const selectedCategory = categories.find(c => Number(c.id) === Number(id));
         if (selectedCategory) {
             onChangeCurrentCategory(selectedCategory);
         }
-    }
+    }, [categories, onChangeCurrentCategory]);
 
-    const onAddNewProduct = async (values: IProduct) => {
+    const onAddNewProduct = useCallback(async (values: IProduct) => {
         const result = {
-            "title": values.title,
-            "description": values.description,
-            "price": +values.price,
-            "category": values.category?.id,
-            "image": values.image,
-            "vendor": values.vendor
+            'title': values.title,
+            'description': values.description,
+            'price': +values.price,
+            'category': values.category?.id,
+            'image': values.image,
+            'vendor': values.vendor
         };
         try {
             const config = getHeaderConfig();
@@ -140,25 +131,18 @@ const ProductList = () => {
         } catch (e: any) {
             ToastError(e?.message);
         }
-    }
+    }, [currentCategory.id, onChangeCategory, onClose, t]);
 
-    const handleSortOrderChange = (e: any) => {
-        setSortOrder(e.target.value);
-    }
+    const handleSortOrderChange = useCallback((value: string) => {
+        setSortOrder(value);
+    }, []);
 
-    const SortOrderSelect = () => (
-        <Select value={sortOrder}
-                borderRadius='2xl'
-                size='lg'
-                w='320px'
-                color='gray.500'
-                focusBorderColor={'yellow.500'}
-                placeholder={t('Sort')}
-                onChange={handleSortOrderChange}>
-            <option value='asc'>{t('Price low to high')}</option>
-            <option value='desc'>{t('Price high to low')}</option>
-        </Select>
-    )
+    const debouncedSearchQuery = useDebounce(updateList, 600);
+
+    const handleSearchQueryChange = useCallback((value: string) => {
+        setSearchQuery(value);
+        debouncedSearchQuery();
+    }, [debouncedSearchQuery]);
 
     const memoizedList = useMemo(() => (
         <>
@@ -167,13 +151,6 @@ const ProductList = () => {
             ))}
         </>
     ), [products]);
-
-    const handleSearchQueryChange = (e: any) => {
-        setSearchQuery(e.target.value)
-        if (e.target.value.length > 0) {
-            onChangeCurrentCategory({} as ICategory)
-        }
-    }
 
     const NoContent = () => {
         return isLoading ? <SkeletonList amount={8}/> : (
@@ -205,7 +182,9 @@ const ProductList = () => {
         >
             <>
                 <Flex justifyContent='space-between' gap={5}>
-                    <Heading mb={5}>{currentCategory?.name?.toUpperCase() ?? t('All goods').toUpperCase()}</Heading>
+                    <Heading mb={5}>
+                        {currentCategory?.name?.toUpperCase() ?? t('All goods').toUpperCase()}
+                    </Heading>
                     {isAdmin &&
                         <Button
                             position='fixed'
@@ -222,38 +201,26 @@ const ProductList = () => {
                         </Button>
                     }
                 </Flex>
-                {!error && <Flex my={6} alignItems='center' gap={4}>
-                    <SortOrderSelect/>
-
-                    <InputGroup size='lg'>
-                        <Input
-                            value={searchQuery}
-                            pr='40px'
-                            type='text'
-                            placeholder={t('Search for items...')}
-                            focusBorderColor={'yellow.500'}
-                            borderRadius='2xl'
-                            onChange={handleSearchQueryChange}
-                        />
-                        {searchQuery.length > 0 &&
-                            <InputRightElement justifyContent='flex-end'>
-                                <IconButton size='lg' variant='link'
-                                            aria-label='Clear' icon={<MdClose/>}
-                                            onClick={() => {
-                                                setSearchQuery('');
-                                                updateList();
-                                            }}/>
-                            </InputRightElement>
-                        }
-                    </InputGroup>
-                </Flex>}
+                {!error && (
+                    <ProductListFilters
+                        sortOrder={sortOrder}
+                        searchQuery={searchQuery}
+                        handleSortOrderChange={handleSortOrderChange}
+                        handleSearchQueryChange={handleSearchQueryChange}
+                    />
+                )}
                 <SimpleGrid minChildWidth='250px' width='100%' spacing='10' placeItems='center'>
                     {!error && products.length === 0 && <NoContent/>}
                     {memoizedList}
                 </SimpleGrid>
                 {error && getErrorMessage()}
             </>
-            <AddEditProductDrawer isEdit={false} isOpen={isOpen} onClose={onClose} onSubmit={onAddNewProduct}/>
+            <AddEditProductDrawer
+                isEdit={false}
+                isOpen={isOpen}
+                onClose={onClose}
+                onSubmit={onAddNewProduct}
+            />
         </Box>
     );
 };

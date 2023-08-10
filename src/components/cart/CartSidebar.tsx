@@ -1,10 +1,10 @@
 import { Box, Button, Flex, Heading, HStack, Image, List, ListItem, Text } from '@chakra-ui/react';
 import React, { memo, useMemo } from 'react';
-import { useCart } from "../../context/CartContext";
-import { toCurrency } from "../../utilities/formatCurrency";
-import { Link } from "react-router-dom";
-import Counter from "../../UI/Counter";
-import { slashEscape } from "../../utilities/RegExpURL";
+import { useCart } from '../../context/CartContext';
+import { toCurrency } from '../../utilities/formatCurrency';
+import { Link } from 'react-router-dom';
+import Counter from '../../UI/Counter';
+import { slashEscape } from '../../utilities/RegExpURL';
 import { useTranslation } from 'react-i18next';
 
 const CartSidebar = memo(() => {
@@ -35,9 +35,12 @@ const CartSidebar = memo(() => {
                                 />
                             </Flex>
                             <Flex gap={2} flexDirection='column'>
-                                <Text fontSize='sm' noOfLines={3}>{item?.title}</Text>
-                                <Text fontSize='sm'
-                                      color='gray.500'>{toCurrency(item?.price)}</Text>
+                                <Text fontSize='sm' noOfLines={3}>
+                                    {item?.title}
+                                </Text>
+                                <Text fontSize='sm' color='gray.500'>
+                                    {toCurrency(item?.price)}
+                                </Text>
                             </Flex>
                         </Link>
                         <Counter product={item} quantity={quantity}/>
@@ -61,7 +64,7 @@ const CartSidebar = memo(() => {
                         w='100%'
                     >
                         {t('View bag')}
-                        <Text as={"span"} fontSize='xl' ml={2} fontWeight='bold'>
+                        <Text as={'span'} fontSize='xl' ml={2} fontWeight='bold'>
                             {toCurrency(getTotalCost(cart.items))}
                         </Text>
                     </Button>
@@ -72,24 +75,25 @@ const CartSidebar = memo(() => {
 
     return (
         <Flex
-            textAlign={"left"}
-            position={"sticky"}
+            textAlign='left'
+            position='sticky'
             top='80px'
             padding={4}
             height='calc(100vh - 80px)'
             overflow='hidden'
             flexDirection='column'
             bg='gray.100'
-            borderLeft="1px"
+            borderLeft='1px'
             borderLeftColor='gray.200'
         >
             <Heading fontSize='x-large'>{t('My bag')}</Heading>
             {memorizedCartList}
-            {cart?.items?.length > 0 &&
+            {cart?.items?.length > 0 && (
                 <Box borderTop='1px solid' borderColor='gray.300' pt={3} pr={3} color='gray' fontSize='sm'
                      textAlign='right'>
                     <Text>{t('Free shipping')}</Text>
-                </Box>}
+                </Box>
+            )}
             <CartLink/>
         </Flex>
 
