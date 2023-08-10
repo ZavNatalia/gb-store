@@ -21,7 +21,7 @@ import { useCustomer } from "../context/CustomerContext";
 import { getHeaderConfig } from "../utilities/getHeaderConfig";
 import { useTranslation } from 'react-i18next';
 
-export const Product = memo(() => {
+export const ProductPage = memo(() => {
     const {t} = useTranslation();
     const {productId} = useParams();
     const navigate = useNavigate();
@@ -111,23 +111,29 @@ export const Product = memo(() => {
     }
 
     const handleSetIsFav = (value: boolean) => {
-        setIsFav(value)
+        setIsFav(value);
     }
 
-    return (
-        <MainBlockLayout>
-            {isLoading && <Flex gap={10} mt='60px'>
-                <Skeleton height='400px' rounded='2xl' maxW='600px' flex={2} startColor='gray.300'
-                          endColor='gray.300'/>
-                <Flex flexDirection='column' justifyContent='center' mt='-10px' flex={1} height='500px'
-                      maxW='500px' gap={5}>
-                    <Skeleton height='84px' w='320px' mt={8} borderRadius='2xl'/>
-                    <SkeletonText noOfLines={3} spacing='2' my={8}/>
-                    <SkeletonText noOfLines={4} spacing='4'/>
-                </Flex>
-            </Flex>}
+    if (isLoading) {
+        return (
+           <MainBlockLayout>
+               <Flex gap={10} mt='60px'>
+                   <Skeleton height='400px' rounded='2xl' maxW='600px' flex={2} startColor='gray.300'
+                             endColor='gray.300'/>
+                   <Flex flexDirection='column' justifyContent='center' mt='-10px' flex={1} height='500px'
+                         maxW='500px' gap={5}>
+                       <Skeleton height='84px' w='320px' mt={8} borderRadius='2xl'/>
+                       <SkeletonText noOfLines={3} spacing='2' my={8}/>
+                       <SkeletonText noOfLines={4} spacing='4'/>
+                   </Flex>
+               </Flex>
+           </MainBlockLayout>
+        )
+    };
 
-            {!isLoading && error && (
+    if (error) {
+        return (
+            <MainBlockLayout>
                 <Flex mt='40px' gap={5} alignItems='center'>
                     <Button leftIcon={<AiOutlineReload/>} colorScheme='yellow'
                             minWidth='fit-content' py={6} borderRadius='2xl'
@@ -136,9 +142,13 @@ export const Product = memo(() => {
                     </Button>
                     <ErrorMessage message={error} borderRadius='2xl'/>
                 </Flex>
-            )}
+            </MainBlockLayout>
+        )
+    }
 
-            {!isLoading && !isEmpty(product) &&
+    return (
+        <MainBlockLayout>
+            {!isEmpty(product) &&
                 <Box>
                     {isAdmin && (
                         <Flex mt={6} gap={5}>

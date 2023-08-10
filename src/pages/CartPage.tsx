@@ -30,7 +30,7 @@ import TotalCostTable from '../UI/TotalCostTable';
 import Loader from "../UI/Loader";
 import { useTranslation } from 'react-i18next';
 
-export const Cart = memo(() => {
+export const CartPage = memo(() => {
     const {t} = useTranslation();
     const {cart, getTotalQuantity, onEmptyCartContext, onFetchCart, isLoadingCart} = useCart();
     const {currentCategory} = useCategory();

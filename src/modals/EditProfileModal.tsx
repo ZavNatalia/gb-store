@@ -65,7 +65,7 @@ const EditProfileModal = (props: EditCategoryModalProps) => {
 
     const formControl = (name: string, label: string, isDisabled?: boolean) => (
         <FormControl>
-            <FormLabel htmlFor={name} fontWeight='bold'>
+            <FormLabel htmlFor={name} color='gray.500'>
                 {t(label)}
             </FormLabel>
             <Field name={name}>
@@ -88,7 +88,7 @@ const EditProfileModal = (props: EditCategoryModalProps) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.4)'}}/>
             <ModalContent borderRadius='2xl' minW='500px' maxW='600px'>
-                <ModalHeader>
+                <ModalHeader borderBottom='1px solid' borderBottomColor='gray.200'>
                     {t('Your data')}
                 </ModalHeader>
                 <ModalCloseButton/>

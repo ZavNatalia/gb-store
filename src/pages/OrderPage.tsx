@@ -15,7 +15,7 @@ import ErrorMessage from '../UI/ErrorMessage';
 import { getDate } from '../utilities/getDate';
 import { getTime } from '../utilities/getTime';
 
-export const Order = memo(() => {
+export const OrderPage = memo(() => {
     const {t, i18n} = useTranslation();
     const lang = i18n.language === 'en' ? 'en-US' : 'Ru-ru';
     const {orderId} = useParams();

@@ -39,10 +39,10 @@ const SettingsModal = (props: SettingsModalProps) => {
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay style={{backgroundColor: 'RGBA(0, 0, 0, 0.4)'}}/>
             <ModalContent borderRadius='2xl' minW='500px' maxW='600px'>
-                <ModalHeader>{t('Settings')}</ModalHeader>
+                <ModalHeader borderBottom='1px solid' borderBottomColor='gray.200'>{t('Settings')}</ModalHeader>
                 <ModalCloseButton/>
                 <ModalBody>
-                    <Tabs variant='soft-rounded' colorScheme='gray'>
+                    <Tabs variant='soft-rounded' colorScheme='gray' mt={4}>
                         <TabList flexWrap='wrap'>
                             <Tab>{t('User rights')}</Tab>
                             <Tab>{t('Change order status')}</Tab>
