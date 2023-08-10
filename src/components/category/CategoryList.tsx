@@ -10,8 +10,8 @@ import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
 import EditCategoryModal from '../../modals/EditCategoryModal';
 import { ToastError, ToastSuccess } from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategoryModal';
-import CategoryService from '../../api/CategoryService';
-import { useCustomer } from '../../context/CustomerContext';
+import CategoryService from "../../api/CategoryService";
+import { useCustomer } from "../../context/CustomerContext";
 import { getHeaderConfig } from '../../utilities/getHeaderConfig';
 import { useTranslation } from 'react-i18next';
 import Sidebar from '../../UI/Sidebar';
@@ -29,9 +29,9 @@ export const CategoryList = () => {
 
     useEffect(() => {
         fetchCategories();
-    });
+    }, []);
 
-    const fetchCategories = useCallback(async () => {
+    const fetchCategories = async () => {
         try {
             setIsLoading(true);
             const {data} = await CategoryService.getCategories();
@@ -41,7 +41,8 @@ export const CategoryList = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [onChangeCategories, t]);
+    };
+
 
     const onRemoveCategory = useCallback(async (id: number) => {
         try {
