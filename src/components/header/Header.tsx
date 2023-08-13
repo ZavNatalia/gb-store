@@ -76,11 +76,11 @@ export const Header = () => {
             `${rootURL}/user/login/${source}`
         )
             .then(({data}) => {
-                ToastSuccess(t('You have successfully logged in'));
                 setToken(data.token.access_token);
                 onFetchCart(data.cartId);
                 setCartId(data.cartId);
                 onChangeAuth(true);
+                ToastSuccess(t('You have successfully logged in'));
                 signInDisclosure.onClose();
             })
             .catch(error => {
@@ -325,7 +325,8 @@ export const Header = () => {
                 isOpen={signInDisclosure.isOpen}
                 onClose={signInDisclosure.onClose}
                 onOpenSignUp={signUpDisclosure.onOpen}
-                signInByEmail={signInByEmail}/>
+                signInByEmail={signInByEmail}
+                signInBySocial={signInBySocial}/>
             <SignUp
                 isOpen={signUpDisclosure.isOpen}
                 onClose={signUpDisclosure.onClose}
