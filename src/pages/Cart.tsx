@@ -82,7 +82,7 @@ export const Cart = () => {
 
     const OrderList = () => (
         <Flex flex={1} overflow='hidden' height='calc(100vh - 300px)' flexDirection='column'>
-            <List overflow='auto'>
+            <List overflow='auto' spacing={2}>
                 {cartItems.map(({product, quantity}) => (
                     <ListItem key={product.id} pr={2}>
                         <HStack spacing={3}>
