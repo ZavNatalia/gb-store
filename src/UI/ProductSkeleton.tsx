@@ -6,16 +6,19 @@ const ProductSkeleton = () => {
         <Flex
             bg='gray.100'
             rounded='2xl'
-            padding='4'
-            maxW='300px'
-            minWidth='220px'
-            height='475px'
+            maxW='220px'
+            minWidth='200px'
+            height='400px'
+            pb={2}
             flexDirection='column'
+            overflow='hidden'
+            boxShadow='md'
         >
-            <Skeleton height='250px'/>
-            <SkeletonText mt='4' noOfLines={4} spacing='4'/>
+            <Skeleton height='220px'/>
+            <Skeleton mt='5' mx={3} h={6} w={50}/>
+            <SkeletonText mt='4' mx={3} noOfLines={3} spacing='3'/>
             <Spacer/>
-            <Skeleton height='40px' mt={8} borderRadius='2xl'/>
+            <Skeleton height='40px' mt={8} mx={2} borderRadius='xl'/>
         </Flex>
     );
 };
