@@ -22,8 +22,8 @@ const CartSidebar = () => {
                                     <Flex maxH='100px'
                                           maxW='100px'
                                           justifyContent='center'
-                                          p={1}
                                           mr={2}
+                                          overflow='hidden'
                                     >
                                         <Image
                                             maxH='100%'

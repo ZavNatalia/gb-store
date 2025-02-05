@@ -8,7 +8,7 @@ export const Layout: FC<PropsWithChildren<{}>> = ({children}) => {
     return (
         <Box bg='gray.50'>
             <Header/>
-            <main style={{minHeight: 'calc(100vh - 80px - 61px)'}}>
+            <main style={{minHeight: 'calc(100vh - 80px)'}}>
                 {children}
             </main>
             <Footer/>

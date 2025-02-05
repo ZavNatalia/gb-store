@@ -17,14 +17,14 @@ const Counter = ({product, quantity, buttonColor = 'gray.50'}: CounterProps) => 
         <>
             {quantity === 0 ? (
                 <Button backgroundColor={buttonColor}
+                        fontWeight='normal'
                         border='1px solid'
                         borderColor='gray.200'
                         rounded='xl'
                         width='100%'
-                        px={8}
-                        py={6}
+                        py={3}
                         transition='all .3s ease'
-                        _hover={{boxShadow: 'md'}}
+                        _hover={{boxShadow: 'md', backgroundColor: 'gray.300', borderColor: 'gray.300'}}
                         isDisabled={isAdmin}
                         onClick={() => increaseCartQuantity(product)}
                 >
@@ -35,27 +35,28 @@ const Counter = ({product, quantity, buttonColor = 'gray.50'}: CounterProps) => 
                         backgroundColor='gray.50'
                         border='1px solid'
                         borderColor='gray.200'
-                        justifyContent='space-around'
+                        justifyContent='space-between'
                         cursor='default'
+                        overflow='hidden'
                         transition='all .3s ease'
                         _hover={{boxShadow: 'md'}}>
                     <IconButton aria-label='Уменьшить количество'
                                 icon={<FaMinus/>}
                                 variant='ghost'
                                 borderRadius='xl'
-                                py={6}
-                                _focus={{boxShadow: 'none'}}
+                                py={3}
+                                _hover={{backgroundColor: 'gray.200'}}
                                 onClick={() => decreaseCartQuantity(product)}
                     />
-                    <Text textAlign={"center"} fontSize={"large"} fontWeight='bold' px={2}>
+                    <Text textAlign={"center"} fontSize={"large"} fontWeight='bold' px={1}>
                         {quantity}
                     </Text>
                     <IconButton aria-label='Увеличить количество'
                                 icon={<FaPlus/>}
                                 variant='ghost'
                                 borderRadius='xl'
-                                py={6}
-                                _focus={{boxShadow: 'none'}}
+                                py={3}
+                                _hover={{backgroundColor: 'gray.200'}}
                                 onClick={() => increaseCartQuantity(product)}
                     />
                 </HStack>

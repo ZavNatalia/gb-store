@@ -165,7 +165,7 @@ const ProductList = () => {
                         </Button>
                     }
                 </Flex>
-                <SimpleGrid minChildWidth='250px' width='100%' spacing='10'>
+                <SimpleGrid minChildWidth='220px' width='100%' spacing='10'>
                     {products.length === 0 ? <NoContent/> : memoizedList}
                 </SimpleGrid>
                 {isLoading && products.length > 0 && (

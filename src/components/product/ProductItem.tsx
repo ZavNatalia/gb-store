@@ -21,7 +21,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
 
     return (
         <Flex
-            maxW='300px'
+            maxW='220px'
             overflow='hidden'
             bg='gray.100'
             border='1px solid'
@@ -33,16 +33,17 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
             _hover={{backgroundColor: 'gray.200'}}
             justifyContent='space-between'
             position='relative'
+            boxShadow={'md'}
         >
             <Box position='absolute'
                  right={2}
                  top={2}>
                 <FavouriteSwitcher isFav={isFav}/>
             </Box>
-            <Box py={4}>
+            <Box pb={2}>
                 <Link
                     to={isAdmin ? `/edit/${id}/${title}` : `/${product.category?.name?.toLowerCase()}/${product.id}/${product.title}`}>
-                    <Flex height='250px' width='100%' justifyContent='center'>
+                    <Flex height='220px' width='100%' justifyContent='center'>
                         <Image
                             maxH='100%'
                             maxW='100%'
@@ -60,7 +61,7 @@ export const ProductItem: FC<ProductItemProps> = ({product}) => {
                         </Text>
                     </Stack>
                 </Link>
-                <Box px={4}>
+                <Box px={2}>
                     <Counter product={product} quantity={quantity}/>
                 </Box>
             </Box>

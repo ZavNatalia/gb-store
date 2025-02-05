@@ -17,7 +17,6 @@ export const SaveIcon = ({onSave, isDisabled}: SaveIconProps) => {
                     borderRadius='50%'
                     fontSize='xx-large'
                     disabled={isDisabled}
-                    _focus={{boxShadow: 'none'}}
                     onClick={onSave}/>
     );
 }

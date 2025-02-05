@@ -19,7 +19,6 @@ export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
                     boxShadow='lg'
                     fontSize='x-large'
                     _hover={{color: isFav ? 'gray.500' : 'red'}}
-                    _focus={{boxShadow: 'none'}}
                     isDisabled={isAdmin}
                     onClick={() => isFav ? onDeleteFavourite() : onAddFavourite()}
         />

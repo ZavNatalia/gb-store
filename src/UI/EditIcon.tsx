@@ -18,7 +18,6 @@ export const EditIcon = ({onEdit, isDisabled}: EditIconProps) => {
                     borderRadius='50%'
                     fontSize='x-large'
                     _hover={{color: 'yellow.500', boxShadow: 'lg'}}
-                    _focus={{boxShadow: 'none'}}
                     isDisabled={isDisabled}
                     onClick={() => onEdit()}
         />

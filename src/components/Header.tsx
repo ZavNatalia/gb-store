@@ -42,7 +42,7 @@ export const Header = () => {
         if (isAuth) {
             getUserWithSession();
         }
-    }, [])
+    }, [isAuth])
 
     const signInBySocial = async (source: string) => {
         ToastInfo('not implemented');
@@ -165,8 +165,12 @@ export const Header = () => {
             </Link>
             <Flex alignItems={'center'}>
                 {!isAuth && <HStack>
-                    <Button onClick={signInDisclosure.onOpen} backgroundColor='gray.300' px={6}>Войти</Button>
-                    <Button onClick={signUpDisclosure.onOpen} colorScheme={"yellow"} px={6}>Регистрация</Button>
+                    <Button backgroundColor='gray.200' px={6} _hover={{backgroundColor: 'gray.300'}} onClick={signInDisclosure.onOpen}>
+                        Войти
+                    </Button>
+                    <Button colorScheme="yellow" px={6} onClick={signUpDisclosure.onOpen}>
+                        Регистрация
+                    </Button>
                 </HStack>}
 
                 {isAuth && <>
