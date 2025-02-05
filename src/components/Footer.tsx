@@ -5,6 +5,9 @@ import {
 } from '@chakra-ui/react';
 
 export default function Footer() {
+    const getCurrentYear = () => {
+        return new Date().getFullYear();
+    };
     return (
         <Box
             bg='gray.200'
@@ -27,7 +30,7 @@ export default function Footer() {
                         ml: 8,
                     }}>
                     <Text fontSize={'sm'} textAlign={'center'} color='gray'>
-                        © 2022 Store. All rights reserved
+                        © {getCurrentYear()} Store. All rights reserved
                     </Text>
                 </Flex>
             </Box>

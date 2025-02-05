@@ -137,7 +137,7 @@ export const Product = () => {
                                 <Text flex={1} color='red.600'
                                       fontSize='x-large'>{toCurrency(product.price)}</Text>
                                 <Box flex={1} textAlign='right'>
-                                    <Counter product={product} quantity={quantity} buttonColor='yellow.400'/>
+                                    <Counter product={product} quantity={quantity} buttonColor='yellow.400' buttonHoverColor='yellow.500'/>
                                 </Box>
                             </Flex>
                             <HStack alignItems='flex-start'>

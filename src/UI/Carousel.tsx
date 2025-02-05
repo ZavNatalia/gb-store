@@ -1,6 +1,6 @@
-import {Box, IconButton, Image} from '@chakra-ui/react';
-import React from 'react';
-import {BiLeftArrowAlt, BiRightArrowAlt} from 'react-icons/bi';
+import { Box, IconButton, Image } from '@chakra-ui/react';
+import React, { ReactNode } from 'react';
+import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 import Slider from 'react-slick';
 
 interface CarouselProps {
@@ -22,44 +22,59 @@ const settings = {
 const Carousel = ({images}: CarouselProps) => {
     const [slider, setSlider] = React.useState<Slider | null>(null);
 
+    const ArrowIcon = ({
+                           icon,
+                           ariaLabel,
+                           right,
+                           left,
+                           onClick
+                       }:
+                           {
+                               icon: ReactNode,
+                               ariaLabel: string,
+                               right?: string,
+                               left?: string,
+                               onClick: () => void
+                           }) => {
+        return (
+            <IconButton
+                aria-label={ariaLabel}
+                colorScheme="gray"
+                borderRadius="full"
+                border='1px solid'
+                borderColor='gray.200'
+                position="absolute"
+                size='lg'
+                right={right}
+                left={left}
+                top='40%'
+                transform={'translate(0%, -50%)'}
+                zIndex={2}
+                hidden={images.length <= 1}
+                onClick={onClick}>
+                {icon}
+            </IconButton>
+        )
+    }
     return (
         <Box
             position='relative'
             height='600px'
             width='full'
             overflow='hidden'>
-            <IconButton
-                aria-label="left-arrow"
-                colorScheme="gray"
-                borderRadius="full"
-                border='1px solid'
-                borderColor='gray.200'
-                position="absolute"
-                size='lg'
+
+            <ArrowIcon
+                icon={<BiLeftArrowAlt/>}
+                ariaLabel='left-arrow'
                 left='10px'
-                top='40%'
-                transform={'translate(0%, -50%)'}
-                zIndex={2}
-                hidden={images.length <=1}
-                onClick={() => slider?.slickPrev()}>
-                <BiLeftArrowAlt/>
-            </IconButton>
-            <IconButton
-                aria-label="right-arrow"
-                colorScheme="gray"
-                borderRadius="full"
-                border='1px solid'
-                borderColor='gray.200'
-                position="absolute"
-                size='lg'
+                onClick={() => slider?.slickPrev()}/>
+
+            <ArrowIcon
+                icon={<BiRightArrowAlt/>}
+                ariaLabel='right-arrow'
                 right='10px'
-                top='40%'
-                transform={'translate(0%, -50%)'}
-                zIndex={2}
-                hidden={images.length <=1}
-                onClick={() => slider?.slickNext()}>
-                <BiRightArrowAlt/>
-            </IconButton>
+                onClick={() => slider?.slickNext()}/>
+
             <Slider {...settings} ref={(slider: any) => setSlider(slider)}>
                 {images.map((url, index) => (
                     <Image

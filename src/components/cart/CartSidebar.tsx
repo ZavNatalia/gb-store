@@ -40,7 +40,7 @@ const CartSidebar = () => {
                                               color='gray.500'>{toCurrency(product.price)}</Text>
                                     </Flex>
                                 </Link>
-                                <Counter product={product} quantity={quantity}/>
+                                <Counter product={product} quantity={quantity} iconSize='sm'/>
                             </HStack>
                         </ListItem>
                     ))}
