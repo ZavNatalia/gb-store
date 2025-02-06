@@ -41,7 +41,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     };
 
     const getUserWithSession = async () => {
-        const token = getToken(); // Функция получения токена
+        const token = getToken();
         if (!token) {
             setIsAuth(false);
             setIsLoading(false);

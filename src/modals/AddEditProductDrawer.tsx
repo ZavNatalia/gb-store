@@ -57,12 +57,6 @@ const AddEditProductDrawer = ({
             .min(5, 'Пожалуйста, введите не меньше 5 символов')
             .max(100, 'Пожалуйста, введите не более 100 символов')
             .required('Пожалуйста, заполните обязательное поле'),
-        // images: Yup.mixed()
-        //     .when('isArray', {
-        //         is: Array.isArray,
-        //         then: Yup.array().of(Yup.string()),
-        //         otherwise: Yup.string(),
-        //     }),
         description: Yup.string()
             .min(5, 'Пожалуйста, введите не меньше 5 символов')
             .max(600, 'Пожалуйста, введите не более 600 символов')
