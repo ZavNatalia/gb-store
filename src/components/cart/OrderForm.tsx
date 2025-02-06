@@ -15,7 +15,7 @@ import {MdOutlineEmail} from "react-icons/md";
 import {Field, Form, Formik, FormikHelpers} from "formik";
 import * as Yup from "yup";
 import {useCart} from "../../context/CartContext";
-import {useCustomer} from "../../context/CustomerContext";
+import {useAuth} from "../../context/AuthContext";
 import {ToastSuccess} from "../../utilities/error-handling";
 
 interface Values {
@@ -28,7 +28,7 @@ interface Values {
 
 export const OrderForm = () => {
     const {cartItems, emptyCart} = useCart();
-    const {customer} = useCustomer();
+    const {user} = useAuth();
 
     const ValidationSchema = Yup.object().shape({
         name: Yup.string()
@@ -47,9 +47,9 @@ export const OrderForm = () => {
     return (
         <Formik
             initialValues={{
-                name: customer?.name ?? '',
+                name: user?.name ?? '',
                 address: '',
-                email: customer?.email ?? '',
+                email: user?.email ?? '',
                 phone: '',
                 comment: '',
             }}

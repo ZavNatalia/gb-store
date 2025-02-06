@@ -7,18 +7,18 @@ import {CartProvider} from "./context/CartContext";
 import {Layout} from "./UI/Layout";
 import AppRouter from "./router/AppRouter";
 import {CategoryProvider} from "./context/CategoryContext";
-import {CustomerProvider} from "./context/CustomerContext";
+import {AuthProvider} from "./context/AuthContext";
 
 export const App = () => {
     return (
         <ChakraProvider theme={theme}>
             <CartProvider>
                 <CategoryProvider>
-                    <CustomerProvider>
+                    <AuthProvider>
                         <Layout>
                             <AppRouter/>
                         </Layout>
-                    </CustomerProvider>
+                    </AuthProvider>
                 </CategoryProvider>
             </CartProvider>
         </ChakraProvider>

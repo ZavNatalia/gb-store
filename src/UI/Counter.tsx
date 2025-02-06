@@ -3,7 +3,7 @@ import { Button, HStack, IconButton, Text } from "@chakra-ui/react";
 import { FaMinus, FaPlus } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import { IProduct } from '../models/IProduct';
-import { isAdmin } from "../constants/isAdmin";
+import { useAuth } from '../context/AuthContext';
 
 interface CounterProps {
     product: IProduct,
@@ -14,6 +14,7 @@ interface CounterProps {
 }
 
 const Counter = ({product, quantity, buttonColor = 'gray.50', buttonHoverColor = 'gray.100', iconSize = 'md'}: CounterProps) => {
+    const {isAdmin} = useAuth();
     const {increaseCartQuantity, decreaseCartQuantity} = useCart();
     return (
         <>

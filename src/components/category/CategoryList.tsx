@@ -11,10 +11,11 @@ import RemoveCategoryModal from '../../modals/RemoveCategoryModal';
 import EditCategoryModal from '../../modals/EditCategoryModal';
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import CreateCategoryModal from '../../modals/CreateCategoryModal';
-import {isAdmin} from "../../constants/isAdmin";
 import CategoryService from "../../api/CategoryService";
+import { useAuth } from '../../context/AuthContext';
 
 export const CategoryList = () => {
+    const {isAdmin} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const editDisclosure = useDisclosure();
     const createDisclosure = useDisclosure();

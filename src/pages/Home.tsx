@@ -7,9 +7,10 @@ import {CategoryList} from "../components/category/CategoryList";
 import ProductList from '../components/product/ProductList';
 import CartSidebar from "../components/cart/CartSidebar";
 import {useCart} from "../context/CartContext";
-import { isAdmin } from '../constants/isAdmin';
+import { useAuth } from '../context/AuthContext';
 
 export const Home = () => {
+    const {isAdmin} = useAuth();
     const {isOpen} = useCart();
     return (
         <Grid

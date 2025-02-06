@@ -9,7 +9,6 @@ import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
 import AddEditProductDrawer from "../modals/AddEditProductDrawer";
-import {isAdmin} from "../constants/isAdmin";
 import Carousel from "../UI/Carousel";
 import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
@@ -19,9 +18,11 @@ import CategoryService from "../api/CategoryService";
 import ProductService from "../api/ProductService";
 import {AiOutlineReload} from 'react-icons/ai';
 import {isFav} from "../components/product/ProductItem";
+import { useAuth } from '../context/AuthContext';
 
 export const Product = () => {
     const {productId} = useParams();
+    const {isAdmin} = useAuth();
     const {getItemQuantity} = useCart();
     const [error, setError] = useState('');
     const [product, setProduct] = useState<IProduct>({} as IProduct);

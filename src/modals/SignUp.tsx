@@ -1,5 +1,5 @@
 import React from 'react';
-import {ICustomer} from "../models/ICustomer";
+import {IUser} from "../models/IUser";
 import {Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay} from "@chakra-ui/react";
 import SignUpForm from '../components/auth/SignUpForm';
 
@@ -8,7 +8,7 @@ interface SignUpProps {
     isLoading: boolean,
     onClose: () => void,
     onOpenSignIn: () => void,
-    signUpHandler: (data: ICustomer) => void
+    signUpHandler: (data: IUser) => void
 }
 
 const SignUp = ({isOpen, isLoading, onClose, onOpenSignIn, signUpHandler}: SignUpProps) => {
