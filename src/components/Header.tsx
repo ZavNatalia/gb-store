@@ -72,6 +72,7 @@ export const Header = () => {
                 ToastError(error.message);
             })
             .finally(() => {
+                setIsLoading(false);
                 signInDisclosure.onClose();
                 getUserWithSession();
             })
@@ -95,12 +96,12 @@ export const Header = () => {
 
     const logOutHandler = () => {
         removeToken();
-        onChangeUser({});
+        onChangeUser(null);
         emptyCart();
     }
     const onEditProfile = async (values: IUser) => {
         await axios.put(
-            `${rootURL}/users/${user.id}`, values
+            `${rootURL}/users/${user?.id}`, values
         )
             .then(({data}) => {
                 onChangeUser(data);
@@ -159,6 +160,7 @@ export const Header = () => {
                                 {icon}
                             </Link>
                         ))}
+                        {isAdmin && <Text>Панель администратора</Text>}
                     </HStack>
                     <Menu>
                         <MenuButton
@@ -187,10 +189,10 @@ export const Header = () => {
                 </>}
             </Flex>
 
-            <EditProfileModal customer={user}
-                              isOpen={editProfileDisclosure.isOpen}
-                              onClose={editProfileDisclosure.onClose}
-                              onEditProfile={onEditProfile}/>
+            {user && <EditProfileModal customer={user}
+                               isOpen={editProfileDisclosure.isOpen}
+                               onClose={editProfileDisclosure.onClose}
+                               onEditProfile={onEditProfile}/>}
 
             <SignIn isOpen={signInDisclosure.isOpen}
                     isLoading={isLoading}

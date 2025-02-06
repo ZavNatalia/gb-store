@@ -59,20 +59,20 @@ const Carousel = ({images}: CarouselProps) => {
     return (
         <Box
             position='relative'
-            height='600px'
+            height='560px'
             width='full'
             overflow='hidden'>
 
             <ArrowIcon
                 icon={<BiLeftArrowAlt/>}
                 ariaLabel='left-arrow'
-                left='10px'
+                left='0px'
                 onClick={() => slider?.slickPrev()}/>
 
             <ArrowIcon
                 icon={<BiRightArrowAlt/>}
                 ariaLabel='right-arrow'
-                right='10px'
+                right='0px'
                 onClick={() => slider?.slickNext()}/>
 
             <Slider {...settings} ref={(slider: any) => setSlider(slider)}>

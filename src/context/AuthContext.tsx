@@ -9,12 +9,12 @@ type AuthProviderProps = {
 }
 
 type AuthContextProps = {
-    user: IUser,
+    user: IUser | null,
     isAuth: boolean,
     isAdmin: boolean,
     isLoading: boolean,
     getUserWithSession: () => void,
-    onChangeUser: (value: IUser) => void
+    onChangeUser: (value: IUser | null) => void
 }
 
 const AuthContext = React.createContext({} as AuthContextProps);
@@ -22,14 +22,24 @@ const AuthContext = React.createContext({} as AuthContextProps);
 export const useAuth = () =>  useContext(AuthContext);
 
 export const AuthProvider = ({children}: AuthProviderProps) => {
-    const [user, setUser] = useState<IUser>({} as IUser);
+    const [user, setUser] = useState<IUser | null>(null);
     const [isAuth, setIsAuth] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const onChangeUser = (value: IUser) => {
+    const onChangeUser = (value: IUser | null) => {
+        if (!value) {
+            setUser(null);
+            setIsAdmin(false);
+            setIsAuth(false);
+            return;
+        }
+
         setUser(value);
-    }
+        setIsAdmin(value.role === "admin");
+        setIsAuth(true);
+    };
+
     const getUserWithSession = async () => {
         const token = getToken(); // Функция получения токена
         if (!token) {

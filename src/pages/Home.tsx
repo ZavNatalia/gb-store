@@ -16,7 +16,7 @@ export const Home = () => {
         <Grid
             templateAreas={`"nav main aside"`}
             gridTemplateRows={'1fr'}
-            gridTemplateColumns={`220px minmax(350px, 1fr) ${isOpen && !isAdmin ? '400px' : 0}`}
+            gridTemplateColumns={`230px minmax(350px, 1fr) ${isOpen && !isAdmin ? '400px' : 0}`}
             h='100%'
             color='blackAlpha.800'
             bg='gray.50'

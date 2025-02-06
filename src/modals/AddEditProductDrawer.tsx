@@ -102,7 +102,7 @@ const AddEditProductDrawer = ({
                             title: values.title,
                             price: values.price,
                             description: values.description,
-                            category: categories[values.categoryId - 1],
+                            category: categories.find(category => category.id === values.categoryId) ?? currentCategory,
                             images: values.images
                         }
                         await onSubmit(result);
