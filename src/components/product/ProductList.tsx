@@ -10,11 +10,12 @@ import {isEmpty} from "../../utilities/isEmpty";
 import {ToastError, ToastSuccess} from '../../utilities/error-handling';
 import Loader from "../../UI/Loader";
 import SkeletonList from '../../UI/SkeletonList';
-import {isAdmin} from '../../constants/isAdmin';
 import CategoryService from "../../api/CategoryService";
 import ProductService from "../../api/ProductService";
+import { useAuth } from '../../context/AuthContext';
 
 const ProductList = () => {
+    const {isAdmin} = useAuth();
     const [products, setProducts] = useState<IProduct[]>([]);
     const [error, setError] = useState('');
     const [offset, setOffset] = useState(0);

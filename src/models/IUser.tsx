@@ -1,4 +1,4 @@
-export interface ICustomer {
+export interface IUser {
     avatar?: string
     email?: string
     id?: number

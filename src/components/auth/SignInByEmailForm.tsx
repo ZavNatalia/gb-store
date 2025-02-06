@@ -2,10 +2,10 @@ import React from 'react';
 import {Field, Form, Formik, FormikHelpers} from "formik";
 import {Button, FormControl, Input, Stack, Text} from "@chakra-ui/react";
 import * as Yup from "yup";
-import {ICustomer} from "../../models/ICustomer";
+import {IUser} from "../../models/IUser";
 
 interface SignInByEmailFormProps {
-    signInByEmail: (data: ICustomer) => void,
+    signInByEmail: (data: IUser) => void,
     isLoading: boolean
 }
 

@@ -9,7 +9,6 @@ import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
 import AddEditProductDrawer from "../modals/AddEditProductDrawer";
-import {isAdmin} from "../constants/isAdmin";
 import Carousel from "../UI/Carousel";
 import {ToastError, ToastSuccess} from "../utilities/error-handling";
 import {useCategory} from "../context/CategoryContext";
@@ -19,9 +18,11 @@ import CategoryService from "../api/CategoryService";
 import ProductService from "../api/ProductService";
 import {AiOutlineReload} from 'react-icons/ai';
 import {isFav} from "../components/product/ProductItem";
+import { useAuth } from '../context/AuthContext';
 
 export const Product = () => {
     const {productId} = useParams();
+    const {isAdmin} = useAuth();
     const {getItemQuantity} = useCart();
     const [error, setError] = useState('');
     const [product, setProduct] = useState<IProduct>({} as IProduct);
@@ -94,8 +95,8 @@ export const Product = () => {
 
     return (
         <MainBlockLayout>
-            {isLoading && <Flex gap={10} mt='60px'>
-                <Skeleton height='400px' rounded='2xl' maxW='600px' flex={2} startColor='gray.300'
+            {isLoading && <Flex gap={10} mt='40px'>
+                <Skeleton height='400px' rounded='2xl' maxW='560px' flex={2} startColor='gray.300'
                           endColor='gray.300'/>
                 <Flex flexDirection='column' justifyContent='center'  mt='-10px' flex={1} height='500px' maxW='500px' gap={5}>
                     <Skeleton height='84px' w='320px' mt={8} borderRadius='2xl'/>
@@ -113,16 +114,16 @@ export const Product = () => {
 
             {!isLoading && !isEmpty(product) &&
                 <>
-                    {isAdmin && <HStack mt={6}>
+                    {isAdmin && <HStack mt={4}>
                         <Button onClick={editDisclosure.onOpen} colorScheme='yellow' minWidth='20%'>Редактировать
                             товар</Button>
                         <Button onClick={removeDisclosure.onOpen} colorScheme='red' minWidth='20%'>Удалить
                             товар</Button>
 
                     </HStack>}
-                    <Flex gap={10} pt={6}>
-                        <Flex maxH='600px'
-                              maxW='600px'
+                    <Flex gap={10} pt={4}>
+                        <Flex maxH='560px'
+                              maxW='560px'
                               minW='300px'
                               justifyContent='center'
                               flex={2}
@@ -141,7 +142,9 @@ export const Product = () => {
                                 </Box>
                             </Flex>
                             <HStack alignItems='flex-start'>
-                                <Text fontSize='xx-large' noOfLines={3}>{product.title}</Text>
+                                <Text fontSize='x-large' fontWeight='bold' noOfLines={5}>
+                                    {product.title}
+                                </Text>
                                 <FavouriteSwitcher isFav={isFav}/>
                             </HStack>
                             <Text>{product.description}</Text>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {IconButton} from "@chakra-ui/react";
 import {FaHeart, FaRegHeart} from "react-icons/fa";
-import {isAdmin} from "../constants/isAdmin";
+import { useAuth } from '../context/AuthContext';
 
 interface FavouriteSwitcherProps {
     isFav: boolean
@@ -10,6 +10,7 @@ interface FavouriteSwitcherProps {
 export const FavouriteSwitcher = ({isFav}: FavouriteSwitcherProps) => {
     const onAddFavourite = () => {}
     const onDeleteFavourite = () => {}
+    const {isAdmin} = useAuth();
     return (
         <IconButton icon={isFav ? <FaHeart/> : <FaRegHeart/>}
                     aria-label='Редактировать'

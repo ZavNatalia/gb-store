@@ -18,14 +18,14 @@ import {
 } from "@chakra-ui/react";
 import {Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {ICustomer} from "../models/ICustomer";
+import {IUser} from "../models/IUser";
 import {RegExpURL} from "../utilities/RegExpURL";
 
 interface EditCategoryModalProps {
-    customer: ICustomer,
+    customer: IUser,
     isOpen: boolean,
     onClose: () => void,
-    onEditProfile: (customer: ICustomer) => void,
+    onEditProfile: (customer: IUser) => void,
 }
 
 type Values = {

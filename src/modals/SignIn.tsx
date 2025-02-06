@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay} from '@chakra-ui/react';
-import {ICustomer} from "../models/ICustomer";
+import {IUser} from "../models/IUser";
 import AuthSocialButtons from '../components/auth/AuthSocialButtons';
 import SignInByEmailForm from "../components/auth/SignInByEmailForm";
 
@@ -10,7 +10,7 @@ interface SignInProps {
     onClose: () => void,
     onOpenSignUp: () => void,
     signInHandler: (source: string) => void
-    signInByEmail: (data: ICustomer) => void
+    signInByEmail: (data: IUser) => void
 }
 
 const SignIn = ({isOpen, isLoading, onClose, onOpenSignUp, signInHandler, signInByEmail}: SignInProps) => {

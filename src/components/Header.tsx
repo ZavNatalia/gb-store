@@ -19,30 +19,26 @@ import axios from "axios";
 import {ToastError, ToastInfo, ToastSuccess} from "../utilities/error-handling";
 import SignIn from '../modals/SignIn';
 import SignUp from "../modals/SignUp";
-import {ICustomer} from "../models/ICustomer";
+import {IUser} from "../models/IUser";
 import {Links} from './cart/Links';
-import {isAdmin} from '../constants/isAdmin';
 import {rootURL} from '../constants/URLs';
 import EditProfileModal from '../modals/EditProfileModal';
-import {getToken, removeToken, setToken} from "../utilities/local-storage-handling";
-import {useCustomer} from "../context/CustomerContext";
+import {removeToken, setToken} from "../utilities/local-storage-handling";
+import {useAuth} from "../context/AuthContext";
 import {useCart} from "../context/CartContext";
 
 export const Header = () => {
+    const {user, isAuth, isAdmin, onChangeUser, getUserWithSession} = useAuth();
     const [isLoading, setIsLoading] = useState(false);
-    const [isAuth, setIsAuth] = useState(!!getToken());
     const signInDisclosure = useDisclosure();
     const signUpDisclosure = useDisclosure();
     const editProfileDisclosure = useDisclosure();
     const {emptyCart} = useCart();
     const {onChangeCurrentCategory} = useCategory();
-    const {customer, onChangeCustomer} = useCustomer();
 
     useEffect(() => {
-        if (isAuth) {
-            getUserWithSession();
-        }
-    }, [isAuth])
+        getUserWithSession();
+    }, [])
 
     const signInBySocial = async (source: string) => {
         ToastInfo('not implemented');
@@ -61,7 +57,7 @@ export const Header = () => {
         //     })
     }
 
-    const signInByEmail = async ({email, password}: ICustomer) => {
+    const signInByEmail = async ({email, password}: IUser) => {
         setIsLoading(true);
         await axios.post(
             `${rootURL}/auth/login`, {
@@ -70,18 +66,18 @@ export const Header = () => {
         )
             .then(({data}) => {
                 ToastSuccess('Вы успешно авторизовались');
-                setIsAuth(true);
                 setToken(data.access_token);
             })
             .catch(error => {
                 ToastError(error.message);
             })
             .finally(() => {
+                setIsLoading(false);
                 signInDisclosure.onClose();
                 getUserWithSession();
             })
     }
-    const signUpHandler = async (data: ICustomer) => {
+    const signUpHandler = async (data: IUser) => {
         setIsLoading(true);
         await axios.post(
             `${rootURL}/users/`, data
@@ -100,35 +96,15 @@ export const Header = () => {
 
     const logOutHandler = () => {
         removeToken();
-        onChangeCustomer({});
+        onChangeUser(null);
         emptyCart();
-        setIsAuth(false);
     }
-
-    const getUserWithSession = async () => {
-        const config = {
-            headers: { Authorization: `Bearer ${getToken()}` }
-        };
-      await axios.get(`${rootURL}/auth/profile`, config)
-          .then(({data}) => {
-              onChangeCustomer(data);
-          })
-          .catch(error => {
-              ToastError(error.message);
-              removeToken();
-              setIsAuth(false);
-          })
-          .finally(() => {
-              setIsLoading(false);
-          })
-    }
-
-    const onEditProfile = async (values: ICustomer) => {
+    const onEditProfile = async (values: IUser) => {
         await axios.put(
-            `${rootURL}/users/${customer.id}`, values
+            `${rootURL}/users/${user?.id}`, values
         )
             .then(({data}) => {
-                onChangeCustomer(data);
+                onChangeUser(data);
                 ToastSuccess('Ваши данные были успешно изменены');
             })
             .catch(error => {
@@ -184,6 +160,7 @@ export const Header = () => {
                                 {icon}
                             </Link>
                         ))}
+                        {isAdmin && <Text>Панель администратора</Text>}
                     </HStack>
                     <Menu>
                         <MenuButton
@@ -194,7 +171,7 @@ export const Header = () => {
                             minW={0}>
                             <Avatar
                                 size={'md'}
-                                src={customer?.avatar}
+                                src={user?.avatar}
                                 border='1px solid'
                                 borderColor='gray.400'
                             />
@@ -212,10 +189,10 @@ export const Header = () => {
                 </>}
             </Flex>
 
-            <EditProfileModal customer={customer}
-                              isOpen={editProfileDisclosure.isOpen}
-                              onClose={editProfileDisclosure.onClose}
-                              onEditProfile={onEditProfile}/>
+            {user && <EditProfileModal customer={user}
+                               isOpen={editProfileDisclosure.isOpen}
+                               onClose={editProfileDisclosure.onClose}
+                               onEditProfile={onEditProfile}/>}
 
             <SignIn isOpen={signInDisclosure.isOpen}
                     isLoading={isLoading}

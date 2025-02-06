@@ -1,12 +1,12 @@
 import {Box, Flex, Image, Stack, Text} from '@chakra-ui/react';
 import {FC} from "react";
 import {Link} from 'react-router-dom';
-import {isAdmin} from '../../constants/isAdmin';
 import {useCart} from "../../context/CartContext";
 import {IProduct} from '../../models/IProduct';
 import {toCurrency} from "../../utilities/formatCurrency";
 import Counter from "../../UI/Counter";
 import {FavouriteSwitcher} from "../../UI/FavouriteSwitcher";
+import { useAuth } from '../../context/AuthContext';
 
 interface ProductItemProps {
     product: IProduct
@@ -15,6 +15,8 @@ interface ProductItemProps {
 export const isFav = false;
 
 export const ProductItem: FC<ProductItemProps> = ({product}) => {
+    const {isAdmin} = useAuth();
+
     const {id, images, price, title} = product;
     const {getItemQuantity} = useCart();
     const quantity = getItemQuantity(id);
