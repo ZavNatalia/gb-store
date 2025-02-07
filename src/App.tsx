@@ -8,6 +8,7 @@ import {Layout} from "./UI/Layout";
 import AppRouter from "./router/AppRouter";
 import {CategoryProvider} from "./context/CategoryContext";
 import {AuthProvider} from "./context/AuthContext";
+import { FavoritesProvider } from './context/FavoritesContext';
 
 export const App = () => {
     return (
@@ -15,9 +16,11 @@ export const App = () => {
             <CartProvider>
                 <CategoryProvider>
                     <AuthProvider>
-                        <Layout>
-                            <AppRouter/>
-                        </Layout>
+                        <FavoritesProvider>
+                            <Layout>
+                                <AppRouter/>
+                            </Layout>
+                        </FavoritesProvider>
                     </AuthProvider>
                 </CategoryProvider>
             </CartProvider>

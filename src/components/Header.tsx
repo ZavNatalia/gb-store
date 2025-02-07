@@ -26,6 +26,7 @@ import EditProfileModal from '../modals/EditProfileModal';
 import {removeToken, setToken} from "../utilities/local-storage-handling";
 import {useAuth} from "../context/AuthContext";
 import {useCart} from "../context/CartContext";
+import { useFavorites } from '../context/FavoritesContext';
 
 export const Header = () => {
     const {user, isAuth, isAdmin, onChangeUser, getUserWithSession} = useAuth();
@@ -35,6 +36,7 @@ export const Header = () => {
     const editProfileDisclosure = useDisclosure();
     const {emptyCart} = useCart();
     const {onChangeCurrentCategory} = useCategory();
+    const { clearFavorites } = useFavorites();
 
     useEffect(() => {
         getUserWithSession();
@@ -98,6 +100,7 @@ export const Header = () => {
         removeToken();
         onChangeUser(null);
         emptyCart();
+        clearFavorites();
     }
     const onEditProfile = async (values: IUser) => {
         await axios.put(
