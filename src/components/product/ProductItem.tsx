@@ -47,11 +47,13 @@ export const ProductItem: FC<ProductItemProps> = ({ product, productId }) => {
     }
 
     if (error) {
-        return <Text>{error}</Text>;
+        console.log('Error:', error);
+        return null;
     }
 
     if (!currentProduct) {
-        return <Text>Ошибка загрузки товара</Text>;
+        console.log('Error:', error);
+        return null;
     }
 
     const { id, images, price, title } = currentProduct;
