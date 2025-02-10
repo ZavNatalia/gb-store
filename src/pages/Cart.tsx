@@ -102,14 +102,14 @@ export const Cart = () => {
                                         src={product.images[0] ?? '/imgs/placeholder-image.jpg'}
                                     />
                                 </Flex>
-                                <Flex flexGrow={1} flexDirection='column' px={4}>
+                                <Flex flexDirection='column' px={4}>
                                     <Text fontSize='sm'>{product.title}</Text>
                                     <Text fontSize='sm'
                                           color='gray.500'>{toCurrency(product.price)}</Text>
                                 </Flex>
                             </Link>
                             <Spacer/>
-                            <Counter product={product} quantity={quantity}/>
+                            <Counter product={product} quantity={quantity} iconSize='sm'/>
                         </HStack>
                     </ListItem>
                 ))}
@@ -123,7 +123,7 @@ export const Cart = () => {
     return (
         <MainBlockLayout title={'Корзина'}>
             {cartItems.length > 0 ? (
-                <Flex gap={10} borderTop='1px solid' borderColor='gray.200' pt={2}>
+                <Flex flexDirection={{ base: "column", xl: "row" }} gap={10} borderTop='1px solid' borderColor='gray.200' pt={2}>
                     <OrderList/>
                     <Box flex={1} overflow={"auto"}>
                         <Heading fontSize='x-large' mb={2}>Итого</Heading>

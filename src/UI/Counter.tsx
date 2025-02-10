@@ -10,7 +10,7 @@ interface CounterProps {
     quantity: number,
     buttonColor?: string,
     buttonHoverColor?: string,
-    iconSize?: string,
+    iconSize?: 'xs' | 'sm' | 'md' | 'lg',
 }
 
 const Counter = ({product, quantity, buttonColor = 'gray.50', buttonHoverColor = 'gray.100', iconSize = 'md'}: CounterProps) => {
@@ -36,6 +36,7 @@ const Counter = ({product, quantity, buttonColor = 'gray.50', buttonHoverColor =
                 </Button>
             ) : (
                 <HStack rounded='xl'
+                        minWidth='108px'
                         backgroundColor='gray.50'
                         border='1px solid'
                         borderColor='gray.200'
