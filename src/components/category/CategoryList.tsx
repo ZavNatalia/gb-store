@@ -152,22 +152,23 @@ export const CategoryList = () => {
                         w='100%'
                         alignItems='center'
                         color='gray.400'
-                        _hover={{backgroundColor: 'gray.400', color: 'gray.600'}}>
+                        _hover={{backgroundColor: 'gray.200'}}>
                         <NavItem
                             fontWeight={currentCategory.name === category.name ? '800' : '400'}
+                            wordBreak='break-word'
                             onClick={() => onChangeCurrentCategory(category)}
                         >
                             {category.name}
                         </NavItem>
-
+                        {/* Edit category */}
                         {isAdmin &&
-                            <EditIcon mr={2} fontSize='xl' cursor='pointer' _hover={{color: 'white'}}
+                            <EditIcon mx={2} fontSize='xl' cursor='pointer' _hover={{color: 'gray.800'}}
                                       onClick={() => {
                                           setSelectedCategory(category);
                                           editDisclosure.onOpen();
                                       }}/>}
                         {isAdmin &&
-                            <DeleteIcon mr={2} fontSize='xl' cursor='pointer' _hover={{color: 'white'}}
+                            <DeleteIcon mr={1} fontSize='xl' cursor='pointer' _hover={{color: 'gray.800'}}
                                         onClick={() => {
                                             setSelectedCategory(category);
                                             removeDisclosure.onOpen();

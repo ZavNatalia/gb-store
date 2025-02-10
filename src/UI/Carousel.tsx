@@ -43,6 +43,7 @@ const Carousel = ({images}: CarouselProps) => {
                 borderRadius="full"
                 border='1px solid'
                 borderColor='gray.200'
+                shadow='sm'
                 position="absolute"
                 size='lg'
                 right={right}
@@ -60,19 +61,18 @@ const Carousel = ({images}: CarouselProps) => {
         <Box
             position='relative'
             height='560px'
-            width='full'
-            overflow='hidden'>
+            width='full'>
 
             <ArrowIcon
                 icon={<BiLeftArrowAlt/>}
                 ariaLabel='left-arrow'
-                left='0px'
+                left='-20px'
                 onClick={() => slider?.slickPrev()}/>
 
             <ArrowIcon
                 icon={<BiRightArrowAlt/>}
                 ariaLabel='right-arrow'
-                right='0px'
+                right='-20px'
                 onClick={() => slider?.slickNext()}/>
 
             <Slider {...settings} ref={(slider: any) => setSlider(slider)}>

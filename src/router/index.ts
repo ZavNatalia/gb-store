@@ -7,7 +7,7 @@ export enum RouteNames {
     ALL_PRODUCTS = '/all',
     CATEGORY = '/:currentCategory',
     PRODUCT = '/:category/:productId/:productTitle',
-    FAVOURITES = '/favourites',
+    FAVORITES = '/favorites',
     CART = '/cart',
     ORDERS = '/orders',
 }
@@ -17,7 +17,7 @@ export const routes: IRoute[] = [
     { path: RouteNames.ALL_PRODUCTS, component: pages.Home },
     { path: RouteNames.CATEGORY, component: pages.Home },
     { path: RouteNames.PRODUCT, component: pages.Product },
-    { path: RouteNames.FAVOURITES, component: pages.Favourites },
+    { path: RouteNames.FAVORITES, component: pages.Favorites },
     { path: RouteNames.CART, component: pages.Cart },
     { path: RouteNames.ORDERS, component: pages.Orders }
 ]

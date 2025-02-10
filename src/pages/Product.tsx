@@ -5,7 +5,7 @@ import {IProduct} from "../models/IProduct";
 import {toCurrency} from "../utilities/formatCurrency";
 import Counter from "../UI/Counter";
 import {useCart} from "../context/CartContext";
-import {FavouriteSwitcher} from "../UI/FavouriteSwitcher";
+import {FavoriteSwitcher} from "../UI/FavoriteSwitcher";
 import MainBlockLayout from "../UI/MainBlockLayout";
 import {isEmpty} from "../utilities/isEmpty";
 import AddEditProductDrawer from "../modals/AddEditProductDrawer";
@@ -17,7 +17,6 @@ import ErrorMessage from "../UI/ErrorMessage";
 import CategoryService from "../api/CategoryService";
 import ProductService from "../api/ProductService";
 import {AiOutlineReload} from 'react-icons/ai';
-import {isFav} from "../components/product/ProductItem";
 import { useAuth } from '../context/AuthContext';
 
 export const Product = () => {
@@ -145,12 +144,11 @@ export const Product = () => {
                                 <Text fontSize='x-large' fontWeight='bold' noOfLines={5}>
                                     {product.title}
                                 </Text>
-                                <FavouriteSwitcher isFav={isFav}/>
+                                {!isAdmin && <FavoriteSwitcher productId={product.id.toString()}/>}
                             </HStack>
                             <Text>{product.description}</Text>
                         </VStack>
                     </Flex>
-
                 </>
             }
             <AddEditProductDrawer isEdit={true} product={product} isOpen={editDisclosure.isOpen}

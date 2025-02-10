@@ -16,7 +16,8 @@ export const NavItem = ({children, ...rest}: NavItemProps) => {
                 cursor='pointer'
                 color='gray.600'
                 _hover={{
-                    bg: 'gray.100',
+                    bg: 'gray.200',
+                    color: 'gray.800',
                 }}
                 {...rest}>
                 {children}
