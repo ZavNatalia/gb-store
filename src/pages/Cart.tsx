@@ -85,7 +85,7 @@ export const Cart = () => {
             <List overflow='auto' spacing={2}>
                 {cartItems.map(({product, quantity}) => (
                     <ListItem key={product.id} pr={2}>
-                        <HStack spacing={3}>
+                        <HStack spacing={2}>
                             <Link to={`/${product.category?.name?.toLowerCase()}/${product.id}/${encodeURIComponent(product.title)}`}
                                   target='_blank'
                                   style={{display: "flex", alignItems: 'center'}}>
@@ -108,7 +108,7 @@ export const Cart = () => {
                                           color='gray.500'>{toCurrency(product.price)}</Text>
                                 </Flex>
                             </Link>
-                            <Spacer/>
+                            <Spacer m={0}/>
                             <Counter product={product} quantity={quantity} iconSize='sm'/>
                         </HStack>
                     </ListItem>

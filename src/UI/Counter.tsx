@@ -54,7 +54,7 @@ const Counter = ({product, quantity, buttonColor = 'gray.50', buttonHoverColor =
                                 _hover={{backgroundColor: 'gray.200'}}
                                 onClick={() => decreaseCartQuantity(product)}
                     />
-                    <Text textAlign={"center"} fontSize={"large"} fontWeight='bold' px={1}>
+                    <Text textAlign={"center"} fontSize={"large"} fontWeight='bold' >
                         {quantity}
                     </Text>
                     <IconButton aria-label='Увеличить количество'
